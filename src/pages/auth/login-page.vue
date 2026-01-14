@@ -29,4 +29,5 @@ const login = async () => {
         <label>password</label>: <input v-model="loginRequest.password" type="password" name="password" /><br />
         <input type="submit" value="Login" />
     </form>
+    <div v-if="authStore.isAuthenticated" class="">Is logged in</div>
 </template>
