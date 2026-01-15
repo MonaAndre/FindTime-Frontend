@@ -2,7 +2,7 @@ import api from "@/plugins/axios";
 import type { ServiceResponse } from "@/types/api"
 import type { Group } from "@/types/group"
 
-export const GroupApi = {
+export const groupApi = {
 
 
     async getGroups(): Promise<ServiceResponse<Group[]>> {
