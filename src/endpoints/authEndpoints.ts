@@ -9,7 +9,7 @@ export const authApi = {
     },
     async logout(): Promise<ServiceResponse<boolean>> {
         const response = await api.post<ServiceResponse<boolean>>("/api/Auth/logout");
-        return response.data
+        return response.data;
     },
     async me(): Promise<ServiceResponse<AuthResponse>> {
         const response = await api.get<ServiceResponse<AuthResponse>>("/api/Auth/me");

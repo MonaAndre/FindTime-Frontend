@@ -1,12 +1,13 @@
 import { authApi } from "@/endpoints/authEndpoints";
 import type { LoginRequest, User } from "@/types/auth";
+import type { ServiceResponse } from "@/types/api";
 import axios from "axios";
 import { defineStore } from "pinia";
 
 interface AuthState {
     user: User | null;
     isAuthenticated: boolean;
-    isInitialized: boolean;
+    isInitialized: boolean
 }
 export const useAuthStore = defineStore('auth', {
     state: (): AuthState => ({
@@ -21,11 +22,11 @@ export const useAuthStore = defineStore('auth', {
                 if (response.statusCode == 200) {
                     this.user = response.data;
                     this.isAuthenticated = true;
-                    console.log("user", this.user);
-                    return response.data;
+                    console.log("user från authStore", this.user);
+                    return response;
                 } else {
                     console.log(response.message);
-                    return response.message
+                    return response
                 }
 
 
@@ -36,27 +37,33 @@ export const useAuthStore = defineStore('auth', {
                 }
             }
         },
-        async logout() {
+        async logout(): Promise<ServiceResponse<boolean>> {
             try {
                 const response = await authApi.logout();
                 if (response.statusCode == 200) {
                     this.user = null;
                     this.isAuthenticated = false;
                     console.log("user is logedout");
+                    return response;
                 } else {
-                    console.log(response.message);
-                    return response.message
+                    return response
                 }
             } catch (error) {
-                console.error("Login failed:", error);
+                console.error("Logout failed:", error);
                 if (axios.isAxiosError(error) && error.response) {
                     return error.response.data;
                 }
+                return {
+                    data: false,
+                    success: false,
+                    message: "Logout failed",
+                    statusCode: 500
+                };
             }
         },
         async checkAuth() {
             try {
-                const response = await authApi.me(); 
+                const response = await authApi.me();
                 if (response.statusCode === 200 && response.data) {
                     this.user = response.data;
                     this.isAuthenticated = true;
