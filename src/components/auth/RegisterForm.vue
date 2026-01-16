@@ -28,31 +28,31 @@ const register = async () => {
 }
 </script>
 <template>
-    <h1 class="form-title">Register konto här</h1>
+    <h1 class="form-title">Register your account</h1>
     <form class="form" @submit.prevent="register">
         <TextInput type="email" name="email" autocomplete="email" inputmode="email" v-model="registerRequest.email">
             Email
         </TextInput>
         <TextInput type="password" name="password" autocomplete="current-password" v-model="registerRequest.password"
             :show-password-toggle="true">
-            Lösenord
+            Password
         </TextInput>
-        <TextInput type="password" name="password" autocomplete="current-password"
-            v-model="registerRequest.confirmPassword" :show-password-toggle="true">
-            Bekräfta lösenord
+        <TextInput type="password" name="password" v-model="registerRequest.confirmPassword"
+            :show-password-toggle="true">
+            Confirm password
         </TextInput>
 
-        <TextInput type="text" name="firstName" v-model="registerRequest.firstName">
-            Namn
+        <TextInput type="text" name="firstName" v-model="registerRequest.firstName" autocomplete="given-name">
+            Name
         </TextInput>
-        <TextInput type="text" name="lastName" v-model="registerRequest.lastName">
-            Efternamn
+        <TextInput type="text" name="lastName" v-model="registerRequest.lastName" autocomplete="family-name">
+            Last name
         </TextInput>
-         <TextInput type="date" name="birthday" v-model="registerRequest.birthday">
-            Födelsedag
+        <TextInput type="date" name="birthday" autocomplete="bday" v-model="registerRequest.birthday">
+            Birthday
         </TextInput>
-        <div class="text-center mt-5">
-            <ButtonComponent type="submit" primary lg center>Registrera</ButtonComponent>
-        </div>
+
+        <ButtonComponent type="submit" primary lg center>Register</ButtonComponent>
+
     </form>
 </template>

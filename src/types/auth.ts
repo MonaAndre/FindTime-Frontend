@@ -28,5 +28,10 @@ export interface AuthResponse {
     lastName: string;
     profilePictureLink?: string;
 }
+export interface ChangePassword {
+    currentPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
 
+}
 

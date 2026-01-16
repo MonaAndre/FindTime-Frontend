@@ -17,7 +17,7 @@ const login = async () => {
         const result = await authStore.login(loginRequest.value!);
         if (result.success) {
             console.log("från login componen: Login successful", result.data);
-           router.push('/dashboard');
+           router.push('/groups');
         }
     } catch (error) {
         console.error(error);

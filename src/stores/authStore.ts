@@ -1,6 +1,5 @@
 import { authApi } from "@/endpoints/authEndpoints";
-import type { LoginRequest, User } from "@/types/auth";
-import type { ServiceResponse } from "@/types/api";
+import type { ChangePassword, LoginRequest, User } from "@/types/auth";
 import axios from "axios";
 import { defineStore } from "pinia";
 
@@ -37,7 +36,7 @@ export const useAuthStore = defineStore('auth', {
                 }
             }
         },
-        async logout(): Promise<ServiceResponse<boolean>> {
+        async logout() {
             try {
                 const response = await authApi.logout();
                 if (response.statusCode == 200) {
@@ -78,7 +77,16 @@ export const useAuthStore = defineStore('auth', {
             } finally {
                 this.isInitialized = true;
             }
+        },
+        async changePassword(changePasswordRequest: ChangePassword) {
+            try {
+                const response = await authApi.changePassword(changePasswordRequest);
+                return response;
+            } catch (error) {
+                console.log("Password updated", error);
+            }
         }
+
     }
 
 });
