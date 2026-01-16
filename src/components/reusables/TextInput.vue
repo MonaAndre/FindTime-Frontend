@@ -37,7 +37,7 @@ const inputType = computed(() => {
 </script>
 <template>
     <div>
-        <label class="block mb-2 text-sm/6 font-medium text-zinc-900" :for="name">
+        <label class="block my-2 text-sm/6 font-medium text-zinc-900" :for="name">
             <slot></slot>
         </label>
         <div class="relative">

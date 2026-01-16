@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router';
 import { useAuthStore } from '@/stores/authStore';
 
 const auth = useAuthStore();
@@ -8,6 +9,7 @@ const logout = async () => {
         const result = await auth.logout();
         if (result.success) {
             console.log("Logout successful");
+            router.push('/');
         }
     } catch (error) {
         console.error(error);

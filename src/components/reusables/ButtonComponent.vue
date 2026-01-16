@@ -10,11 +10,13 @@ defineProps<{
     tertiary?: boolean;
     danger?: boolean;
     disabled?: boolean;
-    loading?: boolean
+    loading?: boolean;
+     type?: 'button' | 'submit' | 'reset'; 
 }>();
 </script>
 <template>
-    <button type="button" :class="[
+    <button   :type="type || 'button'"
+     :class="[
         {
             'px-2 py-1 text-sm': sm,
             'px-2.5 py-1.5 text-sm': md,
@@ -31,8 +33,9 @@ defineProps<{
             'pointer-events-none cursor-not-allowed opacity-50': disabled,
             'pointer-events-none cursor-not-allowed': loading,
         },
-    ]" :disabled="disabled"
-        class="inline-flex items-center justify-center rounded font-semibold shadow-sm transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+    ]"
+     :disabled="disabled"
+        class="inline-flex items-center cursor-pointer justify-center rounded font-semibold shadow-sm transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
         <span v-if="loading">
             <ArrowPathIcon class="text-gray-50 h-4 w-4 animate-spin mx-0.5" />
         </span>

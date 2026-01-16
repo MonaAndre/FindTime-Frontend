@@ -18,7 +18,7 @@ export interface RegisterRequest {
     confirmPassword: string;
     firstName: string;
     lastName: string;
-    birthDate: string;
+    birthday: string;
 }
 
 export interface AuthResponse {

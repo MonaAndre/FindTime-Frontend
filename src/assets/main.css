@@ -1,3 +1,9 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
 
+  .form{
+   @apply  mx-auto  border border-zinc-400 p-3 rounded-lg;
+  }
+  .form-title{
+    @apply text-center font-bold text-2xl my-10;
+  }

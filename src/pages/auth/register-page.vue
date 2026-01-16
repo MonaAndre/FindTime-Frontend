@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import RegisterForm from '@/components/auth/RegisterForm.vue';
+
+
 </script>
 <template>
-<h1>Register Page</h1>
-<form action="">
-    
-</form>
+    <RegisterForm />
 </template>
