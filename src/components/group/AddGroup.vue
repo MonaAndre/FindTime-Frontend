@@ -79,7 +79,7 @@ watch(newMembersEmails, (val) => {
                     <PlusIcon class="h-4 w-4" />
                     Add another email
                 </ButtonComponent>
-                <ButtonComponent type="submit" primary lg center>Register</ButtonComponent>
+                <ButtonComponent type="submit" primary lg center>Create group</ButtonComponent>
 
             </form>
         </div>
