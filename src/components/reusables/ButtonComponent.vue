@@ -22,8 +22,8 @@ defineProps<{
         'text-center': center,
         'text-end': end,
         'text-start': start,
-
-    }]" class="mt-5">
+        
+    }]" >
         <button :type="type || 'button'" :class="[
             {
                 'px-2 py-1 text-sm': sm,
