@@ -7,6 +7,7 @@ import GroupList from '@/components/group/GroupList.vue';
 
 <template>
     <h1>Groups Page</h1>
+
     <GroupList />
 
 </template>

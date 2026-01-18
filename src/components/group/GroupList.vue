@@ -3,6 +3,7 @@ import GroupCard from '@/components/group/GroupCard.vue';
 import { groupApi } from '@/endpoints/groupEndpoints';
 import type { Group } from '@/types/group';
 import { onMounted, ref } from 'vue';
+import AddGroup from './AddGroup.vue';
 
 const groupsArray = ref<Group[] | null>([]);
 
@@ -21,13 +22,13 @@ const getGroups = async () => {
 
 }
 
-onMounted( () => {
-     getGroups();
+onMounted(() => {
+    getGroups();
 });
 </script>
 <template>
 
-
+    <AddGroup @create="getGroups()" />
 
     <div class="groups-container">
 
