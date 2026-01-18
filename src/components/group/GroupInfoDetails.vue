@@ -4,9 +4,13 @@ import type { GroupInfoDtoResponse } from '@/types/group'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import UpdateGroup from './UpdateGroup.vue'
+import ButtonComponent from '../reusables/ButtonComponent.vue'
+import { PencilSquareIcon, UserPlusIcon } from '@heroicons/vue/24/outline'
+import GroupMemberManager from './GroupMemberManager.vue'
 const route = useRoute()
 const groupInfo = ref<GroupInfoDtoResponse>()
 const groupId = +route.params.id!
+const activeModal = ref<'update' | 'add' | null>(null)
 
 const getGroupInfo = async () => {
   try {
@@ -19,25 +23,80 @@ const getGroupInfo = async () => {
     console.error(error)
   }
 }
+const openUpdateModal = () => {
+  activeModal.value = 'update'
+}
+
+const openAddModal = () => {
+  activeModal.value = 'add'
+}
+
+const closeModal = () => {
+  activeModal.value = null
+}
+
+const handleUpdate = async () => {
+  await getGroupInfo()
+  closeModal()
+}
 onMounted(() => {
   getGroupInfo()
 })
 </script>
 <template>
-  <UpdateGroup
-    v-if="groupInfo?.groupId"
-    class="mb-2"
-    :group-name="groupInfo.groupName"
-    :description="groupInfo.description!"
-    :group-id-to-update="groupInfo?.groupId"
-    @update="getGroupInfo()"
-  />
-  <p>group title: {{ groupInfo?.groupName }}</p>
-  <p>group id: {{ groupInfo?.groupId }}</p>
-  <div>
-    <p>group members</p>
-    <ul v-for="member in groupInfo?.members" :key="member.userId">
-      <li>{{ member.firstName }}</li>
-    </ul>
+  <div class="relative">
+    <div v-if="!activeModal" class="space-y-4">
+      <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
+        <ButtonComponent v-if="groupInfo?.groupId" @click="openUpdateModal" primary md>
+          <PencilSquareIcon class="h-5 w-5" /> Update group info
+        </ButtonComponent>
+
+        <ButtonComponent @click="openAddModal" primary md>
+          <UserPlusIcon class="h-5 w-5" /> Add member
+        </ButtonComponent>
+      </div>
+
+      <div class="space-y-4">
+        <p><strong>Group title:</strong> {{ groupInfo?.groupName }}</p>
+        <p><strong>Group ID:</strong> {{ groupInfo?.groupId }}</p>
+
+        <div>
+          <p class="font-semibold mb-2">Group members</p>
+          <ul class="space-y-1">
+            <li v-for="member in groupInfo?.members" :key="member.userId" class="pl-4">
+              • {{ member.firstName }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="activeModal" class="fixed inset-0 bg-white z-50 p-6">
+      <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-semibold">
+            {{ activeModal === 'update' ? 'Update Group' : 'Add Member' }}
+          </h2>
+          <ButtonComponent @click="closeModal" secondary sm> ✕ Close </ButtonComponent>
+        </div>
+
+        <UpdateGroup
+          v-if="activeModal === 'update' && groupInfo?.groupId"
+          :group-name="groupInfo.groupName"
+          :description="groupInfo.description!"
+          :group-id-to-update="groupInfo?.groupId"
+          @update="handleUpdate"
+          @cancel="closeModal"
+        />
+
+        <GroupMemberManager
+          v-if="activeModal === 'add' && groupInfo?.groupId && groupInfo.members"
+          :group-id="groupInfo?.groupId"
+          :members="groupInfo.members"
+          @cancel="closeModal"
+          @added="handleUpdate"
+        />
+      </div>
+    </div>
   </div>
 </template>

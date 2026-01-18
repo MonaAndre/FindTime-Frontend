@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import TextInput from '../reusables/TextInput.vue'
 import type { UpdateGroupInfoDtoRequest } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { PencilSquareIcon } from '@heroicons/vue/24/outline'
 import { groupApi } from '@/endpoints/groupEndpoints'
 import { useToast } from 'primevue/usetoast'
 
@@ -21,6 +20,7 @@ const updateForm = ref<UpdateGroupInfoDtoRequest>({
 })
 const emit = defineEmits<{
   (e: 'update'): void
+  (e: 'cancel'): void
 }>()
 
 const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
@@ -44,10 +44,7 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
 
 <template>
   <div>
-    <ButtonComponent v-if="!showForm" @click="showForm = true" primary md
-      ><PencilSquareIcon class="h-5 w-5" /> Update group info</ButtonComponent
-    >
-    <div v-if="showForm">
+    <div>
       <form @submit.prevent="updateGroup(updateForm)" class="form">
         <TextInput
           :placeholder="'Group name'"
@@ -65,7 +62,7 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
         >
         <div class="flex flex-1 items-center gap-3 justify-center">
           <ButtonComponent type="submit" primary lg>Update group</ButtonComponent>
-          <ButtonComponent secondary md @click="showForm = false">Back</ButtonComponent>
+          <ButtonComponent secondary md @click="emit('cancel')">Back</ButtonComponent>
         </div>
       </form>
     </div>
