@@ -15,6 +15,8 @@ defineProps<{
     center?: boolean;
     start?: boolean;
     end?: boolean;
+    marginY?:boolean;
+    marginX?:boolean;
 }>();
 </script>
 <template>
@@ -22,6 +24,8 @@ defineProps<{
         'text-center': center,
         'text-end': end,
         'text-start': start,
+        'my-3': marginY,
+        'mx-3':marginX
         
     }]" >
         <button :type="type || 'button'" :class="[

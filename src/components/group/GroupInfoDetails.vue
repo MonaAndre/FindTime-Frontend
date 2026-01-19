@@ -46,10 +46,10 @@ onMounted(() => {
 <template>
   <div class="relative">
     <div v-if="!activeModal" class="space-y-4">
-      <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
-        <ButtonComponent v-if="groupInfo?.groupId" @click="openUpdateModal" primary md>
+       <ButtonComponent v-if="groupInfo?.groupId" @click="openUpdateModal" primary md>
           <PencilSquareIcon class="h-5 w-5" /> Update group info
         </ButtonComponent>
+      <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
 
         <ButtonComponent @click="openAddModal" primary md>
           <UserPlusIcon class="h-5 w-5" /> Add member
@@ -82,9 +82,11 @@ onMounted(() => {
 
         <UpdateGroup
           v-if="activeModal === 'update' && groupInfo?.groupId"
+          :members="groupInfo.members"
           :group-name="groupInfo.groupName"
           :description="groupInfo.description!"
           :group-id-to-update="groupInfo?.groupId"
+          :is-admin="groupInfo.isAdmin"
           @update="handleUpdate"
           @cancel="closeModal"
         />

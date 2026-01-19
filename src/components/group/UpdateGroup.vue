@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import TextInput from '../reusables/TextInput.vue'
-import type { UpdateGroupInfoDtoRequest } from '@/types/group'
-import ButtonComponent from '../reusables/ButtonComponent.vue'
+import type { GroupMemberGroupDto, UpdateGroupInfoDtoRequest } from '@/types/group'
 import { groupApi } from '@/endpoints/groupEndpoints'
 import { useToast } from 'primevue/usetoast'
+import ButtonComponent from '../reusables/ButtonComponent.vue'
+import ChangeGroupAdmin from './ChangeGroupAdmin.vue'
+
 
 const showForm = ref(false)
 const toast = useToast()
@@ -12,7 +14,10 @@ const props = defineProps<{
   groupIdToUpdate: number
   groupName: string
   description: string | null
+  members: GroupMemberGroupDto[]
+  isAdmin: boolean
 }>()
+
 const updateForm = ref<UpdateGroupInfoDtoRequest>({
   groupId: props.groupIdToUpdate,
   groupName: props.groupName,
@@ -43,28 +48,19 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
 </script>
 
 <template>
-  <div>
-    <div>
-      <form @submit.prevent="updateGroup(updateForm)" class="form">
-        <TextInput
-          :placeholder="'Group name'"
-          :type="'text'"
-          :name="'group-name'"
-          v-model="updateForm.groupName"
-          >Group name</TextInput
-        >
-        <TextInput
-          :placeholder="'Group description'"
-          :type="'text'"
-          :name="'group-description'"
-          v-model="updateForm.description"
-          >Group name</TextInput
-        >
-        <div class="flex flex-1 items-center gap-3 justify-center">
-          <ButtonComponent type="submit" primary lg>Update group</ButtonComponent>
-          <ButtonComponent secondary md @click="emit('cancel')">Back</ButtonComponent>
-        </div>
-      </form>
-    </div>
-  </div>
+  <section>
+
+    <form @submit.prevent="updateGroup(updateForm)" class="form">
+      <TextInput :placeholder="'Group name'" :type="'text'" :name="'group-name'" v-model="updateForm.groupName">Group
+        name</TextInput>
+      <TextInput :placeholder="'Group description'" :type="'text'" :name="'group-description'"
+        v-model="updateForm.description">Group description</TextInput>
+      <div class="flex flex-1 items-center gap-3 justify-center">
+        <ButtonComponent margin-y type="submit" primary lg>Update group</ButtonComponent>
+        <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
+      </div>
+    </form>
+
+  </section>
+  <ChangeGroupAdmin v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
 </template>

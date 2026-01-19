@@ -79,6 +79,6 @@ const addForm = ref<AddNewGroupMemberRequest>({
 <template>
   <div>
     <AddMember @add="handleAddNewMember" />
-    <DeleteMembers :members="props.members" @remove="handleDeleteMember" />
+    <DeleteMembers v-if="members.length > 1" :members="props.members" @remove="handleDeleteMember" />
   </div>
 </template>

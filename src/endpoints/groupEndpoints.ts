@@ -47,8 +47,5 @@ export const groupApi = {
     async updateUserGroupSettings(req: UpdateGroupInfoDtoRequest): Promise<ServiceResponse<boolean>> {
         const res = await api.post<ServiceResponse<boolean>>("api/Group/update-user-settings", req);
         return res.data;
-    }
-
-
-
+    },
 }

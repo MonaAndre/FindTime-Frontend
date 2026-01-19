@@ -52,7 +52,7 @@ const register = async () => {
             Birthday
         </TextInput>
 
-        <ButtonComponent type="submit" primary lg center>Register</ButtonComponent>
+        <ButtonComponent type="submit" marginY primary lg center>Register</ButtonComponent>
 
     </form>
 </template>

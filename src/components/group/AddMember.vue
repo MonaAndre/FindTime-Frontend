@@ -16,8 +16,8 @@ const emit = defineEmits<{
       Member email
     </TextInput>
     <div class="flex flex-1 items-center gap-3 justify-center">
-      <ButtonComponent type="submit" primary lg>Add new member</ButtonComponent>
-      <ButtonComponent secondary md @click="emit('cancel')">Back</ButtonComponent>
+      <ButtonComponent margin-y type="submit" primary lg>Add new member</ButtonComponent>
+      <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
     </div>
   </form>
 </template>
