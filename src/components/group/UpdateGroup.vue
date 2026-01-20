@@ -19,6 +19,8 @@ const props = defineProps<{
   isAdmin: boolean
 }>()
 
+
+
 const updateForm = ref<UpdateGroupInfoDtoRequest>({
   groupId: props.groupIdToUpdate,
   groupName: props.groupName,
@@ -29,6 +31,9 @@ const emit = defineEmits<{
   (e: 'cancel'): void
 }>()
 
+const handleChangeAdmin = () => {
+  emit('update');
+}
 const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
   try {
     const res = await groupApi.updateGroupInfo(request)
@@ -63,6 +68,6 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
     </form>
 
   </section>
-  <ChangeGroupAdmin v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
+  <ChangeGroupAdmin @close-modal="handleChangeAdmin" v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
   <LeaveGroup :members="members" :is-admin="isAdmin" :group-id="groupIdToUpdate" :group-name="groupName" />
 </template>

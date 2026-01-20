@@ -11,6 +11,9 @@ const props = defineProps<{
     groupId: number
 }>();
 
+const emit = defineEmits<{
+    (e: 'closeModal'): void
+}>()
 
 const changeAdmin = ref<ChangeGroupAdminRequest>({
     groupId: props.groupId,
@@ -29,7 +32,9 @@ const handleChangeAdmin = async (req: ChangeGroupAdminRequest) => {
             toast.add({
                 severity: "success",
                 summary: `Admin changed, new admin is ${newAdminName.value}`
+
             })
+            emit('closeModal')
         }
     } catch (error) {
         toast.add({
@@ -46,7 +51,8 @@ const handleChangeAdmin = async (req: ChangeGroupAdminRequest) => {
     <section>
         <h3>Change admin</h3>
 
-        <select class="border p-2 rounded-md" v-model="changeAdmin.newAdminUserId" @change="handleChangeAdmin(changeAdmin)">
+        <select class="border p-2 rounded-md" v-model="changeAdmin.newAdminUserId"
+            @change="handleChangeAdmin(changeAdmin)">
             <option v-for="member in members" :value="member.userId" :key="member.userId">{{ member.email }}</option>
         </select>
 
