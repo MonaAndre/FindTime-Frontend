@@ -11,6 +11,7 @@ const props = defineProps<{
     groupId: number
 }>();
 
+
 const changeAdmin = ref<ChangeGroupAdminRequest>({
     groupId: props.groupId,
     newAdminUserId: ""

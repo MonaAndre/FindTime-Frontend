@@ -36,7 +36,8 @@ const router = createRouter({
     {
       path: '/group/details/:id',
       name: 'group',
-      component: GroupPage
+      component: GroupPage,
+       meta: { requiresAuth: true }
     }
 
     ,

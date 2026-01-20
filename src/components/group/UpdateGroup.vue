@@ -6,6 +6,7 @@ import { groupApi } from '@/endpoints/groupEndpoints'
 import { useToast } from 'primevue/usetoast'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import ChangeGroupAdmin from './ChangeGroupAdmin.vue'
+import LeaveGroup from './LeaveGroup.vue'
 
 
 const showForm = ref(false)
@@ -63,4 +64,5 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
 
   </section>
   <ChangeGroupAdmin v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
+  <LeaveGroup :members="members" :is-admin="isAdmin" :group-id="groupIdToUpdate" :group-name="groupName" />
 </template>
