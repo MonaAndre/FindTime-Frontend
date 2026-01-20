@@ -7,6 +7,7 @@ import UpdateGroup from './UpdateGroup.vue'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import { PencilSquareIcon, UserPlusIcon } from '@heroicons/vue/24/outline'
 import GroupMemberManager from './GroupMemberManager.vue'
+import GroupMemberList from './GroupMemberList.vue'
 const route = useRoute()
 const groupInfo = ref<GroupInfoDtoResponse>()
 const groupId = +route.params.id!
@@ -57,19 +58,12 @@ onMounted(async () => {
         </ButtonComponent>
       </div>
 
-      <div class="space-y-4">
+      <div v-if="groupInfo?.members" class="space-y-4">
         <p><strong>Group title:</strong> {{ groupInfo?.groupName }}</p>
         <p><strong>Group ID:</strong> {{ groupInfo?.groupId }}</p>
+        <GroupMemberList :group-id="groupId" :members="groupInfo.members" />
 
-        <div>
-          <p class="font-semibold mb-2">Group members</p>
-          <ul class="space-y-1">
-            <li v-for="member in groupInfo?.members" :key="member.userId" class="pl-4">
-              • {{ member.firstName }}
-            </li>
-          </ul>
-        </div>
-        {{ groupInfo?.adminEmail }}
+        <p>Admin email: {{ groupInfo?.adminEmail }}</p>
       </div>
     </div>
 

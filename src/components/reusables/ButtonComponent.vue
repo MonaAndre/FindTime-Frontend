@@ -24,7 +24,7 @@ defineProps<{
         'text-center': center,
         'text-end': end,
         'text-start': start,
-        'my-3': marginY,
+        'my-auto': marginY,
         'mx-3':marginX
         
     }]" >
@@ -37,7 +37,7 @@ defineProps<{
                     primary,
                 'bg-white  text-blue-600 border-2 border-blue-600 hover:bg-blue-600 hover:text-white focus-visible:outline-actblue-dark':
                     secondary,
-                'bg-red-500 text-white hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500 focus-visible:outline-red-500':
+                'bg-red-500 text-white border-2 border-red-500 hover:bg-white hover:border-2 hover:border-red-500 hover:text-red-500 focus-visible:outline-red-500':
                     danger,
 
                 'bg-gray-300 text-gray-700 hover:bg-gray-400 focus-visible:outline-gray-400 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600 dark:focus-visible:outline-neutral-600':
