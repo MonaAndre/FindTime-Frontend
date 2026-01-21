@@ -1,0 +1,41 @@
+import api from '@/plugins/axios'
+import type { ServiceResponse } from '@/types/api'
+import type {
+  CreateEventDtoRequest,
+  CreateEventDtoResponse,
+  DeleteEventDtoRequest,
+  DeleteEventDtoResponse,
+  GetAllGroupEventsResponse,
+  UpdateEventDtoRequest,
+  UpdateEventDtoResponse,
+} from '@/types/events'
+
+export const eventApi = {
+  async createEvent(req: CreateEventDtoRequest): Promise<ServiceResponse<CreateEventDtoResponse>> {
+    const response = await api.post<ServiceResponse<CreateEventDtoResponse>>(
+      'api/Event/create-event',
+      req,
+    )
+    return response.data
+  },
+  async updateEvent(req: UpdateEventDtoRequest): Promise<ServiceResponse<UpdateEventDtoResponse>> {
+    const response = await api.post<ServiceResponse<UpdateEventDtoResponse>>(
+      'api/Event/update-event',
+      req,
+    )
+    return response.data
+  },
+  async deleteEvent(req: DeleteEventDtoRequest): Promise<ServiceResponse<DeleteEventDtoResponse>> {
+    const response = await api.post<ServiceResponse<DeleteEventDtoResponse>>(
+      'api/Event/delete-event',
+      req,
+    )
+    return response.data
+  },
+  async getGroupEvents(groupId: number): Promise<ServiceResponse<GetAllGroupEventsResponse[]>> {
+    const response = await api.post<ServiceResponse<GetAllGroupEventsResponse[]>>(
+      `api/Event/get-group-events/${groupId}`,
+    )
+    return response.data
+  },
+}

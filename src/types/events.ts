@@ -1,0 +1,94 @@
+export enum RecurrencePattern {
+  Daily = 0,
+  Weekly = 1,
+  Monthly = 2,
+  Yearly = 3
+}
+
+export interface CreateEventDtoRequest {
+  eventName: string;
+  eventDescription?: string;
+  groupId: number;
+  startTime: string; 
+  endTime: string;   
+  categoryId?: number;
+  location?: string;
+  isRecurring: boolean;
+  recurrencePattern?: RecurrencePattern;
+  recurrenceEndTime?: string; 
+}
+
+export interface CreateEventDtoResponse {
+  eventId: number;
+  eventName: string;
+  eventDescription?: string;
+  groupId: number;
+  startTime: string;
+  endTime: string;
+  categoryId?: number;
+  location?: string;
+  isRecurring: boolean;
+  recurrencePattern?: RecurrencePattern;
+  recurringInstancesCreated?: number;
+  recurrenceEndTime?: string;
+}
+
+/* =========================
+   Delete Event
+   ========================= */
+
+export enum DeleteRecurringOption {
+  ThisEventOnly = "ThisEventOnly",
+  ThisAndFutureEvents = "ThisAndFutureEvents",
+  AllEvents = "AllEvents"
+}
+
+export interface DeleteEventDtoRequest {
+  eventId: number;
+  deleteOption: DeleteRecurringOption;
+}
+
+export interface DeleteEventDtoResponse {
+  deletedCount: number;
+  message: string;
+}
+
+/* =========================
+   Get Group Events
+   ========================= */
+
+export interface GetAllGroupEventsResponse {
+  eventId: number;
+  eventName?: string;
+  eventDescription?: string;
+  startTime: string;
+  endTime: string;
+  categoryId?: number;
+  categoryColor?: string;
+}
+
+/* =========================
+   Update Event
+   ========================= */
+
+export enum UpdateRecurringOption {
+  ThisEventOnly = "ThisEventOnly",
+  ThisAndFutureEvents = "ThisAndFutureEvents",
+  AllEvents = "AllEvents"
+}
+
+export interface UpdateEventDtoRequest {
+  eventId: number;
+  eventName: string;
+  eventDescription?: string;
+  startTime: string;
+  endTime: string;
+  categoryId?: number;
+  location?: string;
+  updateOption: UpdateRecurringOption;
+}
+
+export interface UpdateEventDtoResponse {
+  updatedCount: number;
+  message: string;
+}
