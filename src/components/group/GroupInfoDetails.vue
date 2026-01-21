@@ -61,7 +61,7 @@ onMounted(async () => {
       <div v-if="groupInfo?.members" class="space-y-4">
         <p><strong>Group title:</strong> {{ groupInfo?.groupName }}</p>
         <p><strong>Group ID:</strong> {{ groupInfo?.groupId }}</p>
-        <GroupMemberList :group-id="groupId" :members="groupInfo.members" />
+        <GroupMemberList @update="getGroupInfo" :group-id="groupId" :members="groupInfo.members" />
 
         <p>Admin email: {{ groupInfo?.adminEmail }}</p>
       </div>
