@@ -38,6 +38,7 @@ const formatDate = (date: string) => new Date(date).toLocaleString()
 onMounted(() => {
   getGroupEvents(props.groupId)
 })
+
 </script>
 
 <template>
@@ -51,6 +52,7 @@ onMounted(() => {
       <p>End time {{ formatDate(groupEvent.endTime) }}</p>
       <p>Is reccuring {{ groupEvent.isRecurring ? 'Yes' : 'No' }}</p>
       <p v-if="groupEvent.isRecurring">{{ mapRecurrencePattern(groupEvent.eventId) }}</p>
+      <p>{{ groupEvent.categoryColor }} </p>
     </li>
   </ul>
 </template>
