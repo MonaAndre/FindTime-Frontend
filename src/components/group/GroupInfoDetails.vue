@@ -8,6 +8,7 @@ import ButtonComponent from '../reusables/ButtonComponent.vue'
 import { PencilSquareIcon, UserPlusIcon } from '@heroicons/vue/24/outline'
 import GroupMemberManager from './GroupMemberManager.vue'
 import GroupMemberList from './GroupMemberList.vue'
+import GroupEventsList from '../event/GroupEventsList.vue'
 const route = useRoute()
 const groupInfo = ref<GroupInfoDtoResponse>()
 const groupId = +route.params.id!
@@ -37,7 +38,6 @@ const closeModal = () => {
 }
 
 const handleUpdate = async () => {
-
   closeModal()
   await getGroupInfo()
 }
@@ -52,7 +52,6 @@ onMounted(async () => {
         <PencilSquareIcon class="h-5 w-5" /> Update group info
       </ButtonComponent>
       <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
-
         <ButtonComponent @click="openAddModal" primary md>
           <UserPlusIcon class="h-5 w-5" /> Add member
         </ButtonComponent>
@@ -76,14 +75,29 @@ onMounted(async () => {
           <ButtonComponent @click="closeModal" secondary sm> ✕ Close </ButtonComponent>
         </div>
 
-        <UpdateGroup v-if="activeModal === 'update' && groupInfo?.groupId" :members="groupInfo.members"
-          :group-name="groupInfo.groupName" :description="groupInfo.description!"
-          :group-id-to-update="groupInfo?.groupId" :is-admin="groupInfo.isAdmin" :group-color="groupInfo.userGroupColor!" @update="handleUpdate"
-          @cancel="closeModal" />
+        <UpdateGroup
+          v-if="activeModal === 'update' && groupInfo?.groupId"
+          :members="groupInfo.members"
+          :group-name="groupInfo.groupName"
+          :description="groupInfo.description!"
+          :group-id-to-update="groupInfo?.groupId"
+          :is-admin="groupInfo.isAdmin"
+          :group-color="groupInfo.userGroupColor!"
+          @update="handleUpdate"
+          @cancel="closeModal"
+        />
 
-        <GroupMemberManager v-if="activeModal === 'add' && groupInfo?.groupId && groupInfo.members"
-          :group-id="groupInfo?.groupId" :members="groupInfo.members" @cancel="closeModal" @added="handleUpdate" />
+        <GroupMemberManager
+          v-if="activeModal === 'add' && groupInfo?.groupId && groupInfo.members"
+          :group-id="groupInfo?.groupId"
+          :members="groupInfo.members"
+          @cancel="closeModal"
+          @added="handleUpdate"
+        />
       </div>
     </div>
   </div>
+  <section>
+    <GroupEventsList v-if="groupInfo?.groupId" :group-id="groupInfo.groupId" />
+  </section>
 </template>

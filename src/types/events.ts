@@ -2,35 +2,35 @@ export enum RecurrencePattern {
   Daily = 0,
   Weekly = 1,
   Monthly = 2,
-  Yearly = 3
+  Yearly = 3,
 }
 
 export interface CreateEventDtoRequest {
-  eventName: string;
-  eventDescription?: string;
-  groupId: number;
-  startTime: string; 
-  endTime: string;   
-  categoryId?: number;
-  location?: string;
-  isRecurring: boolean;
-  recurrencePattern?: RecurrencePattern;
-  recurrenceEndTime?: string; 
+  eventName: string
+  eventDescription?: string
+  groupId: number
+  startTime: string
+  endTime: string
+  categoryId?: number
+  location?: string
+  isRecurring: boolean
+  recurrencePattern?: RecurrencePattern
+  recurrenceEndTime?: string
 }
 
 export interface CreateEventDtoResponse {
-  eventId: number;
-  eventName: string;
-  eventDescription?: string;
-  groupId: number;
-  startTime: string;
-  endTime: string;
-  categoryId?: number;
-  location?: string;
-  isRecurring: boolean;
-  recurrencePattern?: RecurrencePattern;
-  recurringInstancesCreated?: number;
-  recurrenceEndTime?: string;
+  eventId: number
+  eventName: string
+  eventDescription?: string
+  groupId: number
+  startTime: string
+  endTime: string
+  categoryId?: number
+  location?: string
+  isRecurring: boolean
+  recurrencePattern?: RecurrencePattern
+  recurringInstancesCreated?: number
+  recurrenceEndTime?: string
 }
 
 /* =========================
@@ -38,19 +38,19 @@ export interface CreateEventDtoResponse {
    ========================= */
 
 export enum DeleteRecurringOption {
-  ThisEventOnly = "ThisEventOnly",
-  ThisAndFutureEvents = "ThisAndFutureEvents",
-  AllEvents = "AllEvents"
+  ThisEventOnly = 'ThisEventOnly',
+  ThisAndFutureEvents = 'ThisAndFutureEvents',
+  AllEvents = 'AllEvents',
 }
 
 export interface DeleteEventDtoRequest {
-  eventId: number;
-  deleteOption: DeleteRecurringOption;
+  eventId: number
+  deleteOption: DeleteRecurringOption
 }
 
 export interface DeleteEventDtoResponse {
-  deletedCount: number;
-  message: string;
+  deletedCount: number
+  message: string
 }
 
 /* =========================
@@ -58,13 +58,26 @@ export interface DeleteEventDtoResponse {
    ========================= */
 
 export interface GetAllGroupEventsResponse {
-  eventId: number;
-  eventName?: string;
-  eventDescription?: string;
-  startTime: string;
-  endTime: string;
-  categoryId?: number;
-  categoryColor?: string;
+  eventId: number
+  eventName?: string
+  eventDescription?: string
+  startTime: string
+  endTime: string
+  categoryId?: number
+  categoryColor?: string
+  location?: string
+
+  creatorUserId: string
+  creatorUserName: string
+  creatorUserEmail: string
+  nickname?: string
+
+  isRecurring: boolean
+  recurrencePattern?: RecurrencePattern
+  recurrenceEndTime?: string
+
+  createdAt: string
+  updatedAt?: string
 }
 
 /* =========================
@@ -72,23 +85,23 @@ export interface GetAllGroupEventsResponse {
    ========================= */
 
 export enum UpdateRecurringOption {
-  ThisEventOnly = "ThisEventOnly",
-  ThisAndFutureEvents = "ThisAndFutureEvents",
-  AllEvents = "AllEvents"
+  ThisEventOnly = 'ThisEventOnly',
+  ThisAndFutureEvents = 'ThisAndFutureEvents',
+  AllEvents = 'AllEvents',
 }
 
 export interface UpdateEventDtoRequest {
-  eventId: number;
-  eventName: string;
-  eventDescription?: string;
-  startTime: string;
-  endTime: string;
-  categoryId?: number;
-  location?: string;
-  updateOption: UpdateRecurringOption;
+  eventId: number
+  eventName: string
+  eventDescription?: string
+  startTime: string
+  endTime: string
+  categoryId?: number
+  location?: string
+  updateOption: UpdateRecurringOption
 }
 
 export interface UpdateEventDtoResponse {
-  updatedCount: number;
-  message: string;
+  updatedCount: number
+  message: string
 }
