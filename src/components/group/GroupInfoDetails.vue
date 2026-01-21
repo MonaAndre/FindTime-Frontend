@@ -78,7 +78,7 @@ onMounted(async () => {
 
         <UpdateGroup v-if="activeModal === 'update' && groupInfo?.groupId" :members="groupInfo.members"
           :group-name="groupInfo.groupName" :description="groupInfo.description!"
-          :group-id-to-update="groupInfo?.groupId" :is-admin="groupInfo.isAdmin" @update="handleUpdate"
+          :group-id-to-update="groupInfo?.groupId" :is-admin="groupInfo.isAdmin" :group-color="groupInfo.userGroupColor!" @update="handleUpdate"
           @cancel="closeModal" />
 
         <GroupMemberManager v-if="activeModal === 'add' && groupInfo?.groupId && groupInfo.members"

@@ -8,6 +8,7 @@ import ButtonComponent from '../reusables/ButtonComponent.vue'
 import ChangeGroupAdmin from './ChangeGroupAdmin.vue'
 import LeaveGroup from './LeaveGroup.vue'
 import DeleteGroup from './DeleteGroup.vue'
+import ChangeGroupColor from './ChangeGroupColor.vue'
 
 
 const showForm = ref(false)
@@ -17,7 +18,8 @@ const props = defineProps<{
   groupName: string
   description: string | null
   members: GroupMemberGroupDto[]
-  isAdmin: boolean
+  isAdmin: boolean,
+  groupColor: string,
 }>()
 
 
@@ -68,6 +70,7 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
       </div>
     </form>
 
+    <ChangeGroupColor :group-id="groupIdToUpdate" :group-color="groupColor" />
   </section>
   <ChangeGroupAdmin @close-modal="handleChangeAdmin" v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
   <LeaveGroup :members="members" :is-admin="isAdmin" :group-id="groupIdToUpdate" :group-name="groupName" />

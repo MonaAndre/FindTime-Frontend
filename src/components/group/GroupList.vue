@@ -35,7 +35,7 @@ onMounted(() => {
         <div v-for="group in groupsArray" :key="group.groupId" class="">
             <GroupCard :admin-email="group.adminEmail" :admin-name="group.adminName" :created-at="group.createdAt"
                 :description="group.description" :group-id="group.groupId" :group-name="group.groupName"
-                :is-admin="group.isAdmin" :joined-at="group.joinedAt" :member-count="group.memberCount">
+                :is-admin="group.isAdmin" :joined-at="group.joinedAt" :member-count="group.memberCount" :group-color="group.groupColor">
             </GroupCard>
         </div>
 

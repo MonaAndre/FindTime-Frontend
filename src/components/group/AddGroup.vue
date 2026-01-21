@@ -88,7 +88,7 @@ watch(
             <TrashIcon class="h-4 w-4" />
           </button>
         </div>
-        <ButtonComponent tertiary sm type="button" @click="addEmailField">
+        <ButtonComponent tertiary margin-y sm type="button" @click="addEmailField">
           <PlusIcon class="h-4 w-4" />
           Add another email
         </ButtonComponent>

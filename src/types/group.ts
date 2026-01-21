@@ -8,6 +8,7 @@ export interface Group {
     memberCount: number,
     createdAt: string,
     joinedAt: string
+    groupColor: string;
 }
 export interface CreateGroup {
     description: string | null

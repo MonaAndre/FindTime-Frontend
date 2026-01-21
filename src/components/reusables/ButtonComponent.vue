@@ -24,7 +24,7 @@ defineProps<{
         'text-center': center,
         'text-end': end,
         'text-start': start,
-        'my-auto': marginY,
+        'my-3': marginY,
         'mx-3':marginX
         
     }]" >

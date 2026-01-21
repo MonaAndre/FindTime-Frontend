@@ -1,6 +1,6 @@
 import api from "@/plugins/axios";
 import type { ServiceResponse } from "@/types/api"
-import type { AddNewGroupMemberRequest, AddNicknameDtoRequest, ChangeGroupAdminRequest, CreateGroup, CreateGroupDtoResponse, DeleteMemberRequest, Group, GroupInfoDtoResponse, UpdateGroupInfoDtoRequest } from "@/types/group"
+import type { AddNewGroupMemberRequest, AddNicknameDtoRequest, ChangeGroupAdminRequest, CreateGroup, CreateGroupDtoResponse, DeleteMemberRequest, Group, GroupInfoDtoResponse, UpdateGroupInfoDtoRequest, UpdateUserGroupSettingsDtoRequest } from "@/types/group"
 
 export const groupApi = {
     async getGroups(): Promise<ServiceResponse<Group[]>> {
@@ -46,7 +46,7 @@ export const groupApi = {
         const res = await api.post<ServiceResponse<boolean>>("api/Group/add-nickname", addNickname);
         return res.data;
     },
-    async updateUserGroupSettings(req: UpdateGroupInfoDtoRequest): Promise<ServiceResponse<boolean>> {
+    async updateUserGroupSettings(req: UpdateUserGroupSettingsDtoRequest): Promise<ServiceResponse<boolean>> {
         const res = await api.post<ServiceResponse<boolean>>("api/Group/update-user-settings", req);
         return res.data;
     },
