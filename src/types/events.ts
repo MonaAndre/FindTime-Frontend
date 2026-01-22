@@ -7,15 +7,15 @@ export enum RecurrencePattern {
 
 export interface CreateEventDtoRequest {
   eventName: string
-  eventDescription?: string
+  eventDescription?: string |null
   groupId: number
   startTime: string
   endTime: string
-  categoryId?: number
-  location?: string
+  categoryId?: number | undefined
+  location?: string| null
   isRecurring: boolean
-  recurrencePattern?: RecurrencePattern
-  recurrenceEndTime?: string
+  recurrencePattern?: RecurrencePattern | undefined
+  recurrenceEndTime?: string | null
 }
 
 export interface CreateEventDtoResponse {

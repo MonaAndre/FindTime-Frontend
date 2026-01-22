@@ -2,7 +2,8 @@
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { RecurrencePattern, type GetAllGroupEventsResponse } from '@/types/events'
 import { useToast } from 'primevue/usetoast'
-import {  onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import AddEvent from './AddEvent.vue'
 
 const toast = useToast()
 const props = defineProps<{
@@ -25,7 +26,7 @@ const getGroupEvents = async (groupId: number) => {
     console.error(error)
   }
 }
- const mapRecurrencePattern = (eventId: number) => {
+const mapRecurrencePattern = (eventId: number) => {
   const event = events.value.find(e => e.eventId === eventId)
   if (event && event.recurrencePattern !== undefined) {
     return RecurrencePattern[event.recurrencePattern]
@@ -42,6 +43,8 @@ onMounted(() => {
 </script>
 
 <template>
+
+  <AddEvent @update="getGroupEvents(groupId)" :group-id="groupId" />
   <h1>Event list</h1>
   {{ groupId }}
   <ul>
