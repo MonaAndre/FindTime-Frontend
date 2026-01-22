@@ -81,7 +81,7 @@ const handleUpdateEvent = async (res: UpdateEventDtoRequest) => {
                 <TextInput name="end-time" v-model="updateEventForm.endTime" type="datetime-local"> End date</TextInput>
             </div>
             <Select v-model="updateEventForm.updateOption" :options="recurrenceOptions" option-label="label"
-                option-value="value" placeholder="Select update option" class="w-full" />
+                option-value="value" placeholder="Select update option" class="w-3/5" />
 
             <div class="flex justify-end mt-5 gap-2">
                 <ButtonComponent @click="visible = false" tertiary lg>Cancel</ButtonComponent>

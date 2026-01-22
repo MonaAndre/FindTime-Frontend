@@ -7,12 +7,12 @@ export enum RecurrencePattern {
 
 export interface CreateEventDtoRequest {
   eventName: string
-  eventDescription?: string |null
+  eventDescription?: string | null
   groupId: number
   startTime: string
   endTime: string
   categoryId?: number | undefined
-  location?: string| null
+  location?: string | null
   isRecurring: boolean
   recurrencePattern?: RecurrencePattern | undefined
   recurrenceEndTime?: string | null
@@ -38,9 +38,9 @@ export interface CreateEventDtoResponse {
    ========================= */
 
 export enum DeleteRecurringOption {
-  ThisEventOnly = 'ThisEventOnly',
-  ThisAndFutureEvents = 'ThisAndFutureEvents',
-  AllEvents = 'AllEvents',
+  ThisEventOnly = 0,
+  ThisAndFutureEvents = 1,
+  AllEvents = 2,
 }
 
 export interface DeleteEventDtoRequest {
@@ -59,13 +59,13 @@ export interface DeleteEventDtoResponse {
 
 export interface GetAllGroupEventsResponse {
   eventId: number
-  eventName?: string| null
+  eventName?: string | null
   eventDescription?: string
   startTime: string
   endTime: string
   categoryId?: number | undefined
   categoryColor?: string | null
-  location?: string |null
+  location?: string | null
 
   creatorUserId: string
   creatorUserName: string
@@ -93,7 +93,7 @@ export enum UpdateRecurringOption {
 export interface UpdateEventDtoRequest {
   eventId: number
   eventName: string
-  eventDescription?: string |null
+  eventDescription?: string | null
   startTime: string
   endTime: string
   categoryId?: number | undefined

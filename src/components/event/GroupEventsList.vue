@@ -5,6 +5,7 @@ import { useToast } from 'primevue/usetoast'
 import { onMounted, ref } from 'vue'
 import AddEvent from './AddEvent.vue'
 import UpdateEvent from './UpdateEvent.vue'
+import DeleteEvent from './DeleteEvent.vue'
 
 const toast = useToast()
 const props = defineProps<{
@@ -54,10 +55,14 @@ onMounted(() => {
       <p>{{ groupEvent.eventName }}</p>
       <p>Start time {{ formatDate(groupEvent.startTime) }}</p>
       <p>End time {{ formatDate(groupEvent.endTime) }}</p>
-      <p>Is reccuring {{ groupEvent.isRecurring ? 'Yes' : 'No' }}</p>
+      <p>Is recurring {{ groupEvent.isRecurring ? 'Yes' : 'No' }}</p>
       <p v-if="groupEvent.isRecurring">{{ mapRecurrencePattern(groupEvent.eventId) }}</p>
       <p>{{ groupEvent.categoryColor }} </p>
-      <UpdateEvent @update="getGroupEvents(groupId)" :event-data="groupEvent" />
+      <div class="flex gap-2">
+        <UpdateEvent @update="getGroupEvents(groupId)" :event-data="groupEvent" />
+        <DeleteEvent @update="getGroupEvents(groupId)" :event-id="groupEvent.eventId" />
+      </div>
+
     </li>
   </ul>
 </template>
