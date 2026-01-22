@@ -59,18 +59,18 @@ export interface DeleteEventDtoResponse {
 
 export interface GetAllGroupEventsResponse {
   eventId: number
-  eventName?: string
+  eventName?: string| null
   eventDescription?: string
   startTime: string
   endTime: string
-  categoryId?: number
-  categoryColor?: string
-  location?: string
+  categoryId?: number | undefined
+  categoryColor?: string | null
+  location?: string |null
 
   creatorUserId: string
   creatorUserName: string
   creatorUserEmail: string
-  nickname?: string
+  nickname?: string | null
 
   isRecurring: boolean
   recurrencePattern?: RecurrencePattern
@@ -85,19 +85,19 @@ export interface GetAllGroupEventsResponse {
    ========================= */
 
 export enum UpdateRecurringOption {
-  ThisEventOnly = 'ThisEventOnly',
-  ThisAndFutureEvents = 'ThisAndFutureEvents',
-  AllEvents = 'AllEvents',
+  ThisEventOnly = 0,
+  ThisAndFutureEvents = 1,
+  AllEvents = 2,
 }
 
 export interface UpdateEventDtoRequest {
   eventId: number
   eventName: string
-  eventDescription?: string
+  eventDescription?: string |null
   startTime: string
   endTime: string
-  categoryId?: number
-  location?: string
+  categoryId?: number | undefined
+  location?: string | null
   updateOption: UpdateRecurringOption
 }
 

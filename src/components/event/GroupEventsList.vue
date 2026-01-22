@@ -4,6 +4,7 @@ import { RecurrencePattern, type GetAllGroupEventsResponse } from '@/types/event
 import { useToast } from 'primevue/usetoast'
 import { onMounted, ref } from 'vue'
 import AddEvent from './AddEvent.vue'
+import UpdateEvent from './UpdateEvent.vue'
 
 const toast = useToast()
 const props = defineProps<{
@@ -47,8 +48,8 @@ onMounted(() => {
   <AddEvent @update="getGroupEvents(groupId)" :group-id="groupId" />
   <h1>Event list</h1>
   {{ groupId }}
-  <ul>
-    <li class="flex gap-3 mb-5" v-for="groupEvent in events" :key="groupEvent.eventId">
+  <ul class="grid grid-cols-2 gap-2">
+    <li class="flex  p-2 rounded-xl flex-col gap-2 border  mb-5" v-for="groupEvent in events" :key="groupEvent.eventId">
       <p>Created by {{ groupEvent.nickname ?? groupEvent.creatorUserName }}</p>
       <p>{{ groupEvent.eventName }}</p>
       <p>Start time {{ formatDate(groupEvent.startTime) }}</p>
@@ -56,6 +57,7 @@ onMounted(() => {
       <p>Is reccuring {{ groupEvent.isRecurring ? 'Yes' : 'No' }}</p>
       <p v-if="groupEvent.isRecurring">{{ mapRecurrencePattern(groupEvent.eventId) }}</p>
       <p>{{ groupEvent.categoryColor }} </p>
+      <UpdateEvent @update="getGroupEvents(groupId)" :event-data="groupEvent" />
     </li>
   </ul>
 </template>
