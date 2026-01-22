@@ -6,6 +6,7 @@ import { UpdateRecurringOption, type GetAllGroupEventsResponse, type UpdateEvent
 import TextInput from '../reusables/TextInput.vue';
 import { eventApi } from '@/endpoints/eventEndpoints';
 import { useToast } from 'primevue/usetoast';
+import Select from 'primevue/select'
 
 const visible = ref(false);
 const toast = useToast();
@@ -14,6 +15,11 @@ const props = defineProps<{
     eventData: GetAllGroupEventsResponse
 
 }>();
+const recurrenceOptions = [
+    { label: 'This event only', value: UpdateRecurringOption.ThisEventOnly },
+    { label: 'This and future events', value: UpdateRecurringOption.ThisAndFutureEvents },
+    { label: 'All events', value: UpdateRecurringOption.AllEvents },
+];
 
 const emits = defineEmits<{
     (e: 'update'): void;
@@ -74,6 +80,8 @@ const handleUpdateEvent = async (res: UpdateEventDtoRequest) => {
             <div class="flex items-center gap-4 mb-2">
                 <TextInput name="end-time" v-model="updateEventForm.endTime" type="datetime-local"> End date</TextInput>
             </div>
+            <Select v-model="updateEventForm.updateOption" :options="recurrenceOptions" option-label="label"
+                option-value="value" placeholder="Select update option" class="w-full" />
 
             <div class="flex justify-end mt-5 gap-2">
                 <ButtonComponent @click="visible = false" tertiary lg>Cancel</ButtonComponent>

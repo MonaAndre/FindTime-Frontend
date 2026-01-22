@@ -4,14 +4,22 @@ import ButtonComponent from '../reusables/ButtonComponent.vue'
 import TextInput from '../reusables/TextInput.vue'
 import { ref } from 'vue'
 import { eventApi } from '@/endpoints/eventEndpoints'
-
+import ToggleSwitch from 'primevue/toggleswitch';
 import { useToast } from 'primevue/usetoast'
-import type { CreateEventDtoRequest } from '@/types/events'
+import { RecurrencePattern, type CreateEventDtoRequest } from '@/types/events'
+import Select from 'primevue/select'
 
 
 const showForm = ref(false);
 const toast = useToast();
 
+
+const recurrenceOptions = [
+    { label: 'Daily', value: RecurrencePattern.Daily },
+    { label: 'Weekly', value: RecurrencePattern.Weekly },
+    { label: 'Monthly', value: RecurrencePattern.Monthly },
+    { label: 'Yearly', value: RecurrencePattern.Yearly }
+];
 const props = defineProps<{
     groupId: number
 }>();
@@ -77,10 +85,20 @@ const handleCreateEvent = async (req: CreateEventDtoRequest) => {
                 <TextInput name="end-time" v-model="createEventForm.endTime" type="datetime-local"> End date</TextInput>
                 <TextInput name="location" v-model="createEventForm.location" placeholder="Event location" type="text">
                     Location</TextInput>
+                <div class="flex gap-3 items-center ">
+                    <label class="mt-3" for="is-recurring">Is recurring?</label>
+                    <ToggleSwitch name="is-recurring" class="mt-3" v-model="createEventForm.isRecurring" />
+                </div>
+                <div v-if="createEventForm.isRecurring">
+                    <Select v-model="createEventForm.recurrencePattern" :options="recurrenceOptions" option-label="label"
+                        option-value="value" placeholder="Select recurrence" class="w-full" />
+                    <TextInput name="recurrence-end" v-model="createEventForm.recurrenceEndTime" type="datetime-local">
+                        Last day</TextInput>
+                </div>
 
-                <ButtonComponent margin-y type="submit" primary lg center>Create group</ButtonComponent>
+                <ButtonComponent margin-y type="submit" primary lg center>Create event</ButtonComponent>
+
             </form>
         </div>
-
     </div>
 </template>
