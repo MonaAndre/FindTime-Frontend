@@ -1,6 +1,7 @@
 import './assets/main.css'
 import PrimeVue from 'primevue/config'
 import Lara from '@primevue/themes/lara'
+import ConfirmationService from 'primevue/confirmationservice';
 
 
 
@@ -13,6 +14,7 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
+app.use(ConfirmationService);
 app.use(PrimeVue, {
   theme: {
     preset: Lara

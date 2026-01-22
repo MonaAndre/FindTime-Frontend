@@ -44,7 +44,7 @@ const changePassword = async () => {
             :show-password-toggle="true">
             Confirm password
         </TextInput>
-        <ButtonComponent primary lg center type="submit">Change password</ButtonComponent>
+        <ButtonComponent margin-y primary lg center type="submit">Change password</ButtonComponent>
 
     </form>
 </template>

@@ -42,7 +42,7 @@ const handleUpdateUser = async (req: UserDto) => {
         }
 
     } catch (error) {
-      toast.add({
+        toast.add({
             severity: "error",
             summary: "Failed to update user",
             life: 5000
@@ -77,11 +77,10 @@ onMounted(() => {
         <TextInput name="birthday" v-model="userDetail.birthday" type="datetime-local"> Birthday</TextInput>
 
 
-        <div class="flex justify-end mt-5 gap-2">
 
-            <ButtonComponent type="submit" primary lg>Save</ButtonComponent>
 
-        </div>
+        <ButtonComponent type="submit" center margin-y primary lg>Save</ButtonComponent>
+
 
     </form>
 </template>
