@@ -1,176 +1,170 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import CalendarMonthView from './CalendarMonthView.vue'
-import CalendarWeekView from './CalendarWeekView.vue'
-import CalendarDayView from './CalendarDayView.vue'
-import AddEventDialog from './AddEventDialog.vue'
-import EventDetailModal from './EventDetailModal.vue'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
-import type { GroupCategoryGroupDto } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { CalendarIcon, Squares2X2Icon, QueueListIcon, FunnelIcon } from '@heroicons/vue/24/outline'
-import Select from 'primevue/select'
 
 const props = defineProps<{
   events: GetAllGroupEventsResponse[]
   groupId: number
-  groupCategories: GroupCategoryGroupDto[]
 }>()
 
 const emits = defineEmits<{
-  (e: 'update'): void
+  (e: 'eventClick', event: GetAllGroupEventsResponse): void
+  (e: 'timeSlotClick', hour: number): void
 }>()
 
-type ViewMode = 'month' | 'week' | 'day'
+const currentDate = ref(new Date())
 
-const viewMode = ref<ViewMode>('month')
-const showAddEventDialog = ref(false)
-const selectedEvent = ref<GetAllGroupEventsResponse | null>(null)
-const showEventDetail = ref(false)
-const selectedDate = ref<Date | null>(null)
-const selectedCategoryFilter = ref<number | null>(null)
+const hours = Array.from({ length: 24 }, (_, i) => i)
 
-// Filter events by selected category
-const filteredEvents = computed(() => {
-  if (selectedCategoryFilter.value === null) {
-    return props.events
+const dayEvents = computed(() => {
+  return props.events.filter((event) => {
+    const eventStart = new Date(event.startTime)
+    return (
+      eventStart.getDate() === currentDate.value.getDate() &&
+      eventStart.getMonth() === currentDate.value.getMonth() &&
+      eventStart.getFullYear() === currentDate.value.getFullYear()
+    )
+  })
+})
+
+const getEventsForHour = (hour: number): GetAllGroupEventsResponse[] => {
+  return dayEvents.value.filter((event) => {
+    const eventStart = new Date(event.startTime)
+    return eventStart.getHours() === hour
+  })
+}
+
+const previousDay = () => {
+  const newDate = new Date(currentDate.value)
+  newDate.setDate(newDate.getDate() - 1)
+  currentDate.value = newDate
+}
+
+const nextDay = () => {
+  const newDate = new Date(currentDate.value)
+  newDate.setDate(newDate.getDate() + 1)
+  currentDate.value = newDate
+}
+
+const goToToday = () => {
+  currentDate.value = new Date()
+}
+
+const getCategoryColorClasses = (color?: string) => {
+  const colorMap: Record<string, string> = {
+    zinc: 'bg-zinc-100 text-zinc-700 border-l-zinc-500 dark:bg-zinc-800 dark:text-zinc-200',
+    pink: 'bg-pink-50 text-pink-700 border-l-pink-500 dark:bg-pink-900/30 dark:text-pink-200',
+    red: 'bg-red-50 text-red-700 border-l-red-500 dark:bg-red-900/30 dark:text-red-200',
+    blue: 'bg-blue-50 text-blue-700 border-l-blue-500 dark:bg-blue-900/30 dark:text-blue-200',
+    green: 'bg-green-50 text-green-700 border-l-green-500 dark:bg-green-900/30 dark:text-green-200',
+    orange: 'bg-orange-50 text-orange-700 border-l-orange-500 dark:bg-orange-900/30 dark:text-orange-200',
   }
-  return props.events.filter(event => event.categoryId === selectedCategoryFilter.value)
-})
-
-// Add "All Categories" option
-const categoryFilterOptions = computed(() => {
-  return [
-    { categoryId: null, categoryName: 'All Categories', categoryColor: 'zinc' },
-    ...props.groupCategories
-  ]
-})
-
-const handleEventClick = (event: GetAllGroupEventsResponse) => {
-  selectedEvent.value = event
-  showEventDetail.value = true
+  return colorMap[color || 'zinc'] || colorMap.zinc
 }
 
-const handleDateClick = (date: Date) => {
-  selectedDate.value = date
-  showAddEventDialog.value = true
+const formatEventTime = (dateString: string) => {
+  const date = new Date(dateString)
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
 }
 
-const handleAddEvent = () => {
-  selectedDate.value = null
-  showAddEventDialog.value = true
-}
-
-const handleEventUpdate = async () => {
-  emits('update')
-  showEventDetail.value = false
-  showAddEventDialog.value = false
-}
-
-const handleTimeSlotClick = (hour: number) => {
-  const date = new Date()
-  date.setHours(hour, 0, 0, 0)
-  selectedDate.value = date
-  showAddEventDialog.value = true
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 }
 </script>
 
 <template>
-  <div class="space-y-4">
-    <!-- Toolbar -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <!-- View Mode Selector -->
-      <div class="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
-        <ButtonComponent
-          :primary="viewMode === 'month'"
-          :tertiary="viewMode !== 'month'"
-          sm
-          @click="viewMode = 'month'"
-        >
-          <CalendarIcon class="h-4 w-4" />
-          <span class="hidden sm:inline">Month</span>
-        </ButtonComponent>
-        <ButtonComponent
-          :primary="viewMode === 'week'"
-          :tertiary="viewMode !== 'week'"
-          sm
-          @click="viewMode = 'week'"
-        >
-          <Squares2X2Icon class="h-4 w-4" />
-          <span class="hidden sm:inline">Week</span>
-        </ButtonComponent>
-        <ButtonComponent
-          :primary="viewMode === 'day'"
-          :tertiary="viewMode !== 'day'"
-          sm
-          @click="viewMode = 'day'"
-        >
-          <QueueListIcon class="h-4 w-4" />
-          <span class="hidden sm:inline">Day</span>
-        </ButtonComponent>
+  <div class="w-full bg-white dark:bg-zinc-900 rounded-xl shadow-sm border 
+    border-zinc-200 dark:border-zinc-800">
+    <!-- Header -->
+    <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+          {{ formatDate(currentDate) }}
+        </h2>
+        <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
       </div>
 
-      <!-- Category Filter & Add Event -->
-      <div class="flex items-center gap-3 w-full sm:w-auto">
-        <div class="flex items-center gap-2 flex-1 sm:flex-initial">
-          <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
-          <Select
-            v-model="selectedCategoryFilter"
-            :options="categoryFilterOptions"
-            option-label="categoryName"
-            option-value="categoryId"
-            placeholder="Filter by category"
-            class="w-full sm:w-48"
-          />
+      <!-- Navigation -->
+      <div class="flex items-center justify-between">
+        <button
+          @click="previousDay"
+          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+        >
+          <ChevronLeftIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
+        </button>
+
+        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+          Day View
         </div>
-        <ButtonComponent primary lg @click="handleAddEvent">
-          <span class="text-lg">+</span>
-          <span class="hidden sm:inline">Add Event</span>
-        </ButtonComponent>
+
+        <button
+          @click="nextDay"
+          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+        >
+          <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
+        </button>
       </div>
     </div>
 
-    <!-- Calendar Views -->
-    <CalendarMonthView
-      v-if="viewMode === 'month'"
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @date-click="handleDateClick"
-    />
+    <!-- Time Slots -->
+    <div class="max-h-[600px] overflow-y-auto">
+      <div
+        v-for="hour in hours"
+        :key="hour"
+        @click="emits('timeSlotClick', hour)"
+        class="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 
+          dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
+      >
+        <div class="flex">
+          <!-- Time Label -->
+          <div class="w-20 flex-shrink-0 p-3 text-sm font-medium text-zinc-500 
+            dark:text-zinc-400 text-right border-r border-zinc-200 dark:border-zinc-800">
+            {{ hour.toString().padStart(2, '0') }}:00
+          </div>
 
-    <CalendarWeekView
-      v-else-if="viewMode === 'week'"
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @date-click="handleDateClick"
-    />
+          <!-- Events Container -->
+          <div class="flex-1 p-2 min-h-[60px]">
+            <div class="space-y-1">
+              <div
+                v-for="event in getEventsForHour(hour)"
+                :key="event.eventId"
+                @click.stop="emits('eventClick', event)"
+                :class="[
+                  'text-xs px-3 py-2 rounded border-l-2 cursor-pointer hover:shadow-md transition-shadow',
+                  getCategoryColorClasses(event.categoryColor!),
+                ]"
+              >
+                <div class="font-semibold mb-1">{{ event.eventName }}</div>
+                <div class="text-[11px] opacity-75">
+                  {{ formatEventTime(event.startTime) }} - {{ formatEventTime(event.endTime) }}
+                </div>
+                <div v-if="event.location" class="text-[11px] opacity-75 mt-1">
+                  📍 {{ event.location }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <CalendarDayView
-      v-else
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @time-slot-click="handleTimeSlotClick"
-    />
-
-    <!-- Add Event Dialog -->
-    <AddEventDialog
-      v-model:visible="showAddEventDialog"
-      :group-id="groupId"
-      :group-categories="groupCategories"
-      :initial-date="selectedDate"
-      @update="handleEventUpdate"
-    />
-
-    <!-- Event Detail Modal -->
-    <EventDetailModal
-      v-model:visible="showEventDetail"
-      :event="selectedEvent"
-      :group-id="groupId"
-      :group-categories="groupCategories"
-      @update="handleEventUpdate"
-    />
+    <!-- Summary -->
+    <div class="px-4 py-3 border-t border-zinc-200 dark:border-zinc-800 
+      bg-zinc-50 dark:bg-zinc-800/50">
+      <div class="text-sm text-zinc-600 dark:text-zinc-400">
+        {{ dayEvents.length }} {{ dayEvents.length === 1 ? 'event' : 'events' }} today
+      </div>
+    </div>
   </div>
 </template>
