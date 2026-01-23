@@ -70,7 +70,7 @@ const handleCreateEvent = async (req: CreateEventDtoRequest) => {
 
 <template>
     <div>
-        <ButtonComponent margin-y @click="showForm = true" lg secondary>
+        <ButtonComponent end margin-y @click="showForm = true" lg secondary>
             <PlusIcon class="h-5 w-5" />Add Event
         </ButtonComponent>
 

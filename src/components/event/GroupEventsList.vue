@@ -47,8 +47,8 @@ onMounted(() => {
 <template>
 
   <AddEvent @update="getGroupEvents(groupId)" :group-id="groupId" />
-  <h1>Event list</h1>
-  {{ groupId }}
+  <h3 class="text-center font-bold my-5">Event list:</h3>
+
   <ul class="grid grid-cols-2 gap-2">
     <li class="flex  p-2 rounded-xl flex-col gap-2 border  mb-5" v-for="groupEvent in events" :key="groupEvent.eventId">
       <p>Created by {{ groupEvent.nickname ?? groupEvent.creatorUserName }}</p>
