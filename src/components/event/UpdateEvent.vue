@@ -7,12 +7,15 @@ import TextInput from '../reusables/TextInput.vue';
 import { eventApi } from '@/endpoints/eventEndpoints';
 import { useToast } from 'primevue/usetoast';
 import Select from 'primevue/select'
+import type { GroupCategoryGroupDto } from '@/types/group';
+import AddCategoryToEvent from '../category/AddCategoryToEvent.vue';
 
 const visible = ref(false);
 const toast = useToast();
 
 const props = defineProps<{
-    eventData: GetAllGroupEventsResponse
+    eventData: GetAllGroupEventsResponse,
+    groupCategories: GroupCategoryGroupDto[]
 
 }>();
 const recurrenceOptions = [
@@ -31,14 +34,22 @@ const updateEventForm = ref<UpdateEventDtoRequest>({
     eventDescription: props.eventData.eventDescription,
     startTime: props.eventData.startTime,
     endTime: props.eventData.endTime,
-    categoryId: props.eventData.categoryId,
     location: props.eventData.location,
-    updateOption: UpdateRecurringOption.ThisEventOnly
+    updateOption: UpdateRecurringOption.ThisEventOnly,
+    categoryId: props.eventData.categoryId
 })
 
-const handleUpdateEvent = async (res: UpdateEventDtoRequest) => {
+
+
+const handleSetCatId = (categoryId: number) => {
+  updateEventForm.value.categoryId = categoryId;
+    console.log('Category ID set to:', categoryId);
+}
+
+const handleUpdateEvent = async (req: UpdateEventDtoRequest) => {
     try {
-        const result = await eventApi.updateEvent(res);
+        console.log(req);
+        const result = await eventApi.updateEvent(req);
         if (result.success) {
             toast.add({
                 severity: "success",
@@ -63,7 +74,7 @@ const handleUpdateEvent = async (res: UpdateEventDtoRequest) => {
 
     <Dialog v-model:visible="visible" modal header="Update Event" :style="{ width: '25rem' }">
         <span class="text-surface-500 dark:text-surface-400 block mb-2">Update event {{ updateEventForm.eventId
-            }}:</span>
+        }}:</span>
         <form class="" @submit.prevent="handleUpdateEvent(updateEventForm)">
             <div class="flex items-center gap-4 mb-2">
                 <TextInput type="text" name="event-name" v-model="updateEventForm.eventName">New Name</TextInput>
@@ -82,6 +93,7 @@ const handleUpdateEvent = async (res: UpdateEventDtoRequest) => {
             </div>
             <Select v-model="updateEventForm.updateOption" :options="recurrenceOptions" option-label="label"
                 option-value="value" placeholder="Select update option" class="w-3/5" />
+            <AddCategoryToEvent @set-category-to-event="handleSetCatId" :groupCategories="props.groupCategories" />
 
             <div class="flex justify-end mt-5 gap-2">
                 <ButtonComponent @click="visible = false" tertiary lg>Cancel</ButtonComponent>

@@ -8,6 +8,7 @@ import ToggleSwitch from 'primevue/toggleswitch';
 import { useToast } from 'primevue/usetoast'
 import { RecurrencePattern, type CreateEventDtoRequest } from '@/types/events'
 import Select from 'primevue/select'
+import type { GroupCategoryGroupDto } from '@/types/group'
 
 
 const showForm = ref(false);
@@ -21,7 +22,8 @@ const recurrenceOptions = [
     { label: 'Yearly', value: RecurrencePattern.Yearly }
 ];
 const props = defineProps<{
-    groupId: number
+    groupId: number,
+    groupCategories: GroupCategoryGroupDto[];
 }>();
 
 const emits = defineEmits<{
@@ -85,15 +87,19 @@ const handleCreateEvent = async (req: CreateEventDtoRequest) => {
                 <TextInput name="end-time" v-model="createEventForm.endTime" type="datetime-local"> End date</TextInput>
                 <TextInput name="location" v-model="createEventForm.location" placeholder="Event location" type="text">
                     Location</TextInput>
+                       <Select v-model="createEventForm.categoryId" :options="props.groupCategories"
+                        option-label="categoryName" option-value="categoryId" placeholder="Select category"
+                        class="w-3/5" />
                 <div class="flex gap-3 items-center ">
                     <label class="mt-3" for="is-recurring">Is recurring?</label>
                     <ToggleSwitch name="is-recurring" class="mt-3" v-model="createEventForm.isRecurring" />
                 </div>
                 <div v-if="createEventForm.isRecurring">
-                    <Select v-model="createEventForm.recurrencePattern" :options="recurrenceOptions" option-label="label"
-                        option-value="value" placeholder="Select recurrence" class="w-full" />
+                    <Select v-model="createEventForm.recurrencePattern" :options="recurrenceOptions"
+                        option-label="label" option-value="value" placeholder="Select recurrence" class="w-full" />
                     <TextInput name="recurrence-end" v-model="createEventForm.recurrenceEndTime" type="datetime-local">
                         Last day</TextInput>
+                 
                 </div>
 
                 <ButtonComponent margin-y type="submit" primary lg center>Create event</ButtonComponent>

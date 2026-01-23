@@ -41,6 +41,13 @@ export interface GroupInfoDtoResponse {
     joinedAt: string;
     userGroupColor?: string | null;
     members: GroupMemberGroupDto[];
+    categories: GroupCategoryGroupDto[]
+}
+
+export interface GroupCategoryGroupDto {
+    categoryId: number;
+    categoryName: string;
+    categoryColor: string;
 }
 
 export interface GroupMemberGroupDto {
@@ -67,16 +74,16 @@ export interface DeleteMemberRequest {
     userId: string;
     groupId: number;
 }
-export interface ChangeGroupAdminRequest{
+export interface ChangeGroupAdminRequest {
     groupId: number;
     newAdminUserId: string;
 }
 export interface AddNicknameDtoRequest {
-  targetUserId: string;
-  nickname: string;
-  groupId: number;
+    targetUserId: string;
+    nickname: string;
+    groupId: number;
 }
-export interface UpdateUserGroupSettingsDtoRequest{
+export interface UpdateUserGroupSettingsDtoRequest {
     groupId: number;
     groupColor: string;
 }

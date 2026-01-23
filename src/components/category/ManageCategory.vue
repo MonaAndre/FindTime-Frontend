@@ -6,7 +6,6 @@ import AddCategory from './AddCategory.vue'
 import DeleteCategory from './DeleteCategory.vue'
 import UpdateCategory from './UpdateCategory.vue'
 
-
 const categoryList = ref<CategoryListDtoResponse[]>([])
 
 const bgClass = (color?: string) => {
@@ -25,7 +24,9 @@ const props = defineProps<{
     groupId: number
 }>();
 
-
+const emits = defineEmits<{
+    (e: 'update'): void
+}>()
 
 const handleGetCategories = async (groupId: number) => {
     try {
@@ -41,22 +42,25 @@ onMounted(() => {
     handleGetCategories(props.groupId)
 })
 
-
+const refreshData = () => {
+    handleGetCategories(props.groupId);
+    emits('update')
+}
 
 </script>
 <template>
     <section>
         <h2 class="text-center font-bold text-2xl my-5">Manage group categories for events</h2>
-        <AddCategory @update="handleGetCategories(props.groupId)" :group-id="props.groupId" />
+        <AddCategory @update="emits('update')" :group-id="props.groupId" />
         <h3 class="text-center font-bold my-5">Category list:</h3>
         <ul class="flex gap-10 flex-wrap my-5" v-if="categoryList.length > 0">
             <li v-for="category in categoryList" :key="category.categoryId" class="flex  gap-1 items-center">
 
                 <span :class="bgClass(category.categoryColor)">{{ category.categoryName }}</span>
-                <UpdateCategory v-if="category.categoryColor && category.categoryName"
+                <UpdateCategory @update="refreshData" v-if="category.categoryColor && category.categoryName"
                     :category-color="category.categoryColor" :category-id="category.categoryId"
-                    :group-id="props.groupId" :category-name="category.categoryName" @update="handleGetCategories(props.groupId)"/>
-                <DeleteCategory :group-id="props.groupId" :category-id="category.categoryId" @update="handleGetCategories(props.groupId)"/>
+                    :group-id="props.groupId" :category-name="category.categoryName" />
+                <DeleteCategory @update="refreshData" :group-id="props.groupId" :category-id="category.categoryId" />
             </li>
         </ul>
     </section>

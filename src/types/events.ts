@@ -65,6 +65,7 @@ export interface GetAllGroupEventsResponse {
   endTime: string
   categoryId?: number | undefined
   categoryColor?: string | null
+  categoryName?: string|null
   location?: string | null
 
   creatorUserId: string

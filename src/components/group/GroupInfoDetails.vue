@@ -8,7 +8,7 @@ import ButtonComponent from '../reusables/ButtonComponent.vue'
 import { PencilSquareIcon, UserPlusIcon } from '@heroicons/vue/24/outline'
 import GroupMemberManager from './GroupMemberManager.vue'
 import GroupMemberList from './GroupMemberList.vue'
-import GroupEventsList from '../event/GroupEventsList.vue'
+import EventsList from '../event/EventsList.vue'
 import ManageCategory from '../category/ManageCategory.vue'
 const route = useRoute()
 const groupInfo = ref<GroupInfoDtoResponse>()
@@ -88,10 +88,10 @@ onMounted(async () => {
     </div>
   </div>
   <section>
-    <ManageCategory  v-if="groupInfo?.groupId" :group-id="groupInfo?.groupId" />
+    <ManageCategory @update="getGroupInfo" v-if="groupInfo?.groupId" :group-id="groupInfo?.groupId" />
   </section>
   <section>
     <h2 class="text-center font-bold text-2xl">Events overvuiw</h2>
-    <GroupEventsList v-if="groupInfo?.groupId" :group-id="groupInfo.groupId" />
+    <EventsList :groupCategories="groupInfo.categories" v-if="groupInfo?.groupId" :group-id="groupInfo.groupId" />
   </section>
 </template>
