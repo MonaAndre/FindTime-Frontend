@@ -51,11 +51,10 @@ const refreshData = () => {
 <template>
     <section>
         <h2 class="text-center font-bold text-2xl my-5">Manage group categories for events</h2>
-        <AddCategory @update="emits('update')" :group-id="props.groupId" />
+        <AddCategory @update="refreshData" :group-id="props.groupId" />
         <h3 class="text-center font-bold my-5">Category list:</h3>
         <ul class="flex gap-10 flex-wrap my-5" v-if="categoryList.length > 0">
             <li v-for="category in categoryList" :key="category.categoryId" class="flex  gap-1 items-center">
-
                 <span :class="bgClass(category.categoryColor)">{{ category.categoryName }}</span>
                 <UpdateCategory @update="refreshData" v-if="category.categoryColor && category.categoryName"
                     :category-color="category.categoryColor" :category-id="category.categoryId"
