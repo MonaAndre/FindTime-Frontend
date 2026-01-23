@@ -1,47 +1,42 @@
 <script setup lang="ts">
-import { eventApi } from '@/endpoints/eventEndpoints'
+import Dialog from 'primevue/dialog'
 import type { GetAllGroupEventsResponse } from '@/types/events'
-import { useToast } from 'primevue/usetoast'
-import { onMounted, ref } from 'vue'
-import CalendarContainer from './CalendarContainer.vue'
 import type { GroupCategoryGroupDto } from '@/types/group'
+import EventCard from './EventCard.vue'
 
-const toast = useToast()
-const props = defineProps<{
+defineProps<{
+  visible: boolean
+  event: GetAllGroupEventsResponse | null
   groupId: number
   groupCategories: GroupCategoryGroupDto[]
 }>()
 
-const events = ref<GetAllGroupEventsResponse[]>([])
+const emits = defineEmits<{
+  (e: 'update:visible', value: boolean): void
+  (e: 'update'): void
+}>()
 
-const getGroupEvents = async (groupId: number) => {
-  try {
-    const response = await eventApi.getGroupEvents(groupId)
-    if (response.success) {
-      events.value = response.data ?? []
-    }
-  } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Failed to get group events',
-      life: 5000,
-    })
-    console.error(error)
-  }
+const handleUpdate = () => {
+  emits('update')
+  emits('update:visible', false)
 }
 
-onMounted(() => {
-  getGroupEvents(props.groupId)
-})
 </script>
 
 <template>
-  <div class="pb-6">
-    <CalendarContainer
-      :events="events"
+  <Dialog
+    :visible="visible"
+    @update:visible="emits('update:visible', $event)"
+    modal
+    header="Event Details"
+    :style="{ width: '90vw', maxWidth: '600px' }"
+  >
+    <EventCard
+      v-if="event"
+      :event="event"
       :group-id="groupId"
       :group-categories="groupCategories"
-      @update="getGroupEvents(groupId)"
+      @update="handleUpdate"
     />
-  </div>
+  </Dialog>
 </template>

@@ -16,8 +16,8 @@ const events = ref<GetAllGroupEventsResponse[]>([])
 const isLoading = ref(false)
 
 const getGroupEvents = async () => {
-  if (isLoading.value) return // Prevent concurrent calls
-  
+  if (isLoading.value) return
+
   isLoading.value = true
   try {
     const response = await eventApi.getGroupEvents(props.groupId)
@@ -36,7 +36,6 @@ const getGroupEvents = async () => {
   }
 }
 
-// Watch for groupId changes and reload events
 watch(() => props.groupId, () => {
   getGroupEvents()
 }, { immediate: false })
@@ -44,16 +43,21 @@ watch(() => props.groupId, () => {
 onMounted(() => {
   getGroupEvents()
 })
+
+// Handle event updates locally without bubbling to parent
+const handleEventUpdate = async () => {
+  await getGroupEvents()
+}
 </script>
 
 <template>
   <div class="pb-6">
-    <CalendarContainer
-      v-if="!isLoading"
-      :events="events"
-      :group-id="groupId"
+    <CalendarContainer 
+      v-if="!isLoading" 
+      :events="events" 
+      :group-id="groupId" 
       :group-categories="groupCategories"
-      @update="getGroupEvents"
+      @update="handleEventUpdate"
     />
     <div v-else class="text-center py-10">
       <p class="text-zinc-500">Loading calendar...</p>
