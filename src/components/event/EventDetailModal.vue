@@ -2,7 +2,7 @@
 import { eventApi } from '@/endpoints/eventEndpoints'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import { useToast } from 'primevue/usetoast'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import CalendarContainer from './CalendarContainer.vue'
 import type { GroupCategoryGroupDto } from '@/types/group'
 
@@ -13,14 +13,10 @@ const props = defineProps<{
 }>()
 
 const events = ref<GetAllGroupEventsResponse[]>([])
-const isLoading = ref(false)
 
-const getGroupEvents = async () => {
-  if (isLoading.value) return // Prevent concurrent calls
-  
-  isLoading.value = true
+const getGroupEvents = async (groupId: number) => {
   try {
-    const response = await eventApi.getGroupEvents(props.groupId)
+    const response = await eventApi.getGroupEvents(groupId)
     if (response.success) {
       events.value = response.data ?? []
     }
@@ -31,32 +27,21 @@ const getGroupEvents = async () => {
       life: 5000,
     })
     console.error(error)
-  } finally {
-    isLoading.value = false
   }
 }
 
-// Watch for groupId changes and reload events
-watch(() => props.groupId, () => {
-  getGroupEvents()
-}, { immediate: false })
-
 onMounted(() => {
-  getGroupEvents()
+  getGroupEvents(props.groupId)
 })
 </script>
 
 <template>
   <div class="pb-6">
     <CalendarContainer
-      v-if="!isLoading"
       :events="events"
       :group-id="groupId"
       :group-categories="groupCategories"
-      @update="getGroupEvents"
+      @update="getGroupEvents(groupId)"
     />
-    <div v-else class="text-center py-10">
-      <p class="text-zinc-500">Loading calendar...</p>
-    </div>
   </div>
 </template>

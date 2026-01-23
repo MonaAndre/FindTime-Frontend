@@ -12,3 +12,34 @@
 .groups-container {
   @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-10
 }
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 dark:bg-zinc-700 rounded-full;
+}
+
+.scrollbar-thin:hover::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 dark:bg-zinc-600;
+}
+/* Custom scrollbar styles */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 dark:bg-zinc-700 rounded-full;
+}
+
+.scrollbar-thin:hover::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 dark:bg-zinc-600;
+}
