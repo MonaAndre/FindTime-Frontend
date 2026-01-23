@@ -22,22 +22,24 @@ const handleLeaveGroup = async (groupId: number) => {
             detail: "You must transfer admin rights before leaving the group",
             life: 5000
         });
-        return;
+        router.push('/groups')
     }
     try {
         const result = await groupApi.leaveGroup(groupId);
-        console.log(props.groupId);
+       
         if (result.success) {
             toast.add({
                 severity: "success",
-                summary: `You leaved the group ${props.groupName}`
+                summary: `You leaved the group ${props.groupName}`,
+                life:5000
             })
             router.push('/groups');
         }
     } catch (error) {
         toast.add({
             severity: "error",
-            summary: `Failed to leave the group`
+            summary: `Failed to leave the group`,
+            life:5000
 
         })
         console.error(error);

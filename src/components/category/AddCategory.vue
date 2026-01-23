@@ -47,7 +47,7 @@ const handleCreateCategory = async (req: CreateCategoryDtoRequest) => {
 const showForm = ref(false)
 </script>
 <template>
-    <ButtonComponent @click="showForm = true" lg secondary>
+    <ButtonComponent end @click="showForm = true" lg secondary>
      <PlusIcon class="h-5 w-5" />Add category in this group
     </ButtonComponent>
     <form @submit.prevent="handleCreateCategory(createCatReq)" v-if="showForm">

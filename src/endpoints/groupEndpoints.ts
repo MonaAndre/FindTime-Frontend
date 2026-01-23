@@ -34,7 +34,7 @@ export const groupApi = {
     },
     async leaveGroup(groupId: number): Promise<ServiceResponse<boolean>> {
         const response = await api.post<ServiceResponse<boolean>>(
-            `api/Group/leave-group?groupId=${groupId}`
+            `api/Group/leave-group/${groupId}`
         );
         return response.data;
     },

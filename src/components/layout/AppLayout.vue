@@ -6,14 +6,12 @@ import NavBar from './NavBar.vue';
 
 <template>
     <div class="flex flex-col min-h-screen justify-between">
-        <header>
+        <header class="fixed w-full z-20">
             <div class="container mx-auto">
                 <NavBar />
             </div>
-
-
         </header>
-        <main class="grow">
+        <main class="grow mt-15">
             <div class="container mx-auto">
                 <RouterView />
             </div>

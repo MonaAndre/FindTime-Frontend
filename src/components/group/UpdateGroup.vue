@@ -73,6 +73,6 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
     <ChangeGroupColor :group-id="groupIdToUpdate" :group-color="groupColor" />
   </section>
   <ChangeGroupAdmin @close-modal="handleChangeAdmin" v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
-  <LeaveGroup :members="members" :is-admin="isAdmin" :group-id="groupIdToUpdate" :group-name="groupName" />
+  <LeaveGroup v-if="groupIdToUpdate" :members="members" :is-admin="isAdmin" :group-id="groupIdToUpdate" :group-name="groupName" />
   <DeleteGroup :group-id="groupIdToUpdate" v-if="isAdmin" />
 </template>
