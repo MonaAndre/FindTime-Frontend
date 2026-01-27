@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import Dialog from 'primevue/dialog'
-import DatePicker from 'primevue/datepicker'
 import TextInput from '../reusables/TextInput.vue'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import ToggleSwitch from 'primevue/toggleswitch'
@@ -10,29 +9,50 @@ import { useToast } from 'primevue/usetoast'
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { RecurrencePattern, type CreateEventDtoRequest } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
+import { addYears } from 'date-fns'
 
 const props = defineProps<{
-    visible: boolean
-    groupId: number
-    groupCategories: GroupCategoryGroupDto[]
-    initialDate?: Date | null
+  visible: boolean
+  groupId: number
+  groupCategories: GroupCategoryGroupDto[]
+  initialDate?: Date | null
 }>()
 
 const emits = defineEmits<{
-    (e: 'update:visible', value: boolean): void
-    (e: 'update'): void
+  (e: 'update:visible', value: boolean): void
+  (e: 'update'): void
 }>()
 
 const toast = useToast()
 
 const recurrenceOptions = [
-    { label: 'Daily', value: RecurrencePattern.Daily },
-    { label: 'Weekly', value: RecurrencePattern.Weekly },
-    { label: 'Monthly', value: RecurrencePattern.Monthly },
-    { label: 'Yearly', value: RecurrencePattern.Yearly }
+  { label: 'Daily', value: RecurrencePattern.Daily },
+  { label: 'Weekly', value: RecurrencePattern.Weekly },
+  { label: 'Monthly', value: RecurrencePattern.Monthly },
+  { label: 'Yearly', value: RecurrencePattern.Yearly },
 ]
 
 const createEventForm = ref<CreateEventDtoRequest>({
+  eventName: '',
+  eventDescription: null,
+  groupId: props.groupId,
+  startTime: '',
+  endTime: '',
+  categoryId: undefined,
+  location: '',
+  isRecurring: false,
+  recurrencePattern: undefined,
+  recurrenceEndTime: null,
+})
+
+const startDate = ref<Date | null>(null)
+const endDate = ref<Date | null>(null)
+const recurrenceEndDate = ref<Date | null>(null)
+const maxDate = addYears(startDate.value ?? new Date(), 2)
+
+const resetForm = () => {
+  createEventForm.value = {
     eventName: '',
     eventDescription: null,
     groupId: props.groupId,
@@ -42,183 +62,169 @@ const createEventForm = ref<CreateEventDtoRequest>({
     location: '',
     isRecurring: false,
     recurrencePattern: undefined,
-    recurrenceEndTime: null
-})
-
-// Date objects for DatePicker
-const startDate = ref<Date | null>(null)
-const endDate = ref<Date | null>(null)
-const recurrenceEndDate = ref<Date | null>(null)
-
-const convertDateToISOString = (date: Date | null): string => {
-    if (!date) return ''
-    return date.toISOString()
-}
-
-watch(startDate, (newDate) => {
-    createEventForm.value.startTime = convertDateToISOString(newDate)
-})
-
-watch(endDate, (newDate) => {
-    createEventForm.value.endTime = convertDateToISOString(newDate)
-})
-
-watch(recurrenceEndDate, (newDate) => {
-    createEventForm.value.recurrenceEndTime = convertDateToISOString(newDate)
-})
-
-const resetForm = () => {
-    createEventForm.value = {
-        eventName: '',
-        eventDescription: null,
-        groupId: props.groupId,
-        startTime: '',
-        endTime: '',
-        categoryId: undefined,
-        location: '',
-        isRecurring: false,
-        recurrencePattern: undefined,
-        recurrenceEndTime: null
-    }
-    startDate.value = null
-    endDate.value = null
-    recurrenceEndDate.value = null
+    recurrenceEndTime: null,
+  }
+  startDate.value = null
+  endDate.value = null
+  recurrenceEndDate.value = null
 }
 
 const initializeFormWithDate = (date: Date) => {
-    const start = new Date(date)
-    const end = new Date(date)
-    end.setHours(end.getHours() + 1)
+  const start = new Date(date)
+  const end = new Date(date)
+  end.setHours(end.getHours() + 1)
 
-    startDate.value = start
-    endDate.value = end
+  const endString = end.toLocaleString()
+  const startString = start.toLocaleString()
+
+  createEventForm.value.startTime = startString
+  createEventForm.value.endTime = endString
 }
 
-watch(() => props.visible, (isVisible) => {
+watch(
+  () => props.visible,
+  (isVisible) => {
     if (isVisible && props.initialDate) {
-        initializeFormWithDate(props.initialDate)
+      initializeFormWithDate(props.initialDate)
     } else if (!isVisible) {
-        setTimeout(() => resetForm(), 300)
+      setTimeout(() => resetForm(), 300)
     }
-})
+  },
+)
 
 const handleCreateEvent = async (req: CreateEventDtoRequest) => {
-    try {
-        const result = await eventApi.createEvent(req)
-        if (result.success) {
-            toast.add({
-                severity: 'success',
-                summary: 'New event created',
-                life: 5000
-            })
-            emits('update:visible', false)
-            emits('update')
-        }
-    } catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Failed to create event',
-            life: 5000
-        })
-        console.error(error)
+  try {
+    const result = await eventApi.createEvent(req)
+    if (result.success) {
+      toast.add({
+        severity: 'success',
+        summary: 'New event created',
+        life: 5000,
+      })
+      emits('update:visible', false)
+      emits('update')
     }
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Failed to create event',
+      life: 5000,
+    })
+    console.error(error)
+  }
 }
 
 const closeDialog = () => {
-    emits('update:visible', false)
+  emits('update:visible', false)
 }
 </script>
 
 <template>
-    <Dialog :visible="visible" @update:visible="emits('update:visible', $event)" modal header="Create New Event"
-        :style="{ width: '90vw', maxWidth: '600px' }">
-        <form @submit.prevent="handleCreateEvent(createEventForm)" class="space-y-4">
-            <TextInput placeholder="Event name" type="text" name="event-name" v-model="createEventForm.eventName"
-                required>
-                Event name
-            </TextInput>
+  <Dialog
+    :visible="visible"
+    @update:visible="emits('update:visible', $event)"
+    modal
+    header="Create New Event"
+    :style="{ width: '90vw', maxWidth: '600px' }"
+  >
+    <form @submit.prevent="handleCreateEvent(createEventForm)" class="space-y-4">
+      <TextInput
+        placeholder="Event name"
+        type="text"
+        name="event-name"
+        v-model="createEventForm.eventName"
+        required
+      >
+        Event name
+      </TextInput>
 
-            <TextInput placeholder="Event description" type="text" name="event-description"
-                v-model="createEventForm.eventDescription">
-                Event description
-            </TextInput>
+      <TextInput
+        placeholder="Event description"
+        type="text"
+        name="event-description"
+        v-model="createEventForm.eventDescription"
+      >
+        Event description
+      </TextInput>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Start Date & Time -->
-                <div>
-                    <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
-                        Start date & time
-                    </label>
-                    <DatePicker v-model="startDate" showTime hourFormat="24" fluid :pt="{
-                        pcInput: {
-                            root: 'w-full'
-                        }
-                    }" />
-                </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Start Date & Time -->
+        <div>
+          <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
+            Start date & time
+          </label>
+          <VueDatePicker v-model="createEventForm.startTime" />
+        </div>
 
-                <!-- End Date & Time -->
-                <div>
-                    <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
-                        End date & time
-                    </label>
-                    <DatePicker v-model="endDate" showTime hourFormat="24" fluid :pt="{
-                        pcInput: {
-                            root: 'w-full'
-                        }
-                    }" />
-                </div>
-            </div>
+        <!-- End Date & Time -->
+        <div>
+          <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
+            End date & time
+          </label>
+          <VueDatePicker v-model="createEventForm.endTime" />
+        </div>
+      </div>
 
-            <TextInput name="location" v-model="createEventForm.location" placeholder="Event location" type="text">
-                Location
-            </TextInput>
+      <TextInput
+        name="location"
+        v-model="createEventForm.location"
+        placeholder="Event location"
+        type="text"
+      >
+        Location
+      </TextInput>
 
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                    Category
-                </label>
-                <Select v-model="createEventForm.categoryId" :options="groupCategories" option-label="categoryName"
-                    option-value="categoryId" placeholder="Select category (optional)" class="w-full" />
-            </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100"> Category </label>
+        <Select
+          v-model="createEventForm.categoryId"
+          :options="groupCategories"
+          option-label="categoryName"
+          option-value="categoryId"
+          placeholder="Select category (optional)"
+          class="w-full"
+        />
+      </div>
 
-            <div class="flex gap-3 items-center">
-                <label class="text-sm font-medium text-zinc-900 dark:text-zinc-100" for="is-recurring">
-                    Recurring event?
-                </label>
-                <ToggleSwitch name="is-recurring" v-model="createEventForm.isRecurring" />
-            </div>
+      <div class="flex gap-3 items-center">
+        <label class="text-sm font-medium text-zinc-900 dark:text-zinc-100" for="is-recurring">
+          Recurring event?
+        </label>
+        <ToggleSwitch name="is-recurring" v-model="createEventForm.isRecurring" />
+      </div>
 
-            <div v-if="createEventForm.isRecurring" class="space-y-4 pl-4 border-l-2 
-        border-blue-500 dark:border-blue-400">
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Recurrence pattern
-                    </label>
-                    <Select v-model="createEventForm.recurrencePattern" :options="recurrenceOptions"
-                        option-label="label" option-value="value" placeholder="Select recurrence" class="w-full" />
-                </div>
+      <div
+        v-if="createEventForm.isRecurring"
+        class="space-y-4 pl-4 border-l-2 border-blue-500 dark:border-blue-400"
+      >
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            Recurrence pattern
+          </label>
+          <Select
+            v-model="createEventForm.recurrencePattern"
+            :options="recurrenceOptions"
+            option-label="label"
+            option-value="value"
+            placeholder="Select recurrence"
+            class="w-full"
+          />
+        </div>
 
-                <div>
-                    <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
-                        Repeat until
-                    </label>
-                    <DatePicker v-model="recurrenceEndDate" showTime hourFormat="24" fluid :pt="{
-                        pcInput: {
-                            root: 'w-full'
-                        }
-                    }" />
-                </div>
-            </div>
+        <div>
+          <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
+            Repeat until
+          </label>
+          <VueDatePicker v-model="createEventForm.recurrenceEndTime" :max-date="maxDate" />
+        </div>
+      </div>
 
-            <div class="flex items-center justify-end gap-3 pt-4 border-t 
-        border-zinc-200 dark:border-zinc-800">
-                <ButtonComponent secondary lg @click="closeDialog" type="button">
-                    Cancel
-                </ButtonComponent>
-                <ButtonComponent primary lg type="submit">
-                    Create Event
-                </ButtonComponent>
-            </div>
-        </form>
-    </Dialog>
+      <div
+        class="flex items-center justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800"
+      >
+        <ButtonComponent secondary lg @click="closeDialog" type="button"> Cancel </ButtonComponent>
+        <ButtonComponent primary lg type="submit"> Create Event </ButtonComponent>
+      </div>
+    </form>
+  </Dialog>
 </template>
