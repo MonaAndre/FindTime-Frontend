@@ -90,18 +90,20 @@ onMounted(async () => {
 
   </Drawer>
 
-  <Drawer position="right" v-model:visible="openGroupInfoDrawer" class="!w-full md:!w-3/4 lg:!w-3/4" block-scroll
+  <Drawer position="right" v-model:visible="openGroupInfoDrawer" class="!w-full md:!w-1/2" block-scroll
     header="Group Info">
-    <ButtonComponent v-if="groupInfo?.groupId && !showAddMember && !showUpdateGroup" @click="showUpdateGroup = true"
-      primary md>
-      <PencilSquareIcon class="h-5 w-5" /> Update group info
-    </ButtonComponent>
-
-    <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
-      <ButtonComponent v-if="!showAddMember && !showUpdateGroup" @click="showAddMember = true" primary md>
-        <UserPlusIcon class="h-5 w-5" /> Add member
+    <section class="flex gap-3">
+      <ButtonComponent v-if="groupInfo?.groupId && !showAddMember && !showUpdateGroup" @click="showUpdateGroup = true"
+        primary md>
+        <PencilSquareIcon class="h-5 w-5" /> Update group info
       </ButtonComponent>
-    </div>
+
+      <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
+        <ButtonComponent v-if="!showAddMember && !showUpdateGroup" @click="showAddMember = true" primary md>
+          <UserPlusIcon class="h-5 w-5" /> Add member
+        </ButtonComponent>
+      </div>
+    </section>
 
     <div v-if="groupInfo?.members && !showUpdateGroup && !showAddMember" class="space-y-4">
       <p><strong>Group title:</strong> {{ groupInfo?.groupName }}</p>

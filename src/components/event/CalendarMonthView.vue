@@ -176,7 +176,7 @@ const formatEventTime = (dateString: string) => {
       <!-- Calendar Days -->
       <div class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800 rounded-lg overflow-hidden">
         <div v-for="(day, index) in calendarDays" :key="index" @click="emits('dateClick', day.date)" :class="[
-          'h-24 md:h-32 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
+          'h-16 md:h-24 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
           {
             'bg-zinc-50 dark:bg-zinc-800/50': !day.isCurrentMonth,
             'hover:bg-zinc-50 dark:hover:bg-zinc-800': day.isCurrentMonth,
@@ -186,7 +186,7 @@ const formatEventTime = (dateString: string) => {
           <!-- Date Number -->
           <div class="flex items-start justify-between mb-1 flex-shrink-0">
             <span :class="[
-              'text-sm font-medium inline-flex items-center justify-center w-7 h-7      rounded-full',
+              'text-xs font-medium inline-flex items-center justify-center w-7 h-7      rounded-full',
               {
                 'text-zinc-400 dark:text-zinc-600': !day.isCurrentMonth,
                 'text-zinc-900 dark:text-zinc-100': day.isCurrentMonth && !day.isToday,
