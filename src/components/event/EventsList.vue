@@ -12,6 +12,11 @@ const props = defineProps<{
   groupCategories: GroupCategoryGroupDto[]
 }>()
 
+const emits = defineEmits<{
+  (e: 'openCategoryDrawer'): void
+  (e: 'openGroupInfoDrawer'): void
+
+}>()
 const events = ref<GetAllGroupEventsResponse[]>([])
 const isLoading = ref(false)
 
@@ -52,13 +57,9 @@ const handleEventUpdate = async () => {
 
 <template>
   <div class="pb-6">
-    <CalendarContainer 
-      v-if="!isLoading" 
-      :events="events" 
-      :group-id="groupId" 
-      :group-categories="groupCategories"
-      @update="handleEventUpdate"
-    />
+    <CalendarContainer v-if="!isLoading" :events="events" :group-id="groupId" :group-categories="groupCategories"
+      @update="handleEventUpdate" @open-category-drawer="emits('openCategoryDrawer')"
+      @open-group-info-drawer="emits('openGroupInfoDrawer')" />
     <div v-else class="text-center py-10">
       <p class="text-zinc-500">Loading calendar...</p>
     </div>

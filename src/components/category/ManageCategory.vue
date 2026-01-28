@@ -50,7 +50,6 @@ const refreshData = () => {
 </script>
 <template>
     <section>
-        <h2 class="text-center font-bold text-2xl my-5">Manage group categories for events</h2>
         <AddCategory @update="refreshData" :group-id="props.groupId" />
         <h3 class="text-center font-bold my-5">Category list:</h3>
         <ul class="flex gap-10 flex-wrap my-5" v-if="categoryList.length > 0">

@@ -139,30 +139,25 @@ const formatEventTime = (dateString: string) => {
     border-zinc-200 dark:border-zinc-800">
     <!-- Calendar Header -->
     <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-          {{ monthNames[currentMonth] }} {{ currentYear }}
-        </h2>
-        <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
-      </div>
+
 
       <!-- Navigation -->
-      <div class="flex items-center justify-between">
-        <button
-          @click="previousMonth"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-        >
+      <div class="flex items-center">
+        <button @click="previousMonth"
+          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
           <ChevronLeftIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
 
-        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-          {{ monthNames[currentMonth] }} {{ currentYear }}
+        <div class="text-sm grow font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-10">
+          <span class="grow text-center">
+            {{ monthNames[currentMonth] }} {{ currentYear }}
+          </span>
+
+          <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
         </div>
 
-        <button
-          @click="nextMonth"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-        >
+
+        <button @click="nextMonth" class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
           <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
       </div>
@@ -172,43 +167,32 @@ const formatEventTime = (dateString: string) => {
     <div class="p-4">
       <!-- Weekday Headers -->
       <div class="grid grid-cols-7 gap-px mb-2">
-        <div
-          v-for="day in weekDays"
-          :key="day"
-          class="py-2 text-center text-xs font-semibold text-zinc-600 
-            dark:text-zinc-400 uppercase"
-        >
+        <div v-for="day in weekDays" :key="day" class="py-2 text-center text-xs font-semibold text-zinc-600 
+            dark:text-zinc-400 uppercase">
           {{ day }}
         </div>
       </div>
 
       <!-- Calendar Days -->
       <div class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800 rounded-lg overflow-hidden">
-        <div
-          v-for="(day, index) in calendarDays"
-          :key="index"
-          @click="emits('dateClick', day.date)"
-          :class="[
-            'h-24 md:h-32 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
-            {
-              'bg-zinc-50 dark:bg-zinc-800/50': !day.isCurrentMonth,
-              'hover:bg-zinc-50 dark:hover:bg-zinc-800': day.isCurrentMonth,
-              'ring-2 ring-blue-500 ring-inset': day.isToday,
-            },
-          ]"
-        >
+        <div v-for="(day, index) in calendarDays" :key="index" @click="emits('dateClick', day.date)" :class="[
+          'h-24 md:h-32 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
+          {
+            'bg-zinc-50 dark:bg-zinc-800/50': !day.isCurrentMonth,
+            'hover:bg-zinc-50 dark:hover:bg-zinc-800': day.isCurrentMonth,
+            'ring-2 ring-blue-500 ring-inset': day.isToday,
+          },
+        ]">
           <!-- Date Number -->
           <div class="flex items-start justify-between mb-1 flex-shrink-0">
-            <span
-              :class="[
-                'text-sm font-medium inline-flex items-center justify-center w-7 h-7      rounded-full',
-                {
-                  'text-zinc-400 dark:text-zinc-600': !day.isCurrentMonth,
-                  'text-zinc-900 dark:text-zinc-100': day.isCurrentMonth && !day.isToday,
-                  'bg-blue-600 text-white': day.isToday,
-                },
-              ]"
-            >
+            <span :class="[
+              'text-sm font-medium inline-flex items-center justify-center w-7 h-7      rounded-full',
+              {
+                'text-zinc-400 dark:text-zinc-600': !day.isCurrentMonth,
+                'text-zinc-900 dark:text-zinc-100': day.isCurrentMonth && !day.isToday,
+                'bg-blue-600 text-white': day.isToday,
+              },
+            ]">
               {{ day.date.getDate() }}
             </span>
           </div>
@@ -218,15 +202,10 @@ const formatEventTime = (dateString: string) => {
             scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 
             scrollbar-track-transparent hover:scrollbar-thumb-zinc-400 
             dark:hover:scrollbar-thumb-zinc-600">
-            <div
-              v-for="event in day.events"
-              :key="event.eventId"
-              @click.stop="emits('eventClick', event)"
-              :class="[
-                'text-xs px-2 py-1 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
-                getCategoryColorClasses(event.categoryColor!),
-              ]"
-            >
+            <div v-for="event in day.events" :key="event.eventId" @click.stop="emits('eventClick', event)" :class="[
+              'text-xs px-2 py-1 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
+              getCategoryColorClasses(event.categoryColor!),
+            ]">
               <div class="font-medium truncate">{{ event.eventName }}</div>
               <div class="text-[10px] opacity-75">
                 {{ formatEventTime(event.startTime) }}
@@ -252,4 +231,3 @@ const formatEventTime = (dateString: string) => {
     </div>
   </div>
 </template>
-

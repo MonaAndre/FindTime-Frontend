@@ -19,6 +19,9 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: 'update'): void
+  (e: 'openCategoryDrawer'): void
+  (e: 'openGroupInfoDrawer'): void
+
 }>()
 
 type ViewMode = 'month' | 'week' | 'day'
@@ -80,50 +83,36 @@ const handleTimeSlotClick = (hour: number) => {
     <!-- Toolbar -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <!-- View Mode Selector -->
+
       <div class="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
-        <ButtonComponent
-          :primary="viewMode === 'month'"
-          :tertiary="viewMode !== 'month'"
-          sm
-          @click="viewMode = 'month'"
-        >
+        <ButtonComponent :primary="viewMode === 'month'" :tertiary="viewMode !== 'month'" sm
+          @click="viewMode = 'month'">
           <CalendarIcon class="h-4 w-4" />
           <span class="hidden sm:inline">Month</span>
         </ButtonComponent>
-        <ButtonComponent
-          :primary="viewMode === 'week'"
-          :tertiary="viewMode !== 'week'"
-          sm
-          @click="viewMode = 'week'"
-        >
+        <ButtonComponent :primary="viewMode === 'week'" :tertiary="viewMode !== 'week'" sm @click="viewMode = 'week'">
           <Squares2X2Icon class="h-4 w-4" />
           <span class="hidden sm:inline">Week</span>
         </ButtonComponent>
-        <ButtonComponent
-          :primary="viewMode === 'day'"
-          :tertiary="viewMode !== 'day'"
-          sm
-          @click="viewMode = 'day'"
-        >
+        <ButtonComponent :primary="viewMode === 'day'" :tertiary="viewMode !== 'day'" sm @click="viewMode = 'day'">
           <QueueListIcon class="h-4 w-4" />
           <span class="hidden sm:inline">Day</span>
         </ButtonComponent>
       </div>
+      <section class="flex gap-2">
+
+        <ButtonComponent primary md @click="emits('openCategoryDrawer')">Categories</ButtonComponent>
+        <ButtonComponent primary md @click="emits('openGroupInfoDrawer')">Group Info</ButtonComponent>
+      </section>
 
       <!-- Category Filter & Add Event -->
       <div class="flex items-center gap-3 w-full sm:w-auto">
         <div class="flex items-center gap-2 flex-1 sm:flex-initial">
           <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
-          <Select
-            v-model="selectedCategoryFilter"
-            :options="categoryFilterOptions"
-            option-label="categoryName"
-            option-value="categoryId"
-            placeholder="Filter by category"
-            class="w-full sm:w-48"
-          />
+          <Select v-model="selectedCategoryFilter" :options="categoryFilterOptions" option-label="categoryName"
+            option-value="categoryId" placeholder="Filter by category" class="w-full sm:w-48" />
         </div>
-        <ButtonComponent primary lg @click="handleAddEvent">
+        <ButtonComponent primary md @click="handleAddEvent">
           <span class="text-lg">+</span>
           <span class="hidden sm:inline">Add Event</span>
         </ButtonComponent>
@@ -131,46 +120,21 @@ const handleTimeSlotClick = (hour: number) => {
     </div>
 
     <!-- Calendar Views -->
-    <CalendarMonthView
-      v-if="viewMode === 'month'"
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @date-click="handleDateClick"
-    />
+    <CalendarMonthView v-if="viewMode === 'month'" :events="filteredEvents" :group-id="groupId"
+      @event-click="handleEventClick" @date-click="handleDateClick" />
 
-    <CalendarWeekView
-      v-else-if="viewMode === 'week'"
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @date-click="handleDateClick"
-    />
+    <CalendarWeekView v-else-if="viewMode === 'week'" :events="filteredEvents" :group-id="groupId"
+      @event-click="handleEventClick" @date-click="handleDateClick" />
 
-    <CalendarDayView
-      v-else
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @time-slot-click="handleTimeSlotClick"
-    />
+    <CalendarDayView v-else :events="filteredEvents" :group-id="groupId" @event-click="handleEventClick"
+      @time-slot-click="handleTimeSlotClick" />
 
     <!-- Add Event Dialog -->
-    <AddEventDialog
-      v-model:visible="showAddEventDialog"
-      :group-id="groupId"
-      :group-categories="groupCategories"
-      :initial-date="selectedDate"
-      @update="handleEventUpdate"
-    />
+    <AddEventDialog v-model:visible="showAddEventDialog" :group-id="groupId" :group-categories="groupCategories"
+      :initial-date="selectedDate" @update="handleEventUpdate" />
 
     <!-- Event Detail Modal -->
-    <EventDetailModal
-      v-model:visible="showEventDetail"
-      :event="selectedEvent"
-      :group-id="groupId"
-      :group-categories="groupCategories"
-      @update="handleEventUpdate"
-    />
+    <EventDetailModal v-model:visible="showEventDetail" :event="selectedEvent" :group-id="groupId"
+      :group-categories="groupCategories" @update="handleEventUpdate" />
   </div>
 </template>
