@@ -5,17 +5,18 @@ import { useToast } from 'primevue/usetoast'
 import { onMounted, ref, watch } from 'vue'
 import CalendarContainer from './CalendarContainer.vue'
 import type { GroupCategoryGroupDto } from '@/types/group'
+import { getBgColors } from '@/helpers/colors'
 
 const toast = useToast()
 const props = defineProps<{
   groupId: number
   groupCategories: GroupCategoryGroupDto[]
+  groupColor: string
 }>()
 
 const emits = defineEmits<{
   (e: 'openCategoryDrawer'): void
   (e: 'openGroupInfoDrawer'): void
-
 }>()
 const events = ref<GetAllGroupEventsResponse[]>([])
 const isLoading = ref(false)
@@ -41,9 +42,13 @@ const getGroupEvents = async () => {
   }
 }
 
-watch(() => props.groupId, () => {
-  getGroupEvents()
-}, { immediate: false })
+watch(
+  () => props.groupId,
+  () => {
+    getGroupEvents()
+  },
+  { immediate: false },
+)
 
 onMounted(() => {
   getGroupEvents()
@@ -56,10 +61,17 @@ const handleEventUpdate = async () => {
 </script>
 
 <template>
-  <div class="pb-6">
-    <CalendarContainer v-if="!isLoading" :events="events" :group-id="groupId" :group-categories="groupCategories"
-      @update="handleEventUpdate" @open-category-drawer="emits('openCategoryDrawer')"
-      @open-group-info-drawer="emits('openGroupInfoDrawer')" />
+  <div class="pb-6" :class="getBgColors(props.groupColor)">
+    <CalendarContainer
+      v-if="!isLoading"
+      :events="events"
+      :group-id="groupId"
+      :group-categories="groupCategories"
+      :group-color="groupColor"
+      @update="handleEventUpdate"
+      @open-category-drawer="emits('openCategoryDrawer')"
+      @open-group-info-drawer="emits('openGroupInfoDrawer')"
+    />
     <div v-else class="text-center py-10">
       <p class="text-zinc-500">Loading calendar...</p>
     </div>

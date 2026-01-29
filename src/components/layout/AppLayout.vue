@@ -11,7 +11,7 @@ import NavBar from './NavBar.vue';
                 <NavBar />
             </div>
         </header>
-        <main class="grow mt-3">
+        <main class="grow">
             <div class="container mx-auto">
                 <RouterView />
             </div>

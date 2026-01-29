@@ -15,12 +15,11 @@ import Drawer from 'primevue/drawer'
 const route = useRoute()
 const groupInfo = ref<GroupInfoDtoResponse>()
 const groupId = +route.params.id!
-const isLoading = ref(false);
-const openCategoryDrawer = ref(false);
-const openGroupInfoDrawer = ref(false);
-const showUpdateGroup = ref(false);
-const showAddMember = ref(false);
-
+const isLoading = ref(false)
+const openCategoryDrawer = ref(false)
+const openGroupInfoDrawer = ref(false)
+const showUpdateGroup = ref(false)
+const showAddMember = ref(false)
 
 const getGroupInfo = async () => {
   if (isLoading.value) return
@@ -40,12 +39,11 @@ const getGroupInfo = async () => {
   }
 }
 
-const closeModal = () => {
-  showUpdateGroup.value = false;
-}
+// const closeModal = () => {
+//   showUpdateGroup.value = false
+// }
 
 const handleUpdate = async () => {
-  closeModal()
   await getGroupInfo()
 }
 
@@ -72,34 +70,57 @@ onMounted(async () => {
 </script>
 
 <template>
-
-  <section v-if="groupInfo?.groupId && groupInfo?.categories && !isLoading">
-    <EventsList :group-categories="groupInfo.categories" :group-id="groupInfo.groupId"
-      @open-category-drawer="openCategoryDrawer = true" @open-group-info-drawer="openGroupInfoDrawer = true" />
+  <section
+    v-if="groupInfo?.groupId && groupInfo.userGroupColor && groupInfo?.categories && !isLoading"
+  >
+    <EventsList
+      :group-categories="groupInfo.categories"
+      :group-id="groupInfo.groupId"
+      :group-color="groupInfo.userGroupColor"
+      @open-category-drawer="openCategoryDrawer = true"
+      @open-group-info-drawer="openGroupInfoDrawer = true"
+    />
   </section>
 
   <div v-if="isLoading" class="text-center py-10">
     <p class="text-zinc-500">Loading...</p>
   </div>
 
-  <Drawer position="right" v-model:visible="openCategoryDrawer" block-scroll class="!w-full md:!w-3/4 lg:!w-3/4"
-    header="Category Management">
-    <section v-if="groupInfo?.groupId">
-      <ManageCategory @update="handleCategoryUpdate" :group-id="groupInfo.groupId" />
+  <Drawer
+    position="right"
+    v-model:visible="openCategoryDrawer"
+    block-scroll
+    header="Category Management"
+  >
+    <section v-if="groupInfo?.groupId" class="flex justify-center">
+      <ManageCategory  @update="handleCategoryUpdate" :group-id="groupInfo.groupId" />
     </section>
-
   </Drawer>
 
-  <Drawer position="right" v-model:visible="openGroupInfoDrawer" class="!w-full md:!w-1/2" block-scroll
-    header="Group Info">
+  <Drawer
+    position="right"
+    v-model:visible="openGroupInfoDrawer"
+    class="!w-full md:!w-1/2"
+    block-scroll
+    header="Group Info"
+  >
     <section class="flex gap-3">
-      <ButtonComponent v-if="groupInfo?.groupId && !showAddMember && !showUpdateGroup" @click="showUpdateGroup = true"
-        primary md>
+      <ButtonComponent
+        v-if="groupInfo?.groupId && !showAddMember && !showUpdateGroup"
+        @click="showUpdateGroup = true"
+        primary
+        md
+      >
         <PencilSquareIcon class="h-5 w-5" /> Update group info
       </ButtonComponent>
 
       <div v-if="groupInfo?.isAdmin" class="flex gap-3 mb-6">
-        <ButtonComponent v-if="!showAddMember && !showUpdateGroup" @click="showAddMember = true" primary md>
+        <ButtonComponent
+          v-if="!showAddMember && !showUpdateGroup"
+          @click="showAddMember = true"
+          primary
+          md
+        >
           <UserPlusIcon class="h-5 w-5" /> Add member
         </ButtonComponent>
       </div>
@@ -113,14 +134,24 @@ onMounted(async () => {
       <p>Admin email: {{ groupInfo?.adminEmail }}</p>
     </div>
 
+    <UpdateGroup
+      v-if="showUpdateGroup && groupInfo?.groupId"
+      :members="groupInfo.members"
+      :group-name="groupInfo.groupName"
+      :description="groupInfo.description!"
+      :group-id-to-update="groupInfo?.groupId"
+      :is-admin="groupInfo.isAdmin"
+      :group-color="groupInfo.userGroupColor!"
+      @update="handleUpdate"
+      @cancel="showUpdateGroup = false"
+    />
 
-
-    <UpdateGroup v-if="showUpdateGroup && groupInfo?.groupId" :members="groupInfo.members"
-      :group-name="groupInfo.groupName" :description="groupInfo.description!" :group-id-to-update="groupInfo?.groupId"
-      :is-admin="groupInfo.isAdmin" :group-color="groupInfo.userGroupColor!" @update="handleUpdate"
-      @cancel="showUpdateGroup = false" />
-
-    <GroupMemberManager v-if="showAddMember && groupInfo?.groupId && groupInfo.members" :group-id="groupInfo?.groupId"
-      :members="groupInfo.members" @cancel="showAddMember = false" @added="handleUpdate" />
+    <GroupMemberManager
+      v-if="showAddMember && groupInfo?.groupId && groupInfo.members"
+      :group-id="groupInfo?.groupId"
+      :members="groupInfo.members"
+      @cancel="showAddMember = false"
+      @added="handleUpdate"
+    />
   </Drawer>
 </template>

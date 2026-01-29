@@ -10,7 +10,6 @@ import LeaveGroup from './LeaveGroup.vue'
 import DeleteGroup from './DeleteGroup.vue'
 import ChangeGroupColor from './ChangeGroupColor.vue'
 
-
 const showForm = ref(false)
 const toast = useToast()
 const props = defineProps<{
@@ -18,11 +17,9 @@ const props = defineProps<{
   groupName: string
   description: string | null
   members: GroupMemberGroupDto[]
-  isAdmin: boolean,
-  groupColor: string,
+  isAdmin: boolean
+  groupColor: string
 }>()
-
-
 
 const updateForm = ref<UpdateGroupInfoDtoRequest>({
   groupId: props.groupIdToUpdate,
@@ -35,7 +32,7 @@ const emit = defineEmits<{
 }>()
 
 const handleChangeAdmin = () => {
-  emit('update');
+  emit('update')
 }
 const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
   try {
@@ -58,21 +55,45 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
 
 <template>
   <section>
-
     <form @submit.prevent="updateGroup(updateForm)" class="form">
-      <TextInput :placeholder="'Group name'" :type="'text'" :name="'group-name'" v-model="updateForm.groupName">Group
-        name</TextInput>
-      <TextInput :placeholder="'Group description'" :type="'text'" :name="'group-description'"
-        v-model="updateForm.description">Group description</TextInput>
+      <TextInput
+        :placeholder="'Group name'"
+        :type="'text'"
+        :name="'group-name'"
+        v-model="updateForm.groupName"
+        >Group name</TextInput
+      >
+      <TextInput
+        :placeholder="'Group description'"
+        :type="'text'"
+        :name="'group-description'"
+        v-model="updateForm.description"
+        >Group description</TextInput
+      >
       <div class="flex flex-1 items-center gap-3 justify-center">
         <ButtonComponent margin-y type="submit" primary lg>Update group</ButtonComponent>
         <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
       </div>
     </form>
 
-    <ChangeGroupColor :group-id="groupIdToUpdate" :group-color="groupColor" />
+    <ChangeGroupColor
+      :group-id="groupIdToUpdate"
+      :group-color="groupColor"
+      @update="emit('update')"
+    />
   </section>
-  <ChangeGroupAdmin @close-modal="handleChangeAdmin" v-if="isAdmin" :members="members" :group-id="groupIdToUpdate" />
-  <LeaveGroup v-if="groupIdToUpdate" :members="members" :is-admin="isAdmin" :group-id="groupIdToUpdate" :group-name="groupName" />
+  <ChangeGroupAdmin
+    @close-modal="handleChangeAdmin"
+    v-if="isAdmin && members.length > 1"
+    :members="members"
+    :group-id="groupIdToUpdate"
+  />
+  <LeaveGroup
+    v-if="groupIdToUpdate"
+    :members="members"
+    :is-admin="isAdmin"
+    :group-id="groupIdToUpdate"
+    :group-name="groupName"
+  />
   <DeleteGroup :group-id="groupIdToUpdate" v-if="isAdmin" />
 </template>
