@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
+import { getEventCategory } from '@/helpers/colors';
 
 const props = defineProps<{
   events: GetAllGroupEventsResponse[]
@@ -93,17 +94,7 @@ const goToToday = () => {
   currentDate.value = new Date()
 }
 
-const getCategoryColorClasses = (color?: string) => {
-  const colorMap: Record<string, string> = {
-    zinc: 'bg-zinc-100 text-zinc-700 border-l-zinc-500 dark:bg-zinc-800 dark:text-zinc-200',
-    pink: 'bg-pink-50 text-pink-700 border-l-pink-500 dark:bg-pink-900/30 dark:text-pink-200',
-    red: 'bg-red-50 text-red-700 border-l-red-500 dark:bg-red-900/30 dark:text-red-200',
-    blue: 'bg-blue-50 text-blue-700 border-l-blue-500 dark:bg-blue-900/30 dark:text-blue-200',
-    green: 'bg-green-50 text-green-700 border-l-green-500 dark:bg-green-900/30 dark:text-green-200',
-    orange: 'bg-orange-50 text-orange-700 border-l-orange-500 dark:bg-orange-900/30 dark:text-orange-200',
-  }
-  return colorMap[color || 'zinc'] || colorMap.zinc
-}
+
 
 const formatEventTime = (dateString: string) => {
   const date = new Date(dateString)
@@ -192,7 +183,7 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             @click.stop="emits('eventClick', event)"
             :class="[
               'text-xs px-2 py-1.5 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
-              getCategoryColorClasses(event.categoryColor!),
+              getEventCategory(event.categoryColor!),
             ]"
           >
             <div class="font-medium truncate">{{ event.eventName }}</div>

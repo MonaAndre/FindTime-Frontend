@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
+import { getEventCategory } from '@/helpers/colors'
 
 const props = defineProps<{
   events: GetAllGroupEventsResponse[]
@@ -52,18 +53,6 @@ const goToToday = () => {
   currentDate.value = new Date()
 }
 
-const getCategoryColorClasses = (color?: string) => {
-  const colorMap: Record<string, string> = {
-    zinc: 'bg-zinc-100 text-zinc-700 border-l-zinc-500 dark:bg-zinc-800 dark:text-zinc-200',
-    pink: 'bg-pink-50 text-pink-700 border-l-pink-500 dark:bg-pink-900/30 dark:text-pink-200',
-    red: 'bg-red-50 text-red-700 border-l-red-500 dark:bg-red-900/30 dark:text-red-200',
-    blue: 'bg-blue-50 text-blue-700 border-l-blue-500 dark:bg-blue-900/30 dark:text-blue-200',
-    green: 'bg-green-50 text-green-700 border-l-green-500 dark:bg-green-900/30 dark:text-green-200',
-    orange: 'bg-orange-50 text-orange-700 border-l-orange-500 dark:bg-orange-900/30 dark:text-orange-200',
-  }
-  return colorMap[color || 'zinc'] || colorMap.zinc
-}
-
 const formatEventTime = (dateString: string) => {
   const date = new Date(dateString)
   return date.toLocaleTimeString('en-US', {
@@ -84,8 +73,9 @@ const formatDate = (date: Date) => {
 </script>
 
 <template>
-  <div class="w-full bg-white dark:bg-zinc-900 rounded-xl shadow-sm border 
-    border-zinc-200 dark:border-zinc-800">
+  <div
+    class="w-full bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800"
+  >
     <!-- Header -->
     <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
       <div class="flex items-center justify-between mb-4">
@@ -104,9 +94,7 @@ const formatDate = (date: Date) => {
           <ChevronLeftIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
 
-        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-          Day View
-        </div>
+        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Day View</div>
 
         <button
           @click="nextDay"
@@ -123,13 +111,13 @@ const formatDate = (date: Date) => {
         v-for="hour in hours"
         :key="hour"
         @click="emits('timeSlotClick', hour)"
-        class="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 
-          dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
+        class="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
       >
         <div class="flex">
           <!-- Time Label -->
-          <div class="w-20 flex-shrink-0 p-3 text-sm font-medium text-zinc-500 
-            dark:text-zinc-400 text-right border-r border-zinc-200 dark:border-zinc-800">
+          <div
+            class="w-20 flex-shrink-0 p-3 text-sm font-medium text-zinc-500 dark:text-zinc-400 text-right border-r border-zinc-200 dark:border-zinc-800"
+          >
             {{ hour.toString().padStart(2, '0') }}:00
           </div>
 
@@ -142,7 +130,7 @@ const formatDate = (date: Date) => {
                 @click.stop="emits('eventClick', event)"
                 :class="[
                   'text-xs px-3 py-2 rounded border-l-2 cursor-pointer hover:shadow-md transition-shadow',
-                  getCategoryColorClasses(event.categoryColor!),
+                  getEventCategory(event.categoryColor!),
                 ]"
               >
                 <div class="font-semibold mb-1">{{ event.eventName }}</div>
@@ -160,8 +148,9 @@ const formatDate = (date: Date) => {
     </div>
 
     <!-- Summary -->
-    <div class="px-4 py-3 border-t border-zinc-200 dark:border-zinc-800 
-      bg-zinc-50 dark:bg-zinc-800/50">
+    <div
+      class="px-4 py-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50"
+    >
       <div class="text-sm text-zinc-600 dark:text-zinc-400">
         {{ dayEvents.length }} {{ dayEvents.length === 1 ? 'event' : 'events' }} today
       </div>

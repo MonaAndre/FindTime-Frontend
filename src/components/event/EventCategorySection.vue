@@ -7,71 +7,68 @@ import { categoryApi } from '@/endpoints/categoryEndpoints'
 import { useToast } from 'primevue/usetoast'
 import { PencilSquareIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
+import {  getCategoryLabel } from '@/helpers/colors'
 
-const showSelectCategory = ref(false);
+const showSelectCategory = ref(false)
 const toast = useToast()
 
 const props = defineProps<{
-    event: GetAllGroupEventsResponse
-    groupId: number
-    groupCategories: GroupCategoryGroupDto[]
+  event: GetAllGroupEventsResponse
+  groupId: number
+  groupCategories: GroupCategoryGroupDto[]
 }>()
 
 const emits = defineEmits<{
-    (e: 'update'): void
+  (e: 'update'): void
 }>()
 
-const bgClass = (color?: string) => {
-    const colorMap: Record<string, string> = {
-        zinc: 'bg-zinc-200 text-zinc-700 dark:bg-zinc-600 dark:text-zinc-200 border border-zinc-700 rounded-xl p-2 inline',
-        pink: 'bg-pink-200 text-pink-700 dark:bg-pink-600 dark:text-pink-200 border border-pink-700 rounded-xl p-2 inline',
-        red: 'bg-red-200 text-red-700 dark:bg-red-600 dark:text-red-200 border border-red-700 rounded-xl p-2 inline',
-        blue: 'bg-blue-200 text-blue-700 dark:bg-blue-600 dark:text-blue-200 border border-blue-700 rounded-xl p-2 inline',
-        green: 'bg-green-200 text-green-700 dark:bg-green-600 dark:text-green-200 border border-green-700 rounded-xl p-2 inline',
-        orange: 'bg-orange-200 text-orange-700 dark:bg-orange-600 dark:text-orange-200 border border-orange-700 rounded-xl p-2 inline',
-    }
-    return colorMap[color || 'red'] || 'bg-red-500 dark:bg-zinc-500'
-}
-
 const handleAddCatToEvent = async (categoryId: number) => {
-    const req: AddCategoryToEventDtoRequest = {
-        groupId: props.groupId,
-        eventId: props.event.eventId,
-        categoryId: categoryId
-    }
+  const req: AddCategoryToEventDtoRequest = {
+    groupId: props.groupId,
+    eventId: props.event.eventId,
+    categoryId: categoryId,
+  }
 
-    try {
-        const result = await categoryApi.addCategoryToEvent(req)
-        if (result.success) {
-            toast.add({
-                severity: 'success',
-                summary: 'Category added to event',
-                life: 5000
-            })
-            showSelectCategory.value = false;
-            emits('update')
-        }
-    } catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Failed to add category',
-            life: 5000
-        })
-        console.error(error)
+  try {
+    const result = await categoryApi.addCategoryToEvent(req)
+    if (result.success) {
+      toast.add({
+        severity: 'success',
+        summary: 'Category added to event',
+        life: 5000,
+      })
+      showSelectCategory.value = false
+      emits('update')
     }
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Failed to add category',
+      life: 5000,
+    })
+    console.error(error)
+  }
 }
 </script>
 
 <template>
-    <div v-if="event.categoryId && event.categoryColor && !showSelectCategory" class="my-5 flex items-top gap-1">
-        <strong :class="bgClass(event.categoryColor)">
-            {{ event.categoryName }}
-        </strong>
+  <div
+    v-if="event.categoryId && event.categoryColor && !showSelectCategory"
+    class="my-5 flex items-top gap-1"
+  >
+    <strong :class="getCategoryLabel(event.categoryColor)">
+      {{ event.categoryName }}
+    </strong>
 
-        <PencilSquareIcon class="h-5 w-5 cursor-pointer hover:text-gray-600" @click="showSelectCategory = true" />
-    </div>
-    <div v-else-if="showSelectCategory || !event.categoryId">
-        <AddCategoryToEvent @set-category-to-event="handleAddCatToEvent" :group-categories="groupCategories" />
-    </div>
-
+    <PencilSquareIcon
+      class="h-5 w-5 cursor-pointer hover:text-gray-600"
+      @click="showSelectCategory = true"
+    />
+  </div>
+  <div v-else-if="showSelectCategory || !event.categoryId">
+    <AddCategoryToEvent
+      @set-category-to-event="handleAddCatToEvent"
+      :group-categories="groupCategories"
+    />
+  </div>
 </template>

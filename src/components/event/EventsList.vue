@@ -1,73 +1,28 @@
 <script setup lang="ts">
-import { eventApi } from '@/endpoints/eventEndpoints'
-import type { GetAllGroupEventsResponse } from '@/types/events'
-import { useToast } from 'primevue/usetoast'
-import { onMounted, ref, watch } from 'vue'
 import CalendarContainer from './CalendarContainer.vue'
-import type { GroupCategoryGroupDto } from '@/types/group'
 import { getBgColors } from '@/helpers/colors'
+import { userGroupStore } from '@/stores/userGroupStore'
 
-const toast = useToast()
-const props = defineProps<{
-  groupId: number
-  groupCategories: GroupCategoryGroupDto[]
-  groupColor: string
-}>()
+const groupStore = userGroupStore()
 
 const emits = defineEmits<{
   (e: 'openCategoryDrawer'): void
   (e: 'openGroupInfoDrawer'): void
 }>()
-const events = ref<GetAllGroupEventsResponse[]>([])
-const isLoading = ref(false)
 
-const getGroupEvents = async () => {
-  if (isLoading.value) return
-
-  isLoading.value = true
-  try {
-    const response = await eventApi.getGroupEvents(props.groupId)
-    if (response.success) {
-      events.value = response.data ?? []
-    }
-  } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Failed to get group events',
-      life: 5000,
-    })
-    console.error(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-watch(
-  () => props.groupId,
-  () => {
-    getGroupEvents()
-  },
-  { immediate: false },
-)
-
-onMounted(() => {
-  getGroupEvents()
-})
-
-// Handle event updates locally without bubbling to parent
 const handleEventUpdate = async () => {
-  await getGroupEvents()
+  await groupStore.fetchEvents()
 }
 </script>
 
 <template>
-  <div class="pb-6" :class="getBgColors(props.groupColor)">
+  <div class="pb-6" :class="getBgColors(groupStore.currentGroup?.userGroupColor || 'zinc')">
     <CalendarContainer
-      v-if="!isLoading"
-      :events="events"
-      :group-id="groupId"
-      :group-categories="groupCategories"
-      :group-color="groupColor"
+      v-if="!groupStore.isLoading"
+      :events="groupStore.eventsWithCurrentCategories"
+      :group-id="groupStore.groupId || 0"
+      :group-categories="groupStore.categories"
+      :group-color="groupStore.currentGroup?.userGroupColor || 'zinc'"
       @update="handleEventUpdate"
       @open-category-drawer="emits('openCategoryDrawer')"
       @open-group-info-drawer="emits('openGroupInfoDrawer')"

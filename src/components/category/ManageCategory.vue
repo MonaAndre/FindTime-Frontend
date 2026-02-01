@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { categoryApi } from '@/endpoints/categoryEndpoints'
 import type { CategoryListDtoResponse } from '@/types/category'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import AddCategory from './AddCategory.vue'
 import DeleteCategory from './DeleteCategory.vue'
 import UpdateCategory from './UpdateCategory.vue'
@@ -9,20 +8,17 @@ import { getCategoryLabel } from '@/helpers/colors'
 import Button from 'primevue/button'
 import Menu from 'primevue/menu'
 import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline'
+import Dialog from 'primevue/dialog'
+import { userGroupStore } from '@/stores/userGroupStore'
+// import { useToast } from 'primevue/usetoast'
 
-const categoryList = ref<CategoryListDtoResponse[]>([])
+const groupStore = userGroupStore()
+//const toast = useToast()
+
 const menu = ref()
 const selectedCategory = ref<CategoryListDtoResponse | null>(null)
 const showUpdateDialog = ref(false)
 const showDeleteDialog = ref(false)
-
-const props = defineProps<{
-  groupId: number
-}>()
-
-const emits = defineEmits<{
-  (e: 'update'): void
-}>()
 
 const menuItems = ref([
   {
@@ -47,27 +43,9 @@ const toggle = (event: Event, category: CategoryListDtoResponse) => {
   menu.value.toggle(event)
 }
 
-const handleGetCategories = async (groupId: number) => {
-  try {
-    const result = await categoryApi.getAllCategories(groupId)
-    if (result.success) {
-      categoryList.value = result.data ? result.data : []
-    }
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-onMounted(() => {
-  handleGetCategories(props.groupId)
-})
-
-const refreshData = () => {
-  handleGetCategories(props.groupId)
-  emits('update')
-  showUpdateDialog.value = false
-  showDeleteDialog.value = false
-  selectedCategory.value = null
+const refreshCategories = async () => {
+  await groupStore.fetchCategories()
+  closeDialogs()
 }
 
 const closeDialogs = () => {
@@ -79,13 +57,13 @@ const closeDialogs = () => {
 
 <template>
   <section>
-    <AddCategory @update="refreshData" :group-id="props.groupId" />
+    <AddCategory @update="refreshCategories" :group-id="groupStore.groupId || 0" />
 
     <h3 class="text-center font-bold my-5">Category list:</h3>
 
-    <div v-if="categoryList.length > 0" class="space-y-3">
+    <div v-if="groupStore.categories.length > 0" class="space-y-3">
       <div
-        v-for="category in categoryList"
+        v-for="category in groupStore.categories"
         :key="category.categoryId"
         class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
       >
@@ -131,25 +109,32 @@ const closeDialogs = () => {
     />
 
     <!-- Update Modal - Triggered by Edit menu action -->
-    <UpdateCategory
-      v-if="showUpdateDialog && selectedCategory"
-      @update="refreshData"
-      @close="closeDialogs"
-      :category-color="selectedCategory.categoryColor!"
-      :category-id="selectedCategory.categoryId"
-      :group-id="props.groupId"
-      :category-name="selectedCategory.categoryName!"
-    />
 
     <!-- Delete Modal - Triggered by Delete menu action -->
     <DeleteCategory
       v-if="showDeleteDialog && selectedCategory"
-      @update="refreshData"
+      @update="refreshCategories"
       @close="closeDialogs"
-      :group-id="props.groupId"
+      :group-id="groupStore.groupId || 0"
       :category-id="selectedCategory.categoryId"
     />
   </section>
+
+  <Dialog
+    v-model:visible="showUpdateDialog"
+    modal
+    :header="'Update category'"
+    :style="{ width: '18rem' }"
+  >
+    <UpdateCategory
+      v-if="showUpdateDialog && selectedCategory"
+      @update="refreshCategories"
+      @close="closeDialogs"
+      :category-color="selectedCategory.categoryColor!"
+      :category-id="selectedCategory.categoryId"
+      :group-id="groupStore.groupId || 0"
+      :category-name="selectedCategory.categoryName!"
+  /></Dialog>
 </template>
 
 <style scoped>
