@@ -111,13 +111,6 @@ const closeDialogs = () => {
     <!-- Update Modal - Triggered by Edit menu action -->
 
     <!-- Delete Modal - Triggered by Delete menu action -->
-    <DeleteCategory
-      v-if="showDeleteDialog && selectedCategory"
-      @update="refreshCategories"
-      @close="closeDialogs"
-      :group-id="groupStore.groupId || 0"
-      :category-id="selectedCategory.categoryId"
-    />
   </section>
 
   <Dialog
@@ -135,6 +128,21 @@ const closeDialogs = () => {
       :group-id="groupStore.groupId || 0"
       :category-name="selectedCategory.categoryName!"
   /></Dialog>
+
+  <Dialog
+    v-model:visible="showDeleteDialog"
+    modal
+    :header="'Delete category'"
+    block-scroll
+    :style="{ width: '18rem' }"
+  >
+    <DeleteCategory
+      v-if="showDeleteDialog && selectedCategory"
+      @cancel="closeDialogs"
+      :group-id="groupStore.groupId || 0"
+      :category-id="selectedCategory.categoryId"
+    />
+  </Dialog>
 </template>
 
 <style scoped>

@@ -8,6 +8,7 @@ import { useToast } from 'primevue/usetoast'
 import { PlusIcon } from '@heroicons/vue/24/outline'
 import { getBgColors } from '@/helpers/colors'
 import { availableColors } from '@/types/colorList'
+import { userGroupStore } from '@/stores/userGroupStore'
 
 const toast = useToast()
 
@@ -15,9 +16,7 @@ const props = defineProps<{
   groupId: number
 }>()
 
-const emits = defineEmits<{
-  (e: 'update'): void
-}>()
+const groupStore = userGroupStore()
 
 const createCatReq = ref<CreateCategoryDtoRequest>({
   groupId: props.groupId,
@@ -34,7 +33,11 @@ const handleCreateCategory = async (req: CreateCategoryDtoRequest) => {
         life: 5000,
       })
       showForm.value = false
-      emits('update')
+      createCatReq.value = {
+        categoryName: '',
+        groupId: props.groupId,
+      }
+      groupStore.fetchCategories()
     }
   } catch (error) {
     toast.add({
