@@ -84,7 +84,7 @@ const handleUpdateCat = async (res: UpdateCategoryRequestDto) => {
 
     <div class="flex justify-end mt-5 gap-2">
       <ButtonComponent @click="$emit('close')" tertiary lg>Cancel</ButtonComponent>
-      <ButtonComponent type="submit" tertiary lg>Save</ButtonComponent>
+      <ButtonComponent type="submit" primary lg>Save</ButtonComponent>
     </div>
   </form>
 </template>

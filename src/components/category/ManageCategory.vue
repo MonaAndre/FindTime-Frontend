@@ -59,7 +59,7 @@ const closeDialogs = () => {
   <section>
     <AddCategory @update="refreshCategories" :group-id="groupStore.groupId || 0" />
 
-    <h3 class="text-center font-bold my-5">Category list:</h3>
+    <h3 class="text-center font-bold my-5">Categories:</h3>
 
     <div v-if="groupStore.categories.length > 0" class="space-y-3">
       <div

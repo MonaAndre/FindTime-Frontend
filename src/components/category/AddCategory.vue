@@ -53,9 +53,10 @@ const showForm = ref(false)
 </script>
 <template>
   <section class="px-2">
-    <ButtonComponent center @click="showForm = true" lg secondary>
-      <PlusIcon class="h-5 w-5" />Add category in this group
+    <ButtonComponent v-if="!showForm" center @click="showForm = true" lg secondary>
+      <PlusIcon class="h-5 w-5" />Add category
     </ButtonComponent>
+
     <form @submit.prevent="handleCreateCategory(createCatReq)" v-if="showForm">
       <TextInput
         v-model="createCatReq.categoryName"
@@ -63,15 +64,15 @@ const showForm = ref(false)
         name="category-name"
         >Category name
       </TextInput>
-      <p>Choose color</p>
+      <p class="block my-2 text-sm/6 font-medium text-zinc-900">Choose color</p>
       <ul>
-        <fieldset class="flex items-center justify-center gap-3 flex-wrap">
+        <fieldset class="grid grid-cols-5 items-center justify-center gap-3">
           <div v-for="color in availableColors" :key="color">
             <div
               :class="
                 createCatReq.categoryColor === color
-                  ? 'border-2 p-1 border-blue-600 rounded-full '
-                  : ''
+                  ? 'border-2 flex justify-center items-center border-blue-600 overflow-hidden rounded-full h-6 w-6 '
+                  : 'flex justify-center items-center overflow-hidden rounded-full h-6 w-6 '
               "
             >
               <label class="cursor-pointer" :for="`color-${color}`">
@@ -83,14 +84,16 @@ const showForm = ref(false)
                   :id="`color-${color}`"
                   type="radio"
                 />
-                <div :class="getBgColors(color)" class="h-5 w-5 rounded-full transition-all"></div>
+                <div :class="getBgColors(color)" class="h-6 w-6  transition-all"></div>
               </label>
             </div>
           </div>
         </fieldset>
       </ul>
-
-      <ButtonComponent margin-y type="submit" primary lg center>Add category</ButtonComponent>
+      <div class="flex justify-center items-center gap-4 mt-2">
+        <ButtonComponent tertiary margin-y lg @click="showForm = false">Cancel</ButtonComponent>
+        <ButtonComponent margin-y type="submit" primary lg>Add category</ButtonComponent>
+      </div>
     </form>
   </section>
 </template>
