@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
+@import 'primeicons/primeicons.css';
+
 
 .form {
   @apply mx-auto w-full md:w-1/2 border border-zinc-400 p-3 rounded-lg;
