@@ -71,14 +71,11 @@ const resetForm = () => {
 
 const initializeFormWithDate = (date: Date) => {
   const start = new Date(date)
+  start.setHours(9, 0, 0, 0)
   const end = new Date(date)
-  end.setHours(end.getHours() + 1)
-
-  const endString = end.toLocaleString()
-  const startString = start.toLocaleString()
-
-  createEventForm.value.startTime = startString
-  createEventForm.value.endTime = endString
+  end.setHours(10, 0, 0, 0)
+  createEventForm.value.startTime = start.toISOString().slice(0, -1)
+  createEventForm.value.endTime = end.toISOString().slice(0, -1)
 }
 
 watch(
@@ -148,7 +145,6 @@ const closeDialog = () => {
       </TextInput>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Start Date & Time -->
         <div>
           <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
             Start date & time
@@ -156,7 +152,6 @@ const closeDialog = () => {
           <VueDatePicker v-model="createEventForm.startTime" />
         </div>
 
-        <!-- End Date & Time -->
         <div>
           <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
             End date & time
