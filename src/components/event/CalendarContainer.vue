@@ -8,7 +8,7 @@ import EventDetailModal from './EventDetailModal.vue'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { CalendarIcon, Squares2X2Icon, QueueListIcon, FunnelIcon } from '@heroicons/vue/24/outline'
+import { CalendarIcon, Squares2X2Icon, QueueListIcon, FunnelIcon, InformationCircleIcon, PlusCircleIcon, TagIcon } from '@heroicons/vue/24/outline'
 import Select from 'primevue/select'
 
 const props = defineProps<{
@@ -113,10 +113,10 @@ const handleTimeSlotClick = (hour: number) => {
       </div>
       <section class="flex gap-2">
         <ButtonComponent primary md @click="emits('openCategoryDrawer')"
-          >Categories</ButtonComponent
+          ><TagIcon class="w-5"/><p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
         >
         <ButtonComponent primary md @click="emits('openGroupInfoDrawer')"
-          >Group Info</ButtonComponent
+          > <InformationCircleIcon class="w-5"/> <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
         >
       </section>
 
@@ -134,8 +134,8 @@ const handleTimeSlotClick = (hour: number) => {
           />
         </div>
         <ButtonComponent primary md @click="handleAddEvent">
-          <span class="text-lg">+</span>
-          <span class="hidden sm:inline">Add Event</span>
+          <span class="w-5"><PlusCircleIcon/></span>
+          <span class="hidden ml-1 lg:inline">Add Event</span>
         </ButtonComponent>
       </div>
     </div>

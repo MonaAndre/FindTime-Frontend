@@ -45,7 +45,7 @@ const handleGroupUpdate = async () => {
     position="right"
     v-model:visible="openCategoryDrawer"
     block-scroll
-    header="Category Management"
+    header="Categories"
   >
     <ManageCategory />
   </Drawer>

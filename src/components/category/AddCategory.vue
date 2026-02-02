@@ -52,38 +52,26 @@ const handleCreateCategory = async (req: CreateCategoryDtoRequest) => {
 const showForm = ref(false)
 </script>
 <template>
-  <section class="px-2">
-    <ButtonComponent v-if="!showForm" center @click="showForm = true" lg secondary>
-      <PlusIcon class="h-5 w-5" />Add category
-    </ButtonComponent>
-
+  <section class="">
+    <div class="flex justify-end">
+      <ButtonComponent class="mb-6" v-if="!showForm" @click="showForm = true" lg secondary>
+        <PlusIcon class="h-5 w-5" />Create category
+      </ButtonComponent>
+    </div>
     <form @submit.prevent="handleCreateCategory(createCatReq)" v-if="showForm">
-      <TextInput
-        v-model="createCatReq.categoryName"
-        placeholder="Category name"
-        name="category-name"
-        >Category name
+      <TextInput v-model="createCatReq.categoryName" placeholder="Category name" name="category-name">Category name
       </TextInput>
       <p class="block my-2 text-sm/6 font-medium text-zinc-900">Choose color</p>
       <ul>
         <fieldset class="grid grid-cols-5 items-center justify-center gap-3">
           <div v-for="color in availableColors" :key="color">
-            <div
-              :class="
-                createCatReq.categoryColor === color
-                  ? 'border-2 flex justify-center items-center border-blue-600 overflow-hidden rounded-full h-6 w-6 '
-                  : 'flex justify-center items-center overflow-hidden rounded-full h-6 w-6 '
-              "
-            >
+            <div :class="createCatReq.categoryColor === color
+              ? 'border-2 flex justify-center items-center border-blue-600 overflow-hidden rounded-full h-6 w-6 '
+              : 'flex justify-center items-center overflow-hidden rounded-full h-6 w-6 '
+              ">
               <label class="cursor-pointer" :for="`color-${color}`">
-                <input
-                  class="hidden"
-                  v-model="createCatReq.categoryColor"
-                  :value="color"
-                  name="color"
-                  :id="`color-${color}`"
-                  type="radio"
-                />
+                <input class="hidden" v-model="createCatReq.categoryColor" :value="color" name="color"
+                  :id="`color-${color}`" type="radio" />
                 <div :class="getBgColors(color)" class="h-6 w-6  transition-all"></div>
               </label>
             </div>

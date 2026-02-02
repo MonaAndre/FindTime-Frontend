@@ -34,7 +34,7 @@ const login = async () => {
             Password
         </TextInput>
         <div class="text-center mt-5">
-            <ButtonComponent type="submit" margin-y primary lg center>Login</ButtonComponent>
+            <ButtonComponent type="submit" margin-y primary lg >Login</ButtonComponent>
 
         </div>
     </form>

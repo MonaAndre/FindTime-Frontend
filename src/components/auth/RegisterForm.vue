@@ -51,8 +51,8 @@ const register = async () => {
         <TextInput type="date" name="birthday" autocomplete="bday" v-model="registerRequest.birthday">
             Birthday
         </TextInput>
-
-        <ButtonComponent type="submit" marginY primary lg center>Register</ButtonComponent>
-
+        <div class="flex justify-center">
+            <ButtonComponent class="" type="submit" marginY primary lg>Register</ButtonComponent>
+        </div>
     </form>
 </template>
