@@ -7,11 +7,15 @@ const emit = defineEmits<{
   (e: 'add', email: string): void
   (e: 'cancel'): void
 }>()
+
+const cleanForm=()=>{
+  memberEmail.value="";
+}
 </script>
 
 <template>
   <h3>Add member</h3>
-  <form @submit.prevent="emit('add', memberEmail ?? '')" class="form">
+  <form @submit.prevent="emit('add', memberEmail ?? ''), cleanForm()" class="">
     <TextInput placeholder="Member email" type="email" :name="`member-email`" v-model="memberEmail">
       Member email
     </TextInput>

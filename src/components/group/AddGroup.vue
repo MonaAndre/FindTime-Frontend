@@ -37,6 +37,12 @@ const createGroup = async () => {
 
       emit('create')
       showForm.value = false
+      createGroupForm.value = {
+        description: null,
+        groupName: '',
+        membersEmails: [],
+      }
+      newMembersEmails.value=[""];
       groupResponse.value = response.data!
       if (groupResponse.value.failedEmails.length > 0) {
         showFailedEmails.value = true;

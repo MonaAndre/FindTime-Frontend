@@ -5,9 +5,6 @@ import type { GroupMemberGroupDto, UpdateGroupInfoDtoRequest } from '@/types/gro
 import { groupApi } from '@/endpoints/groupEndpoints'
 import { useToast } from 'primevue/usetoast'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import ChangeGroupAdmin from './ChangeGroupAdmin.vue'
-import LeaveGroup from './LeaveGroup.vue'
-import DeleteGroup from './DeleteGroup.vue'
 import ChangeGroupColor from './ChangeGroupColor.vue'
 
 const showForm = ref(false)
@@ -31,9 +28,7 @@ const emit = defineEmits<{
   (e: 'cancel'): void
 }>()
 
-const handleChangeAdmin = () => {
-  emit('update')
-}
+
 const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
   try {
     const res = await groupApi.updateGroupInfo(request)
@@ -55,7 +50,7 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
 
 <template>
   <section>
-    <form @submit.prevent="updateGroup(updateForm)" class="form">
+    <form @submit.prevent="updateGroup(updateForm)" class="">
       <TextInput
         :placeholder="'Group name'"
         :type="'text'"
@@ -70,9 +65,10 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
         v-model="updateForm.description"
         >Group description</TextInput
       >
-      <div class="flex flex-1 items-center gap-3 justify-center">
-        <ButtonComponent margin-y type="submit" primary lg>Update group</ButtonComponent>
-        <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
+      <div class="flex flex-1 items-center gap-3 justify-end">
+                <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
+
+        <ButtonComponent margin-y type="submit" primary lg>Update</ButtonComponent>
       </div>
     </form>
 
@@ -82,18 +78,6 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
       @update="emit('update')"
     />
   </section>
-  <ChangeGroupAdmin
-    @close-modal="handleChangeAdmin"
-    v-if="isAdmin && members.length > 1"
-    :members="members"
-    :group-id="groupIdToUpdate"
-  />
-  <LeaveGroup
-    v-if="groupIdToUpdate"
-    :members="members"
-    :is-admin="isAdmin"
-    :group-id="groupIdToUpdate"
-    :group-name="groupName"
-  />
-  <DeleteGroup :group-id="groupIdToUpdate" v-if="isAdmin" />
+
+ 
 </template>

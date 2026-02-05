@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { groupApi } from '@/endpoints/groupEndpoints';
+import { userGroupStore } from '@/stores/userGroupStore';
 import type { ChangeGroupAdminRequest, GroupMemberGroupDto } from '@/types/group';
 import { useToast } from 'primevue/usetoast';
 import { computed, ref } from 'vue';
 
 const toast = useToast();
+const groupStore = userGroupStore()
 
 const props = defineProps<{
     members: GroupMemberGroupDto[],
@@ -31,7 +33,8 @@ const handleChangeAdmin = async (req: ChangeGroupAdminRequest) => {
         if (result.success) {
             toast.add({
                 severity: "success",
-                summary: `Admin changed, new admin is ${newAdminName.value}`
+                summary: `Admin changed, new admin is ${newAdminName.value}`,
+                life:3000
 
             })
             emit('closeModal')
@@ -39,7 +42,8 @@ const handleChangeAdmin = async (req: ChangeGroupAdminRequest) => {
     } catch (error) {
         toast.add({
             severity: "error",
-            summary: `Failed to change admin`
+            summary: `Failed to change admin`,
+            life:3000
 
         })
         console.error(error);
@@ -47,13 +51,14 @@ const handleChangeAdmin = async (req: ChangeGroupAdminRequest) => {
 }
 </script>
 <template>
-
-    <section>
-        <h3>Change admin</h3>
+    <section class="">
+        <h3 class="mb-2">Choose user</h3>
 
         <select class="border p-2 rounded-md" v-model="changeAdmin.newAdminUserId"
             @change="handleChangeAdmin(changeAdmin)">
-            <option v-for="member in members" :value="member.userId" :key="member.userId">{{ member.email }}</option>
+            <option value="" disabled>-- Choose new admin --</option>
+            <option v-for="member in members.filter(m => m.email !== groupStore.currentGroup?.adminEmail)"
+                :value="member.userId" :key="member.userId">{{ member.email }}</option>
         </select>
 
     </section>

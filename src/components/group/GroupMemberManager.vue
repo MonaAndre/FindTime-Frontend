@@ -15,7 +15,7 @@ const props = defineProps<{
   members: GroupMemberGroupDto[]
 }>()
 const emit = defineEmits<{
-  (e: 'added'): void
+  (e: 'updated'): void
   (e: 'cancel'): void
 }>()
 const membersToDelete = ref<DeleteMemberRequest>({
@@ -31,6 +31,8 @@ const deleteMember = async (req: DeleteMemberRequest, userMail: string) => {
         summary: `${userMail} was removed`,
         life: 3000,
       })
+    emit('updated')
+
     }
   } catch (error) {
     console.error(error)
@@ -52,12 +54,14 @@ const addNewMember = async (req: AddNewGroupMemberRequest) => {
         detail: `${addForm.value.userEmail} was added`,
         life: 3000,
       })
-      emit('added')
+
+      emit('updated')
     }
   } catch (error) {
     toast.add({
       severity: 'error',
       summary: `Failed to add member`,
+      life:3000,
       detail: `${addForm.value.userEmail} does not exist`,
     })
     console.error(error)
