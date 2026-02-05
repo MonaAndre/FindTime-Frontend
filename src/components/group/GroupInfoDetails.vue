@@ -83,12 +83,17 @@ const handleGroupUpdate = async () => {
     <GroupMemberList @update="handleGroupUpdate" :group-id="groupId"
       :members="groupStore.currentGroup?.members || []" />
 
+    <div class="absolute bottom-0 right-5">
+      <div class="flex gap-5">
+        <LeaveGroup v-if="groupStore.currentGroup?.members" :members="groupStore.currentGroup?.members"
+          :is-admin="groupStore.currentGroup.isAdmin" :group-id="groupStore.currentGroup.groupId"
+          :group-name="groupStore.currentGroup.groupName" />
+        <DeleteGroup :group-id="groupStore.currentGroup?.groupId"
+          v-if="groupStore.currentGroup?.groupId && groupStore.currentGroup?.isAdmin" />
+      </div>
 
-    <LeaveGroup v-if="groupStore.currentGroup?.members" :members="groupStore.currentGroup?.members"
-      :is-admin="groupStore.currentGroup.isAdmin" :group-id="groupStore.currentGroup.groupId"
-      :group-name="groupStore.currentGroup.groupName" />
-    <DeleteGroup :group-id="groupStore.currentGroup?.groupId"
-      v-if="groupStore.currentGroup?.groupId && groupStore.currentGroup?.isAdmin" />
+    </div>
+
 
   </Drawer>
 
