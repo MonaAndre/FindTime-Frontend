@@ -35,6 +35,7 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
     if (res.success) {
       console.log('GROUP UPDATED')
       emit('update')
+      emit('cancel')
       showForm.value = false
       toast.add({
         severity: 'success',
@@ -51,33 +52,19 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
 <template>
   <section>
     <form @submit.prevent="updateGroup(updateForm)" class="">
-      <TextInput
-        :placeholder="'Group name'"
-        :type="'text'"
-        :name="'group-name'"
-        v-model="updateForm.groupName"
-        >Group name</TextInput
-      >
-      <TextInput
-        :placeholder="'Group description'"
-        :type="'text'"
-        :name="'group-description'"
-        v-model="updateForm.description"
-        >Group description</TextInput
-      >
+      <TextInput :placeholder="'Group name'" :type="'text'" :name="'group-name'" v-model="updateForm.groupName">Group
+        name</TextInput>
+      <TextInput :placeholder="'Group description'" :type="'text'" :name="'group-description'"
+        v-model="updateForm.description">Group description</TextInput>
       <div class="flex flex-1 items-center gap-3 justify-end">
-                <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
+        <ButtonComponent margin-y secondary lg @click="emit('cancel')">Back</ButtonComponent>
 
         <ButtonComponent margin-y type="submit" primary lg>Update</ButtonComponent>
       </div>
     </form>
 
-    <ChangeGroupColor
-      :group-id="groupIdToUpdate"
-      :group-color="groupColor"
-      @update="emit('update')"
-    />
+    <ChangeGroupColor :group-id="groupIdToUpdate" :group-color="groupColor" @update="emit('update')" />
   </section>
 
- 
+
 </template>

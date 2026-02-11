@@ -8,7 +8,6 @@ export const getBgColors = (color: string) => {
     teal: 'bg-teal-200 dark:bg-teal-700',
     sky: 'bg-sky-200 dark:bg-sky-700',
     purple: 'bg-purple-200 dark:bg-purple-700',
-    rose: 'bg-rose-200 dark:bg-rose-700',
     lime: 'bg-lime-200 dark:bg-lime-700',
   }
   return colorMap[color] || 'bg-zinc-200 dark:bg-zinc-700'
@@ -27,7 +26,6 @@ export const getCategoryLabel = (color?: string) => {
     sky: 'bg-sky-200 text-sky-700 dark:bg-sky-600 dark:text-sky-200 border border-sky-700 rounded-xl p-2 inline',
     purple:
       'bg-purple-200 text-purple-700 dark:bg-purple-600 dark:text-purple-200 border border-purple-700 rounded-xl p-2 inline',
-    rose: 'bg-rose-200 text-rose-700 dark:bg-rose-600 dark:text-rose-200 border border-rose-700 rounded-xl p-2 inline',
     lime: 'bg-lime-200 text-lime-700 dark:bg-lime-600 dark:text-lime-200 border border-lime-700 rounded-xl p-2 inline',
   }
   return colorMap[color || 'zinc'] || 'bg-zinc-200 dark:bg-zinc-700'
@@ -45,7 +43,6 @@ export const getEventCategory = (color?: string) => {
     sky: 'bg-sky-50 text-sky-700 border-l-sky-500 dark:bg-sky-900/30 dark:text-sky-200',
     purple:
       'bg-purple-50 text-purple-700 border-l-purple-500 dark:bg-purple-900/30 dark:text-purple-200',
-    rose: 'bg-rose-50 text-rose-700 border-l-rose-500 dark:bg-rose-900/30 dark:text-rose-200',
     lime: 'bg-lime-50 text-lime-700 border-l-lime-500 dark:bg-lime-900/30 dark:text-lime-200',
   }
   return colorMap[color || 'zinc'] || colorMap.zinc

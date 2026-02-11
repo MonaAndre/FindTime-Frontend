@@ -54,7 +54,7 @@ const handleGroupUpdate = async () => {
     header="Group Info">
 
     <div class="flex mt-5 relative gap-3 justify-center items-center ">
-      <h3 class=" text-lg md:text-2xl font-bold text-center">{{ groupStore.currentGroup?.groupName }}</h3>
+      <h3 class="text-lg md:text-2xl font-bold text-center mb-2">{{ groupStore.currentGroup?.groupName }}</h3>
 
       <ButtonComponent class="md:absolute right-0" @click="showUpdateGroup = true" secondary rounded-full margin-y>
         <PencilIcon class="w-4 md:w-5" />
@@ -64,16 +64,16 @@ const handleGroupUpdate = async () => {
     <p class="flex gap-1 justify-center">
       <ShieldCheckIcon class="w-5 text-blue-700" /> {{ groupStore.currentGroup?.adminName }}
     </p>
-    <p class="text-zinc-500 text-center dark:text-zinc-400" v-if="groupStore.currentGroup?.description">{{
+    <p class="text-zinc-500 text-center dark:text-zinc-400 mt-2" v-if="groupStore.currentGroup?.description">{{
       groupStore.currentGroup?.description }}</p>
-    <div class="flex my-5 justify-center gap-5">
+    <div class="flex my-3 justify-center gap-5">
 
       <ButtonComponent rounded-full v-if="groupStore.currentGroup?.isAdmin" @click="showAddMember = true" primary
         margin-y>
         <UserPlusIcon class="h-5 w-5" />
       </ButtonComponent>
 
-      <ButtonComponent @click="showChangeAdmin = true" primary rounded-full margin-y>
+      <ButtonComponent v-if="groupStore.currentGroup?.isAdmin" @click="showChangeAdmin = true" primary rounded-full margin-y>
         <ShieldCheckIcon class="w-5" />
       </ButtonComponent>
 

@@ -121,8 +121,8 @@ const closeDialog = () => {
     :visible="visible"
     @update:visible="emits('update:visible', $event)"
     modal
-    header="Create New Event"
-    class=" w-full md:w-96"
+    header="Add event"
+    class=" w-full md:w-1/2"
   >
     <form @submit.prevent="handleCreateEvent(createEventForm)" class="space-y-4">
       <TextInput
@@ -218,7 +218,7 @@ const closeDialog = () => {
         class="flex items-center justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800"
       >
         <ButtonComponent secondary lg @click="closeDialog" type="button"> Cancel </ButtonComponent>
-        <ButtonComponent primary lg type="submit"> Create Event </ButtonComponent>
+        <ButtonComponent primary lg type="submit"> Add </ButtonComponent>
       </div>
     </form>
   </Dialog>

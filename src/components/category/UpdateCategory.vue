@@ -52,11 +52,10 @@ const handleUpdateCat = async (res: UpdateCategoryRequestDto) => {
 </script>
 <template>
   <form class="" @submit.prevent="handleUpdateCat(updateCategoryForm)">
-    <div class="flex items-center gap-4 mb-2">
-      <TextInput type="text" name="category-name" v-model="updateCategoryForm.categoryName"
+   
+      <TextInput  type="text" name="category-name" v-model="updateCategoryForm.categoryName"
         >New Name
       </TextInput>
-    </div>
     <label class="block my-2 text-sm/6 font-medium text-zinc-900">Color</label>
     <div class="flex items-center gap-4 mb-2 flex-wrap">
       <div v-for="color in availableColors" :key="color">

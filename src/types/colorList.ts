@@ -7,6 +7,6 @@ export const availableColors: string[] = [
   'teal',
   'sky',
   'purple',
-  'rose',
+  
   'lime',
 ]
