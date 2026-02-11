@@ -77,9 +77,9 @@ const handleTimeSlotClick = (hour: number) => {
 </script>
 
 <template>
-  <div class="space-y-4 pt-2">
+  <div class="space-y-4 p-2">
     <!-- Toolbar -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="flex  flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <!-- View Mode Selector -->
 
       <div class="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
@@ -111,7 +111,7 @@ const handleTimeSlotClick = (hour: number) => {
           <span class="hidden sm:inline">Day</span>
         </ButtonComponent>
       </div>
-      <section class="flex gap-2">
+      <section class="flex gap-2 ">
         <ButtonComponent primary md @click="emits('openCategoryDrawer')"
           ><TagIcon class="w-5"/><p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
         >
@@ -121,7 +121,7 @@ const handleTimeSlotClick = (hour: number) => {
       </section>
 
       <!-- Category Filter & Add Event -->
-      <div class="flex items-center gap-3 w-full sm:w-auto">
+      <div class="flex items-center  gap-3 w-full sm:w-auto">
         <div class="flex items-center gap-2 flex-1 sm:flex-initial">
           <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
           <Select

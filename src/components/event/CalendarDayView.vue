@@ -106,7 +106,7 @@ const formatDate = (date: Date) => {
     </div>
 
     <!-- Time Slots -->
-    <div class="max-h-[600px] overflow-y-auto">
+    <div class=" overflow-y-auto">
       <div
         v-for="hour in hours"
         :key="hour"

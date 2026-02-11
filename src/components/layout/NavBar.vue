@@ -20,8 +20,8 @@ const logout = async () => {
 <template>
     <div>
 
-        <nav class="flex gap-5 items-center justify-between flex-row p-3 bg-gray-200 rounded-2xl ">
-            <div class="flex gap-10">
+        <nav class="flex  md:flex-col gap-5 items-center md:items-start justify-between flex-row p-3">
+            <div class="flex md:flex-col md:items-start gap-10">
                 <RouterLink class="" to="/">Home</RouterLink>
                 <RouterLink v-if="auth.isAuthenticated" to="/groups">Groups</RouterLink>
                 <RouterLink v-if="!auth.isAuthenticated" to="/register">Register</RouterLink>
