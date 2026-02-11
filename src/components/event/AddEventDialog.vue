@@ -122,7 +122,7 @@ const closeDialog = () => {
     @update:visible="emits('update:visible', $event)"
     modal
     header="Create New Event"
-    :style="{ width: '90vw', maxWidth: '600px' }"
+    class=" w-full md:w-96"
   >
     <form @submit.prevent="handleCreateEvent(createEventForm)" class="space-y-4">
       <TextInput

@@ -115,7 +115,7 @@ const closeDialogs = () => {
     v-model:visible="showUpdateDialog"
     modal
     :header="'Update category'"
-    :style="{ width: '18rem' }"
+    class=" w-full md:w-96"
   >
     <UpdateCategory
       v-if="showUpdateDialog && selectedCategory"
@@ -132,7 +132,7 @@ const closeDialogs = () => {
     modal
     :header="'Delete category'"
     block-scroll
-    :style="{ width: '18rem' }"
+  class=" w-full md:w-96"
   >
     <DeleteCategory
       v-if="showDeleteDialog && selectedCategory"

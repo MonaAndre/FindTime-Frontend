@@ -3,10 +3,9 @@ import { groupApi } from '@/endpoints/groupEndpoints';
 import ButtonComponent from '../reusables/ButtonComponent.vue';
 import { useToast } from 'primevue/usetoast';
 import router from '@/router';
+import { userGroupStore } from '@/stores/userGroupStore';
 
-defineProps<{
-    groupId: number
-}>();
+const groupStore = userGroupStore();
 const toast = useToast();
 const handleDeleteGroup = async (groupId: number) => {
     try {
@@ -32,6 +31,7 @@ const handleDeleteGroup = async (groupId: number) => {
 </script>
 <template>
     <section>
-        <ButtonComponent @click="handleDeleteGroup(groupId)" sm center danger margin-y>Delete group</ButtonComponent>
+        <ButtonComponent @click="handleDeleteGroup(groupStore.currentGroup!.groupId)" sm center danger margin-y>Delete
+            group</ButtonComponent>
     </section>
 </template>

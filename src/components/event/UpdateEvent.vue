@@ -90,7 +90,7 @@ const handleUpdateEvent = async (req: UpdateEventDtoRequest) => {
 <template>
     <ButtonComponent primary sm @click="visible = true">Update event</ButtonComponent>
 
-    <Dialog v-model:visible="visible" modal header="Update Event" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="visible" modal header="Update Event" class=" w-full md:w-96">
         <span class="text-surface-500 dark:text-surface-400 block mb-2">Update event {{ updateEventForm.eventId
             }}:</span>
         <form class="" @submit.prevent="handleUpdateEvent(updateEventForm)">

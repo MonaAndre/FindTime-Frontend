@@ -29,7 +29,7 @@ const handleUpdate = () => {
     @update:visible="emits('update:visible', $event)"
     modal
     header="Event Details"
-    :style="{ width: '90vw', maxWidth: '600px' }"
+   class=" w-full md:w-96"
   >
     <EventCard
       v-if="event"

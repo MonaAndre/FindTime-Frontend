@@ -15,6 +15,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'closeModal'): void
+    (e: 'updated'): void
 }>()
 
 const changeAdmin = ref<ChangeGroupAdminRequest>({
@@ -34,16 +35,17 @@ const handleChangeAdmin = async (req: ChangeGroupAdminRequest) => {
             toast.add({
                 severity: "success",
                 summary: `Admin changed, new admin is ${newAdminName.value}`,
-                life:3000
+                life: 3000
 
             })
             emit('closeModal')
+            emit('updated')
         }
     } catch (error) {
         toast.add({
             severity: "error",
             summary: `Failed to change admin`,
-            life:3000
+            life: 3000
 
         })
         console.error(error);

@@ -52,7 +52,7 @@ const deleteEvent = async (req: DeleteEventDtoRequest) => {
 
 <template>
     <ButtonComponent @click="showDeleteModal = true" danger sm>Delete event</ButtonComponent>
-    <Dialog v-model:visible="showDeleteModal" modal header="Update Event" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="showDeleteModal" modal header="Update Event" class=" w-full md:w-96">
         <span class="text-surface-500 dark:text-surface-400 block mb-2">Delete event {{ props.eventId
         }}:</span>
 

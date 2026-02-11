@@ -24,6 +24,8 @@ const openGroupInfoDrawer = ref(false)
 const showUpdateGroup = ref(false)
 const showAddMember = ref(false)
 const showChangeAdmin = ref(false)
+const showLeaveGroup = ref(false);
+const showDeleteGroup = ref(false);
 
 onMounted(async () => {
   await groupStore.initialize(groupId)
@@ -85,19 +87,16 @@ const handleGroupUpdate = async () => {
 
     <div class="absolute bottom-0 right-5">
       <div class="flex gap-5">
-        <LeaveGroup v-if="groupStore.currentGroup?.members" :members="groupStore.currentGroup?.members"
-          :is-admin="groupStore.currentGroup.isAdmin" :group-id="groupStore.currentGroup.groupId"
-          :group-name="groupStore.currentGroup.groupName" />
-        <DeleteGroup :group-id="groupStore.currentGroup?.groupId"
-          v-if="groupStore.currentGroup?.groupId && groupStore.currentGroup?.isAdmin" />
+        <ButtonComponent danger sm margin-y @click="showLeaveGroup = true">Leave Group</ButtonComponent>
+        <ButtonComponent v-if="groupStore.currentGroup?.isAdmin" danger sm margin-y @click="showDeleteGroup = true">Delete Group</ButtonComponent>
+
       </div>
 
     </div>
 
-
   </Drawer>
 
-  <Dialog header="Edit Info" v-model:visible="showUpdateGroup">
+  <Dialog header="Edit Info" class=" w-full md:w-96" v-model:visible="showUpdateGroup">
     <UpdateGroup :members="groupStore.currentGroup?.members || []"
       :group-name="groupStore.currentGroup?.groupName || ''" :description="groupStore.currentGroup?.description || ''"
       :group-id-to-update="groupStore.currentGroup?.groupId || 0" :is-admin="groupStore.currentGroup?.isAdmin || false"
@@ -105,16 +104,37 @@ const handleGroupUpdate = async () => {
       @cancel="showUpdateGroup = false" />
   </Dialog>
 
-  <Dialog header="Handle members" v-model:visible="showAddMember">
+  <Dialog header="Handle members" class=" w-full md:w-96" v-model:visible="showAddMember">
 
     <GroupMemberManager :group-id="groupStore.currentGroup?.groupId || 0"
       :members="groupStore.currentGroup?.members || []" @cancel="showAddMember = false" @updated="handleGroupUpdate" />
   </Dialog>
 
-  <Dialog header="Change admin" v-model:visible="showChangeAdmin">
+  <Dialog header="Change admin" class=" w-full md:w-96" v-model:visible="showChangeAdmin">
     <ChangeGroupAdmin v-if="groupStore.currentGroup?.isAdmin && groupStore.currentGroup.memberCount > 1"
       :members="groupStore.currentGroup.members" :group-id="groupStore.currentGroup.groupId"
-      @close-modal="handleGroupUpdate" />
+      @updated="handleGroupUpdate" @close-modal="showChangeAdmin = false" />
 
   </Dialog>
+  <Dialog header="Leave group?" class=" w-full md:w-96" v-model:visible="showLeaveGroup">
+    <p class="text-sm text-gray-600 mt-1">You will be removed from this group and lose access to all shared events.</p>
+    <div class="flex justify-end gap-3 mt-5">
+
+      <ButtonComponent tertiary margin-y sm @click="showLeaveGroup = false">Cancel</ButtonComponent>
+      <LeaveGroup />
+    </div>
+
+  </Dialog>
+
+  <Dialog header="Delete group?" class=" w-full md:w-96" v-model:visible="showDeleteGroup">
+    <p class="text-sm text-gray-600 mt-1">You will delete this group and lose all data.</p>
+    <div class="flex justify-end gap-3 mt-5">
+
+      <ButtonComponent tertiary margin-y sm @click="showDeleteGroup = false">Cancel</ButtonComponent>
+      <DeleteGroup :group-id="groupStore.currentGroup?.groupId"
+        />
+    </div>
+
+  </Dialog>
+
 </template>

@@ -100,7 +100,7 @@ const bgColor = computed(() => {
             </li>
         </ul>
     </div>
-    <Dialog :header="`Add nickname for ${selectedMember?.firstName}`" v-model:visible="showAddNickName">
+    <Dialog class=" w-full md:w-96" :header="`Add nickname for ${selectedMember?.firstName}`" v-model:visible="showAddNickName">
 
         <TextInput v-model="request.nickname" name='nickName' type="text" placeholder="Nickname"></TextInput>
 

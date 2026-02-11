@@ -15,13 +15,13 @@ const cleanForm=()=>{
 
 <template>
   <h3>Add member</h3>
-  <form @submit.prevent="emit('add', memberEmail ?? ''), cleanForm()" class="">
+  <form @submit.prevent="emit('add', memberEmail ?? ''), cleanForm()" >
     <TextInput placeholder="Member email" type="email" :name="`member-email`" v-model="memberEmail">
       Member email
     </TextInput>
-    <div class="flex flex-1 items-center gap-3 justify-center">
-      <ButtonComponent margin-y type="submit" primary lg>Add new member</ButtonComponent>
+    <div class="flex flex-1 items-center gap-3 justify-end">
       <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
+         <ButtonComponent margin-y type="submit" primary lg>Add new member</ButtonComponent>
     </div>
   </form>
 </template>

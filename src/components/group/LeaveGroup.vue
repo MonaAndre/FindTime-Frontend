@@ -2,20 +2,15 @@
 import { useToast } from 'primevue/usetoast';
 import ButtonComponent from '../reusables/ButtonComponent.vue';
 import { groupApi } from '@/endpoints/groupEndpoints';
-import type { GroupMemberGroupDto } from '@/types/group';
 import router from '@/router';
+import { userGroupStore } from '@/stores/userGroupStore';
 
 const toast = useToast();
-const props = defineProps<{
-    groupName: string;
-    groupId: number;
-    isAdmin: boolean,
-    members: GroupMemberGroupDto[]
-}>();
+const groupStore = userGroupStore();
 
 
 const handleLeaveGroup = async (groupId: number) => {
-    if (props.isAdmin && props.members.length > 1) {
+    if (groupStore.currentGroup!.isAdmin && groupStore.currentGroup!.memberCount>0) {
         toast.add({
             severity: "warn",
             summary: "Cannot leave group",
@@ -30,7 +25,7 @@ const handleLeaveGroup = async (groupId: number) => {
         if (result.success) {
             toast.add({
                 severity: "success",
-                summary: `You leaved the group ${props.groupName}`,
+                summary: `You leaved the group ${groupStore.currentGroup?.groupName}`,
                 life:5000
             })
             router.push('/groups');
@@ -49,7 +44,8 @@ const handleLeaveGroup = async (groupId: number) => {
 </script>
 <template>
     <section>
-        <ButtonComponent @click="handleLeaveGroup(props.groupId)" danger sm center margin-y>Leave group
+        <ButtonComponent @click="handleLeaveGroup(groupStore.currentGroup!.groupId)" danger sm center margin-y>Leave group
         </ButtonComponent>
     </section>
+
 </template>

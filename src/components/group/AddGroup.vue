@@ -67,7 +67,7 @@ watch(
       <PlusIcon class="h-5 w-5" />Create group
     </ButtonComponent>
   </div>
-  <Dialog header="Add new group" class="w-lg" v-model:visible="showForm">
+  <Dialog header="Add new group" class=" w-full md:w-96" v-model:visible="showForm">
 
     <form class="" @submit.prevent="createGroup">
       <TextInput :placeholder="'Group name'" :type="'text'" :name="'group-name'" v-model="createGroupForm.groupName">
@@ -95,7 +95,7 @@ watch(
     </form>
   </Dialog>
 
-  <Dialog header="Failed emails" v-model:visible="showFailedEmails">
+  <Dialog header="Failed emails" class=" w-full md:w-96" v-model:visible="showFailedEmails">
 
     <h3>
       Group created but some members were not created because some emails are not registered
