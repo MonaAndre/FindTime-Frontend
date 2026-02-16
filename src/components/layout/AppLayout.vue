@@ -5,19 +5,15 @@ import NavBar from './NavBar.vue';
 
 <template>
     <div class="relative md:grid md:grid-cols-14 min-h-screen ">
-        <!-- <header class=" w-full">
-           <div class="container mx-auto">
-                <NavBar />
-            </div>
-        </header> -->
-          <header class="fixed w-full z-10 bottom-0 md:relative md:col-span-2 bg-white dark:bg-zinc-900">
+       
+          <header class="fixed w-full z-10 bottom-0 md:relative md:col-span-2 bg-white dark:bg-zinc-900 ">
             <div class="mx-auto">
                 <NavBar />
             </div>
 
         </header>
-        <main class="mb-10 md:mb-0 md:col-span-12">
-            <div class="mx-auto">
+        <main class="mb-10 md:mb-0 md:col-span-12 px-2">
+            <div class="mx-auto md:max-h-screen overflow-auto">
                 <RouterView />
             </div>
         </main>
