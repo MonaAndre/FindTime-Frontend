@@ -2,7 +2,8 @@
 import type { Group } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import { useRouter } from 'vue-router'
-import { getBgColors } from '@/helpers/colors'
+import {  getBorderColors } from '@/helpers/colors'
+import { CalendarDaysIcon, UserGroupIcon } from '@heroicons/vue/24/outline'
 const router = useRouter()
 const props = defineProps<Group>()
 const goToGroupPage = () => {
@@ -10,9 +11,27 @@ const goToGroupPage = () => {
 }
 </script>
 <template>
-  <div :class="getBgColors(props.groupColor)" class="p-3 rounded-2xl">
-    <h2>{{ props.groupName }}</h2>
-    <p>Id: {{ props.groupId }}</p>
-    <ButtonComponent md primary @click="goToGroupPage()">Open Calendar</ButtonComponent>
+  <div :class="getBorderColors(props.groupColor)" class="p-5 rounded-xl border-2 flex flex-col  space-y-3 bg-white dark:bg-zinc-800">
+    <div class="flex justify-between w-full">
+      <h2 class="font-bold">{{ props.groupName }}</h2>
+      <span v-if="props.isAdmin">
+        <p class="border-2 py-.5 px-2 text-blue-600 text-sm border-blue-600 ml-auto rounded-full">Admin</p>
+      </span>
+    </div>
+    <span class="inline-flex items-center gap-2 text-zinc-500 dark:text-zinc-200">
+      <UserGroupIcon class="w-4 h-4" />
+      <p class="text-sm">{{ props.memberCount }} members</p>
+    </span>
+
+
+    <section class="bg-blue-100 dark:bg-zinc-900 py-3 px-3  border-l-5 border-l-blue-400 dark:border-l-blue-700 space-y-3">
+      <p class="text-xs font-bold text-blue-400 dark:text-blue-700">UPCOMING EVENT</p>
+      <p class="font-bold text-zinc-800 dark:text-zinc-200">Event name</p>
+      <p class="text-zinc-500 dark:text-zinc-200 text-xs">Monday 17/02/2026, 08:00</p>
+
+    </section>
+    <ButtonComponent md primary @click="goToGroupPage()">
+      <CalendarDaysIcon class="w-5 h-5 mr-2" />Open Calendar
+    </ButtonComponent>
   </div>
 </template>

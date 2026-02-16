@@ -4,6 +4,7 @@ import { groupApi } from '@/endpoints/groupEndpoints'
 import type { Group } from '@/types/group'
 import { onMounted, ref } from 'vue'
 import AddGroup from './AddGroup.vue'
+import { BellIcon, PlusIcon } from '@heroicons/vue/24/outline'
 
 const groupsArray = ref<Group[] | null>([])
 
@@ -23,23 +24,30 @@ onMounted(() => {
 })
 </script>
 <template>
-  <AddGroup @create="getGroups()" />
+  <section class="flex justify-between items-center px-3 border-b dark:border-zinc-600 border-zinc-300">
+    <p class="font-bold text-lg">My Calendars</p>
+    <div class="flex items-center  divide-x divide-zinc-300 dark:divide-zinc-600 gap-5 ">
+      <div class="flex justify-center">
 
-  <div class="groups-container">
-    <div v-for="group in groupsArray" :key="group.groupId" class="">
-      <GroupCard
-        :admin-email="group.adminEmail"
-        :admin-name="group.adminName"
-        :created-at="group.createdAt"
-        :description="group.description"
-        :group-id="group.groupId"
-        :group-name="group.groupName"
-        :is-admin="group.isAdmin"
-        :joined-at="group.joinedAt"
-        :member-count="group.memberCount"
-        :group-color="group.groupColor"
-      >
+        <BellIcon class="w-5 h-5 mr-5" />
+      </div>
+
+      <AddGroup @create="getGroups()" />
+    </div>
+  </section>
+
+  <div class="groups-container bg-neutral-100 dark:bg-zinc-900">
+    <div v-for="group in groupsArray" :key="group.groupId">
+      <GroupCard :admin-email="group.adminEmail" :admin-name="group.adminName" :created-at="group.createdAt"
+        :description="group.description" :group-id="group.groupId" :group-name="group.groupName"
+        :is-admin="group.isAdmin" :joined-at="group.joinedAt" :member-count="group.memberCount"
+        :group-color="group.groupColor">
       </GroupCard>
+    </div>
+    <div class="border border-dashed border-zinc-400 hover:border-blue-700 hover:cursor-pointer rounded-lg p-3 flex flex-col justify-center items-center gap-4 bg-white dark:bg-zinc-800">
+      <div class="rounded-full  bg-zinc-200 dark:bg-zinc-500 w-10 h-10 flex justify-center items-center text-zinc-500 dark:text-zinc-300"><PlusIcon class="w-5 h-5"></PlusIcon></div>
+      <p>New Calendar</p>
+      <p class="text-zinc-500 text-xs dark:text-zinc-200">Create a new group</p>
     </div>
   </div>
 </template>

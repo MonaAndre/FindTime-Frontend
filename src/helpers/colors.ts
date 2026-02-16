@@ -13,6 +13,21 @@ export const getBgColors = (color: string) => {
   return colorMap[color] || 'bg-zinc-200 dark:bg-zinc-700'
 }
 
+export const getBorderColors = (color: string) => {
+  const colorMap: Record<string, string> = {
+    zinc: ' border-zinc-200 dark:border-zinc-700',
+    red: ' border-red-200 dark:border-red-700',
+    blue: 'border-blue-200 dark:border-blue-700',
+    green: 'border-green-200 dark:border-green-700',
+    orange: 'border-orange-200 dark:border-orange-700',
+    teal: 'border-teal-200 dark:border-teal-700',
+    sky: 'border-sky-200 dark:border-sky-700',
+    purple: 'border-purple-200 dark:border-purple-700',
+    lime: 'border-lime-200 dark:border-lime-700',
+  }
+  return colorMap[color] || 'border-zinc-200 dark:border-zinc-700'
+}
+
 export const getCategoryLabel = (color?: string) => {
   const colorMap: Record<string, string> = {
     zinc: 'bg-zinc-200 text-zinc-700 dark:bg-zinc-600 dark:text-zinc-200 border border-zinc-700 rounded-xl p-2 inline',

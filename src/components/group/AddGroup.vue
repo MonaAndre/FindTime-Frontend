@@ -63,8 +63,8 @@ watch(
 
 <template>
   <div>
-    <ButtonComponent end margin-y @click="showForm = true" lg secondary>
-      <PlusIcon class="h-5 w-5" />Create group
+    <ButtonComponent end margin-y @click="showForm = true" lg primary>
+      <PlusIcon class="h-5 w-5 mr-1" />Create group
     </ButtonComponent>
   </div>
   <Dialog header="Add new group" class=" w-full md:w-96" v-model:visible="showForm">

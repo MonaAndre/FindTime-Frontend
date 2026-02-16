@@ -21,7 +21,7 @@ const logout = async () => {
 </script>
 <template>  
     <nav
-        class="flex md:flex-col gap-5 items-center md:items-start p-3 border-t  border-zinc-300 md:border-r md:border-t-0 md:min-h-screen  ">
+        class="flex md:flex-col gap-5 items-center md:items-start p-3 border-t dark:border-zinc-600 border-zinc-300 md:border-r md:border-t-0 md:min-h-screen  ">
         <div class="hidden md:flex md:flex-col gap-1">
             <LogoIcon class=""></LogoIcon>
             <p class="font-bold hidden md:block lg:text-xl text-blue-400">FindTime</p>
