@@ -106,3 +106,11 @@ export interface UpdateEventDtoResponse {
   updatedCount: number
   message: string
 }
+
+export interface NextEventDtoResponse{
+  eventName: string;
+  startTime: string;
+  endTime: string;
+  categoryId: number;
+  categoryColor: string;
+}
