@@ -29,7 +29,7 @@ export const getBorderColors = (color: string) => {
 }
 export const getTextColors = (color: string) => {
   const colorMap: Record<string, string> = {
-    zinc: ' text-zinc-400 dark:text-zinc-700',
+    zinc: ' text-zinc-400 dark:text-zinc-500',
     red: ' text-red-400 dark:text-red-700',
     blue: 'text-blue-400 dark:text-blue-700',
     green: 'text-green-400 dark:text-green-700',
@@ -39,7 +39,7 @@ export const getTextColors = (color: string) => {
     purple: 'text-purple-400 dark:text-purple-700',
     lime: 'text-lime-400 dark:text-lime-700',
   }
-  return colorMap[color] || 'text-zinc-400 dark:text-zinc-700'
+  return colorMap[color] || 'text-zinc-400 dark:text-zinc-400'
 }
 
 export const getCategoryLabel = (color?: string) => {

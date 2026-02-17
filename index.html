@@ -10,4 +10,14 @@
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
+  <script>
+  const saved = localStorage.getItem("theme");
+  const prefersDark =
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (saved === "dark" || (!saved && prefersDark)) {
+    document.documentElement.classList.add("my-app-dark");
+    document.documentElement.classList.add("dark");
+  }
+</script>
 </html>

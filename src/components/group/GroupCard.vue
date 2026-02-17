@@ -40,7 +40,7 @@ onMounted(() => {
 <template>
   <div
     :class="getBorderColors(props.groupColor)"
-    class="p-5 rounded-xl border-2 flex flex-col space-y-3 bg-white dark:bg-zinc-700"
+    class="p-5 rounded-xl border-2 flex flex-col space-y-3 bg-white dark:bg-neutral-800"
   >
     <div class="flex justify-between w-full">
       <h2 class="font-bold">{{ props.groupName }}</h2>

@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { ArrowLeftStartOnRectangleIcon, Cog8ToothIcon, HomeIcon, UserGroupIcon } from '@heroicons/vue/24/outline';
 import LogoutIcon from '../reusables/icons/LogoutIcon.vue';
 import LogoIcon from '../reusables/icons/LogoIcon.vue';
+import ThemeSwitcher from '../menu/ThemeSwitcher.vue';
 
 const auth = useAuthStore();
 
@@ -48,8 +49,9 @@ const logout = async () => {
                 <p class="hidden md:block">Settings</p>
             </RouterLink>
         </div>
+        <ThemeSwitcher/>
 
-        <button type="button" class="cursor-pointer inline-flex text-red-600 dark:text-red-700  bottom-3 md:absolute" v-if="auth.isAuthenticated"
+        <button type="button" class="cursor-pointer inline-flex text-red-600 dark:text-red-700  bottom-3 " v-if="auth.isAuthenticated"
             @click="logout">
             <ArrowLeftStartOnRectangleIcon class="h-5 w-5 mr-2 self-center" />
             <p class="hidden md:block">Logout</p>

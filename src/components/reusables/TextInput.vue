@@ -37,12 +37,12 @@ const inputType = computed(() => {
 </script>
 <template>
     <div>
-        <label class="block my-2 text-sm/6 font-medium text-zinc-900" :for="name">
+        <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-neutral-200" :for="name">
             <slot></slot>
         </label>
         <div class="relative">
             <input :id="name" :type="inputType" :placeholder="placeholder" v-model="value" v-bind="$attrs" :class="[
-                'block w-full rounded-md bg-white px-3  md:text-base text-zinc-800 outline-1 -outline-offset-1 placeholder:text-zinc-400 focus:outline-2 focus:-outline-offset-2 text-sm/6',
+                'block w-full rounded-md bg-white dark:bg-zinc-700 px-3  md:text-base text-zinc-800 outline-1 -outline-offset-1 placeholder:text-zinc-400 focus:outline-2 focus:-outline-offset-2 text-sm/6',
                 showPasswordToggle && type === 'password' ? 'py-1.5 pr-10' : 'py-1.5',
                 !isValid ? 'outline-red-500 focus:outline-red-600' : 'outline-zinc-500 focus:outline-green-600'
             ]" />

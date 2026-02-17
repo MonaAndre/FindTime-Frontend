@@ -2,7 +2,19 @@
 @import "tailwindcss-primeui";
 @import 'primeicons/primeicons.css';
 
+@custom-variant dark (&:where(.my-app-dark, .my-app-dark *));
 
+.my-app-dark .dp__theme_dark {
+  --dp-background-color: theme(--color-zinc-700);
+  --dp-text-color: theme(--color-zinc-100);
+  --dp-hover-color: theme(--color-zinc-600);
+  --dp-border-color: theme(--color-zinc-600);
+  --dp-menu-border-color: theme(--color-zinc-600);
+  --dp-secondary-color: theme(--color-zinc-500);
+}
+*{
+  @apply transition delay-150 duration-300
+}
 .form {
   @apply mx-auto w-full md:w-1/2 border border-zinc-400 p-3 rounded-lg;
 }

@@ -9,7 +9,6 @@ import { useToast } from 'primevue/usetoast'
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { RecurrencePattern, type CreateEventDtoRequest } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
-import { VueDatePicker } from '@vuepic/vue-datepicker'
 import { addYears } from 'date-fns'
 
 const props = defineProps<{
@@ -171,13 +170,13 @@ const closeDialog = () => {
 
       <div class="space-y-2">
         <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100"> Category </label>
-        <Select
+        <Select 
           v-model="createEventForm.categoryId"
           :options="groupCategories"
           option-label="categoryName"
           option-value="categoryId"
           placeholder="Select category (optional)"
-          class="w-full"
+          class="w-full dark:bg-zinc-700!"
         />
       </div>
 
