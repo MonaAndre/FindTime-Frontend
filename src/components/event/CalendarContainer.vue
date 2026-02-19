@@ -8,7 +8,15 @@ import EventDetailModal from './EventDetailModal.vue'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { CalendarIcon, Squares2X2Icon, QueueListIcon, FunnelIcon, InformationCircleIcon, PlusCircleIcon, TagIcon } from '@heroicons/vue/24/outline'
+import {
+  CalendarIcon,
+  Squares2X2Icon,
+  QueueListIcon,
+  FunnelIcon,
+  InformationCircleIcon,
+  PlusCircleIcon,
+  TagIcon,
+} from '@heroicons/vue/24/outline'
 import Select from 'primevue/select'
 
 const props = defineProps<{
@@ -74,6 +82,8 @@ const handleTimeSlotClick = (hour: number) => {
   selectedDate.value = date
   showAddEventDialog.value = true
 }
+
+
 </script>
 
 <template>
@@ -82,7 +92,7 @@ const handleTimeSlotClick = (hour: number) => {
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-3">
       <!-- View Mode Selector -->
 
-      <div class="flex items-center gap-1  rounded-lg p-1">
+      <div class="flex items-center gap-1 rounded-lg p-1">
         <ButtonComponent
           :primary="viewMode === 'month'"
           :tertiary="viewMode !== 'month'"
@@ -111,17 +121,19 @@ const handleTimeSlotClick = (hour: number) => {
           <span class="hidden sm:inline">Day</span>
         </ButtonComponent>
       </div>
-      <section class="flex gap-2 ">
+      <section class="flex gap-2">
         <ButtonComponent primary md @click="emits('openCategoryDrawer')"
-          ><TagIcon class="w-5"/><p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
+          ><TagIcon class="w-5" />
+          <p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
         >
-        <ButtonComponent primary md @click="emits('openGroupInfoDrawer')"
-          > <InformationCircleIcon class="w-5"/> <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
+        <ButtonComponent primary md @click="emits('openGroupInfoDrawer')">
+          <InformationCircleIcon class="w-5" />
+          <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
         >
       </section>
 
       <!-- Category Filter & Add Event -->
-      <div class="flex items-center  gap-3 w-full sm:w-auto">
+      <div class="flex items-center gap-3 w-full sm:w-auto">
         <div class="flex items-center gap-2 flex-1 sm:flex-initial">
           <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
           <Select
@@ -130,11 +142,12 @@ const handleTimeSlotClick = (hour: number) => {
             option-label="categoryName"
             option-value="categoryId"
             placeholder="Filter by category"
-            class="w-full sm:w-48 dark:bg-zinc-700! placeholder:text-red-500!"
+            size="small"
+            class="w-full sm:w-48 dark:bg-zinc-700!"
           />
         </div>
         <ButtonComponent primary md @click="handleAddEvent">
-          <span class="w-5"><PlusCircleIcon/></span>
+          <span class="w-5"><PlusCircleIcon /></span>
           <span class="hidden ml-1 lg:inline">Add Event</span>
         </ButtonComponent>
       </div>
@@ -150,6 +163,7 @@ const handleTimeSlotClick = (hour: number) => {
     />
 
     <CalendarWeekView
+      ref="calendarRef"
       v-else-if="viewMode === 'week'"
       :events="filteredEvents"
       :group-id="groupId"

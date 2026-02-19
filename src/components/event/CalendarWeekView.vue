@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { getEventCategory } from '@/helpers/colors';
+import { getEventCategory } from '@/helpers/colors'
 
 const props = defineProps<{
   events: GetAllGroupEventsResponse[]
@@ -94,8 +94,6 @@ const goToToday = () => {
   currentDate.value = new Date()
 }
 
-
-
 const formatEventTime = (dateString: string) => {
   const date = new Date(dateString)
   return date.toLocaleTimeString('en-US', {
@@ -104,22 +102,30 @@ const formatEventTime = (dateString: string) => {
     hour12: false,
   })
 }
+const header = ref<HTMLElement | null>(null)
+const headerHeight = ref(0);
+
+defineExpose({
+  header,
+  headerHeight
+})
+
+onMounted(async () => {
+  await nextTick()
+  if (header.value) {
+    headerHeight.value = header.value.offsetHeight
+  }
+})
 
 const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 </script>
 
 <template>
-  <div class="w-full bg-white dark:bg-zinc-900 h-screen shadow-sm border 
-    border-zinc-200 dark:border-zinc-800">
+  <div
+    class="w-full bg-white dark:bg-zinc-900 h-full shadow-sm border border-zinc-200 dark:border-zinc-800"
+  >
     <!-- Header -->
-    <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {{ weekRange }}
-        </h2>
-        <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
-      </div>
-
+    <div ref="header" class="p-4 border-b border-zinc-200 dark:border-zinc-800">
       <!-- Navigation -->
       <div class="flex items-center justify-between">
         <button
@@ -130,26 +136,32 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         </button>
 
         <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-          Week View
+          {{ weekRange }}
         </div>
+        <div class="flex items-center gap-2">
+          <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
 
-        <button
-          @click="nextWeek"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-        >
-          <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-        </button>
+          <button
+            @click="nextWeek"
+            class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+          >
+            <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Week Days -->
-    <div class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800">
+    <div
+      :style="{ height: `calc(100vh - ${headerHeight}px - 65px)` }"
+      class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800"
+    >
       <div
         v-for="(day, index) in weekDays"
         :key="index"
         @click="emits('dateClick', day.date)"
         :class="[
-          'h-32 md:h-40 bg-white dark:bg-zinc-900 p-3 cursor-pointer hover:bg-zinc-50  dark:hover:bg-zinc-800 transition-colors flex flex-col',
+          ' bg-white dark:bg-zinc-900 p-3 cursor-pointer hover:bg-zinc-50  dark:hover:bg-zinc-800 transition-colors flex flex-col',
           {
             'ring-2 ring-blue-500 ring-inset': day.isToday,
           },
@@ -174,9 +186,9 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         </div>
 
         <!-- Events - Scrollable -->
-        <div class="flex-1 overflow-y-auto overflow-x-hidden space-y-1 min-h-0
-          scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 
-          scrollbar-track-transparent">
+        <div
+          class="flex-1 overflow-y-auto overflow-x-hidden space-y-1 min-h-0 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent"
+        >
           <div
             v-for="event in day.events"
             :key="event.eventId"
@@ -196,4 +208,3 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     </div>
   </div>
 </template>
-
