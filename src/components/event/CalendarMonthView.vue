@@ -135,10 +135,10 @@ const formatEventTime = (dateString: string) => {
 
 <template>
   <div
-    class="w-full bg-white dark:bg-zinc-900  shadow-sm border border-zinc-200 dark:border-zinc-800"
+    class="w-full  bg-white dark:bg-zinc-900  shadow-sm border border-zinc-200 dark:border-zinc-800 "
   >
     <!-- Calendar Header -->
-    <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
+    <div class="pt-4  px-4 pb-5 border-b border-zinc-200 dark:border-zinc-800">
       <!-- Navigation -->
       <div class="flex items-center">
         <button
@@ -149,7 +149,7 @@ const formatEventTime = (dateString: string) => {
         </button>
 
         <div
-          class="text-sm grow font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-10"
+          class="text-sm grow mr-2 font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-10"
         >
           <span class="grow text-center"> {{ monthNames[currentMonth] }} {{ currentYear }} </span>
 
@@ -185,7 +185,7 @@ const formatEventTime = (dateString: string) => {
           :key="index"
           @click="emits('dateClick', day.date)"
           :class="[
-            'h-16 md:h-24 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
+            'h-12 md:h-24 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
             {
               'bg-zinc-50 dark:bg-zinc-800/50': !day.isCurrentMonth,
               'hover:bg-zinc-50 dark:hover:bg-zinc-800': day.isCurrentMonth,
@@ -209,7 +209,6 @@ const formatEventTime = (dateString: string) => {
             </span>
           </div>
 
-          <!-- Events - Scrollable Container with Fixed Height -->
           <div
             class="flex-1 overflow-y-auto overflow-x-hidden space-y-1 min-h-0 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent hover:scrollbar-thumb-zinc-400 dark:hover:scrollbar-thumb-zinc-600"
           >
@@ -232,18 +231,6 @@ const formatEventTime = (dateString: string) => {
       </div>
     </div>
 
-    <!-- Legend -->
-    <div class="px-4 pb-4 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-      <div class="flex items-center gap-4 flex-wrap text-xs">
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-blue-600"></div>
-          <span class="text-zinc-600 dark:text-zinc-400">Today</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded border-l-2 border-l-zinc-500 bg-zinc-100"></div>
-          <span class="text-zinc-600 dark:text-zinc-400">Events (scroll to see all)</span>
-        </div>
-      </div>
-    </div>
+   
   </div>
 </template>

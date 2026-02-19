@@ -74,15 +74,12 @@ const formatDate = (date: Date) => {
 
 <template>
   <div
-    class="w-full bg-white dark:bg-zinc-900  shadow-sm border border-zinc-200 dark:border-zinc-800"
+    class="w-full bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800"
   >
     <!-- Header -->
     <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {{ formatDate(currentDate) }}
-        </h2>
-        <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
+        <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100"></h2>
       </div>
 
       <!-- Navigation -->
@@ -94,19 +91,23 @@ const formatDate = (date: Date) => {
           <ChevronLeftIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
 
-        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Day View</div>
-
-        <button
-          @click="nextDay"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-        >
-          <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-        </button>
+        <div class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+          {{ formatDate(currentDate) }}
+        </div>
+        <div class="flex items-center gap-3">
+          <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
+          <button
+            @click="nextDay"
+            class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+          >
+            <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Time Slots -->
-    <div class=" overflow-y-auto">
+    <div class="overflow-y-auto">
       <div
         v-for="hour in hours"
         :key="hour"
