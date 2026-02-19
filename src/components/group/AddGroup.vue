@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import type { CreateGroup, CreateGroupDtoResponse } from '@/types/group'
 import TextInput from '../reusables/TextInput.vue'
 import { groupApi } from '@/endpoints/groupEndpoints'
@@ -9,7 +9,7 @@ import Dialog from 'primevue/dialog'
 const showForm = ref(false)
 const newMembersEmails = ref<string[]>([''])
 const groupResponse = ref<CreateGroupDtoResponse>()
-const showFailedEmails = ref(false);
+const showFailedEmails = ref(false)
 
 const addEmailField = () => {
   newMembersEmails.value.push('')
@@ -23,10 +23,22 @@ const createGroupForm = ref<CreateGroup>({
   membersEmails: [],
 })
 
-
 const emit = defineEmits<{
   (e: 'create'): void
+  (e: 'close'): void
 }>()
+
+const props = defineProps<{
+  toggleForm: boolean
+}>()
+
+const isDialogVisible = computed({
+  get: () => showForm.value || props.toggleForm,
+  set: (val) => {
+    showForm.value = val
+    if (!val) emit('close')
+  },
+})
 
 const createGroup = async () => {
   try {
@@ -42,10 +54,10 @@ const createGroup = async () => {
         groupName: '',
         membersEmails: [],
       }
-      newMembersEmails.value=[""];
+      newMembersEmails.value = ['']
       groupResponse.value = response.data!
       if (groupResponse.value.failedEmails.length > 0) {
-        showFailedEmails.value = true;
+        showFailedEmails.value = true
       }
     }
   } catch (error) {
@@ -67,20 +79,36 @@ watch(
       <PlusIcon class="h-5 w-5 mr-1" />Create group
     </ButtonComponent>
   </div>
-  <Dialog header="Add new group" class=" w-full md:w-96" v-model:visible="showForm">
-
+  <Dialog header="Add new group" class="w-full md:w-96" v-model:visible="isDialogVisible">
     <form class="" @submit.prevent="createGroup">
-      <TextInput :placeholder="'Group name'" :type="'text'" :name="'group-name'" v-model="createGroupForm.groupName">
-        Group name</TextInput>
-      <TextInput :placeholder="'Group description'" :type="'text'" :name="'group-description'"
-        v-model="createGroupForm.description">Group name</TextInput>
+      <TextInput
+        :placeholder="'Group name'"
+        :type="'text'"
+        :name="'group-name'"
+        v-model="createGroupForm.groupName"
+      >
+        Group name</TextInput
+      >
+      <TextInput
+        :placeholder="'Group description'"
+        :type="'text'"
+        :name="'group-description'"
+        v-model="createGroupForm.description"
+        >Group name</TextInput
+      >
       <div v-for="(email, index) in newMembersEmails" :key="index" class="flex gap-2 items-end">
-        <TextInput placeholder="Member email" type="email" :name="`member-email-${index}`"
-          v-model="newMembersEmails[index]">
+        <TextInput
+          placeholder="Member email"
+          type="email"
+          :name="`member-email-${index}`"
+          v-model="newMembersEmails[index]"
+        >
           Member email
         </TextInput>
         <button v-if="newMembersEmails.length > 1" type="button" @click="removeEmailField(index)">
-          <TrashIcon class=" w-6 mb-2 cursor-pointer  hover:scale-125 ease-in-out hover:text-red-500 transition-all" />
+          <TrashIcon
+            class="w-6 mb-2 cursor-pointer hover:scale-125 ease-in-out hover:text-red-500 transition-all"
+          />
         </button>
       </div>
       <ButtonComponent tertiary margin-y sm type="button" @click="addEmailField">
@@ -88,23 +116,24 @@ watch(
         Add another email
       </ButtonComponent>
       <div class="flex justify-end gap-3">
-        <ButtonComponent @click="showForm = false" lg tertiary>Cancel</ButtonComponent>
+        <ButtonComponent @click="((showForm = false), emit('close'))" lg tertiary
+          >Cancel</ButtonComponent
+        >
 
         <ButtonComponent type="submit" primary lg>Create group</ButtonComponent>
       </div>
     </form>
   </Dialog>
 
-  <Dialog header="Failed emails" class=" w-full md:w-96" v-model:visible="showFailedEmails">
-
-    <h3>
-      Group created but some members were not created because some emails are not registered
-    </h3>
+  <Dialog header="Failed emails" class="w-full md:w-96" v-model:visible="showFailedEmails">
+    <h3>Group created but some members were not created because some emails are not registered</h3>
     <ul>
       <li v-for="failedEmail in groupResponse?.failedEmails" :key="failedEmail">
         {{ failedEmail }}
       </li>
     </ul>
-    <ButtonComponent margin-y end lg secondary @click="showFailedEmails = false">Continue</ButtonComponent>
+    <ButtonComponent margin-y end lg secondary @click="showFailedEmails = false"
+      >Continue</ButtonComponent
+    >
   </Dialog>
 </template>

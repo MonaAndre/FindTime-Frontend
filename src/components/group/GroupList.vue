@@ -18,7 +18,12 @@ const getGroups = async () => {
     console.error(error)
   }
 }
+const toggleCreate = ref(false)
 
+const handleCreate = () => {
+  getGroups()
+  toggleCreate.value = false
+}
 onMounted(() => {
   getGroups()
 })
@@ -33,7 +38,7 @@ onMounted(() => {
         <BellIcon class="w-5 h-5 mr-5" />
       </div>
 
-      <AddGroup @create="getGroups()" />
+      <AddGroup :toggle-form="toggleCreate" @create="handleCreate()" @close="toggleCreate = false" />
     </div>
   </section>
 
@@ -54,6 +59,7 @@ onMounted(() => {
       </GroupCard>
     </div>
     <div
+      @click="toggleCreate = true"
       class="group border border-dashed transition-custom border-zinc-400 hover:border-blue-700 hover:cursor-pointer rounded-lg p-3 flex flex-col justify-center items-center gap-4 bg-white dark:bg-zinc-800"
     >
       <div
