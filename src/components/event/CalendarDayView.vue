@@ -86,7 +86,7 @@ const formatDate = (date: Date) => {
       <div class="flex items-center justify-between">
         <button
           @click="previousDay"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+          class="p-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
         >
           <ChevronLeftIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
@@ -98,7 +98,7 @@ const formatDate = (date: Date) => {
           <ButtonComponent secondary sm @click="goToToday">Today</ButtonComponent>
           <button
             @click="nextDay"
-            class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+            class="p-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
           >
             <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
           </button>

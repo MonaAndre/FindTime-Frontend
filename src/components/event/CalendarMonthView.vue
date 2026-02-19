@@ -143,7 +143,7 @@ const formatEventTime = (dateString: string) => {
       <div class="flex items-center">
         <button
           @click="previousMonth"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+          class="p-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
         >
           <ChevronLeftIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
@@ -158,7 +158,7 @@ const formatEventTime = (dateString: string) => {
 
         <button
           @click="nextMonth"
-          class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+          class="p-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
         >
           <ChevronRightIcon class="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
         </button>
