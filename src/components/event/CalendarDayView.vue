@@ -74,7 +74,7 @@ const formatDate = (date: Date) => {
 
 <template>
   <div
-    class="w-full bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800"
+    class="w-full bg-white dark:bg-zinc-900  shadow-sm border border-zinc-200 dark:border-zinc-800"
   >
     <!-- Header -->
     <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">

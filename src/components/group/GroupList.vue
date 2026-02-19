@@ -54,10 +54,10 @@ onMounted(() => {
       </GroupCard>
     </div>
     <div
-      class="group border border-dashed border-zinc-400 hover:border-blue-700 hover:cursor-pointer rounded-lg p-3 flex flex-col justify-center items-center gap-4 bg-white dark:bg-zinc-800"
+      class="group border border-dashed transition-custom border-zinc-400 hover:border-blue-700 hover:cursor-pointer rounded-lg p-3 flex flex-col justify-center items-center gap-4 bg-white dark:bg-zinc-800"
     >
       <div
-        class="rounded-full group-hover:scale-125 ease-in-out group-hover:bg-blue-600 bg-zinc-200 dark:bg-zinc-500 w-10 h-10 flex justify-center items-center text-zinc-500 dark:text-zinc-300"
+        class="rounded-full group-hover:scale-125 transition-custom ease-in-out group-hover:bg-blue-600 bg-zinc-200 dark:bg-zinc-500 w-10 h-10 flex justify-center items-center text-zinc-500 dark:text-zinc-300"
       >
         <PlusIcon class="w-5 h-5 group-hover:text-white"></PlusIcon>
       </div>

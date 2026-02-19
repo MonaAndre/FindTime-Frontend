@@ -12,7 +12,7 @@
   --dp-menu-border-color: theme(--color-zinc-600);
   --dp-secondary-color: theme(--color-zinc-500);
 }
-*{
+.transition-custom{
   @apply transition delay-150 duration-300
 }
 .form {

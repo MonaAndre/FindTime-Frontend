@@ -16,7 +16,7 @@ const handleEventUpdate = async () => {
 </script>
 
 <template>
-  <div class="pb-6" :class="getBgColors(groupStore.currentGroup?.userGroupColor || 'zinc')">
+  <div  :class="getBgColors(groupStore.currentGroup?.userGroupColor || 'zinc')">
     <CalendarContainer
       v-if="!groupStore.isLoading"
       :events="groupStore.eventsWithCurrentCategories"

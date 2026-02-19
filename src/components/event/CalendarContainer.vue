@@ -77,12 +77,12 @@ const handleTimeSlotClick = (hour: number) => {
 </script>
 
 <template>
-  <div class="space-y-4 p-2">
+  <div class="space-y-4 pt-2">
     <!-- Toolbar -->
-    <div class="flex  flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-3">
       <!-- View Mode Selector -->
 
-      <div class="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
+      <div class="flex items-center gap-1  rounded-lg p-1">
         <ButtonComponent
           :primary="viewMode === 'month'"
           :tertiary="viewMode !== 'month'"
@@ -130,7 +130,7 @@ const handleTimeSlotClick = (hour: number) => {
             option-label="categoryName"
             option-value="categoryId"
             placeholder="Filter by category"
-            class="w-full sm:w-48"
+            class="w-full sm:w-48 dark:bg-zinc-700! placeholder:text-red-500!"
           />
         </div>
         <ButtonComponent primary md @click="handleAddEvent">

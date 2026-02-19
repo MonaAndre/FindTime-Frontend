@@ -109,7 +109,7 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 </script>
 
 <template>
-  <div class="w-full bg-white dark:bg-zinc-900 rounded-xl shadow-sm border 
+  <div class="w-full bg-white dark:bg-zinc-900 h-screen shadow-sm border 
     border-zinc-200 dark:border-zinc-800">
     <!-- Header -->
     <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
