@@ -63,14 +63,14 @@ const closeDialogs = () => {
       <div
         v-for="category in groupStore.categories"
         :key="category.categoryId"
-        class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+        class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow dark:bg-zinc-800 dark:border-gray-600"
       >
         <div class="flex items-center gap-3">
           <span
             class="w-4 h-4 rounded-full border-2 border-gray-300"
             :class="getCategoryLabel(category.categoryColor)"
           ></span>
-          <span class="font-medium text-gray-900">{{ category.categoryName }}</span>
+          <span class="font-medium text-gray-900 dark:text-zinc-200">{{ category.categoryName }}</span>
         </div>
 
         <div class="flex items-center gap-2">

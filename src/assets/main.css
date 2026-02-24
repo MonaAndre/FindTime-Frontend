@@ -6,11 +6,20 @@
 
 .my-app-dark .dp__theme_dark {
   --dp-background-color: theme(--color-zinc-700);
-  --dp-text-color: theme(--color-zinc-100);
+  --dp-text-color: theme(--color-red-500);
   --dp-hover-color: theme(--color-zinc-600);
   --dp-border-color: theme(--color-zinc-600);
   --dp-menu-border-color: theme(--color-zinc-600);
   --dp-secondary-color: theme(--color-zinc-500);
+}
+@layer base {
+  html {
+    @apply text-zinc-900 ;
+  }
+
+  .my-app-dark {
+    @apply text-zinc-200 ;
+  }
 }
 .transition-custom{
   @apply transition delay-150 duration-300
