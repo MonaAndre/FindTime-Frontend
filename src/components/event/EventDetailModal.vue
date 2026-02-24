@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Dialog from 'primevue/dialog'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import EventCard from './EventCard.vue'
+import Drawer from 'primevue/drawer'
 
 defineProps<{
   visible: boolean
@@ -20,16 +20,16 @@ const handleUpdate = () => {
   emits('update')
   emits('update:visible', false)
 }
-
 </script>
 
 <template>
-  <Dialog
+  <Drawer
     :visible="visible"
     @update:visible="emits('update:visible', $event)"
-    modal
+    position="right"
+    block-scroll
     header="Event Details"
-   class=" w-full md:w-96"
+    class="w-full md:w-96"
   >
     <EventCard
       v-if="event"
@@ -38,5 +38,5 @@ const handleUpdate = () => {
       :group-categories="groupCategories"
       @update="handleUpdate"
     />
-  </Dialog>
+  </Drawer>
 </template>

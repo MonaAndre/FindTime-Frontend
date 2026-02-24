@@ -94,7 +94,7 @@ watch(
         :type="'text'"
         :name="'group-description'"
         v-model="createGroupForm.description"
-        >Group name</TextInput
+        >Group description</TextInput
       >
       <div v-for="(email, index) in newMembersEmails" :key="index" class="flex gap-2 items-end">
         <TextInput
@@ -111,9 +111,9 @@ watch(
           />
         </button>
       </div>
-      <ButtonComponent tertiary margin-y sm type="button" @click="addEmailField">
+      <ButtonComponent tertiary margin-y sm type="button" @click="addEmailField" class="mt-5">
         <PlusIcon class="h-4 w-4" />
-        Add another email
+        Add member
       </ButtonComponent>
       <div class="flex justify-end gap-3">
         <ButtonComponent @click="((showForm = false), emit('close'))" lg tertiary

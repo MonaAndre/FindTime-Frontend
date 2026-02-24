@@ -4,6 +4,7 @@ import type { GroupCategoryGroupDto } from '@/types/group'
 import UpdateEvent from './UpdateEvent.vue'
 import DeleteEvent from './DeleteEvent.vue'
 import EventCategorySection from './EventCategorySection.vue'
+import TextTag from '../reusables/TextTag.vue'
 
 const props = defineProps<{
   event: GetAllGroupEventsResponse
@@ -33,7 +34,9 @@ const formatDate = (date: string) =>
 </script>
 
 <template>
-  <li class="flex p-2 rounded-xl flex-col gap-2 border mb-5">
+  <div class="flex p-2 rounded-xl flex-col gap-2 border mb-5">
+    <TextTag>{{ event.categoryName }}</TextTag>
+    <p>{{ event.categoryName }}</p>
     <p>Created by: {{ event.nickname ?? event.creatorUserName }}</p>
     <p class="font-semibold">{{ event.eventName }}</p>
     <p>Description: {{ event.eventDescription }}</p>
@@ -42,20 +45,12 @@ const formatDate = (date: string) =>
     <p>Is recurring: {{ event.isRecurring ? 'Yes' : 'No' }}</p>
     <p v-if="event.isRecurring">{{ mapRecurrencePattern() }}</p>
 
-    <EventCategorySection
-      :event="event"
-      :group-id="groupId"
-      :group-categories="groupCategories"
-      @update="emits('update')"
-    />
+    <EventCategorySection :event="event" :group-id="groupId" :group-categories="groupCategories"
+      @update="emits('update')" />
 
     <div class="flex gap-2">
-      <UpdateEvent
-        :group-categories="groupCategories"
-        @update="emits('update')"
-        :event-data="event"
-      />
+      <UpdateEvent :group-categories="groupCategories" @update="emits('update')" :event-data="event" />
       <DeleteEvent @update="emits('update')" :event-id="event.eventId" />
     </div>
-  </li>
+  </div>
 </template>
