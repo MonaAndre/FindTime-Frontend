@@ -28,7 +28,7 @@ const handleEventUpdate = async () => {
       @open-group-info-drawer="emits('openGroupInfoDrawer')"
     />
     <div v-else class="text-center py-10">
-      <p class="text-zinc-500">Loading calendar...</p>
+      <p class="text-zinc-500">Loading calendar.....</p>
     </div>
   </div>
 </template>
