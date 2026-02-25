@@ -89,47 +89,47 @@ const handleTimeSlotClick = (hour: number) => {
     <!-- Toolbar -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-3">
       <!-- View Mode Selector -->
-
-      <div class="flex items-center gap-1 rounded-lg p-1">
-        <ButtonComponent
-          :primary="viewMode === 'month'"
-          :tertiary="viewMode !== 'month'"
-          sm
-          @click="viewMode = 'month'"
-        >
-          <CalendarIcon class="h-4 w-4" />
-          <span class="hidden sm:inline">Month</span>
-        </ButtonComponent>
-        <ButtonComponent
-          :primary="viewMode === 'week'"
-          :tertiary="viewMode !== 'week'"
-          sm
-          @click="viewMode = 'week'"
-        >
-          <Squares2X2Icon class="h-4 w-4" />
-          <span class="hidden sm:inline">Week</span>
-        </ButtonComponent>
-        <ButtonComponent
-          :primary="viewMode === 'day'"
-          :tertiary="viewMode !== 'day'"
-          sm
-          @click="viewMode = 'day'"
-        >
-          <QueueListIcon class="h-4 w-4" />
-          <span class="hidden sm:inline">Day</span>
-        </ButtonComponent>
+      <div class="flex flex-row w-full justify-between">
+        <div class="flex items-center gap-1 rounded-lg p-1">
+          <ButtonComponent
+            :primary="viewMode === 'month'"
+            :tertiary="viewMode !== 'month'"
+            sm
+            @click="viewMode = 'month'"
+          >
+            <CalendarIcon class="h-4 w-4" />
+            <span class="hidden sm:inline">Month</span>
+          </ButtonComponent>
+          <ButtonComponent
+            :primary="viewMode === 'week'"
+            :tertiary="viewMode !== 'week'"
+            sm
+            @click="viewMode = 'week'"
+          >
+            <Squares2X2Icon class="h-4 w-4" />
+            <span class="hidden sm:inline">Week</span>
+          </ButtonComponent>
+          <ButtonComponent
+            :primary="viewMode === 'day'"
+            :tertiary="viewMode !== 'day'"
+            sm
+            @click="viewMode = 'day'"
+          >
+            <QueueListIcon class="h-4 w-4" />
+            <span class="hidden sm:inline">Day</span>
+          </ButtonComponent>
+        </div>
+        <section class="flex gap-2">
+          <ButtonComponent primary md @click="emits('openCategoryDrawer')"
+            ><TagIcon class="w-5" />
+            <p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
+          >
+          <ButtonComponent primary md @click="emits('openGroupInfoDrawer')">
+            <InformationCircleIcon class="w-5" />
+            <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
+          >
+        </section>
       </div>
-      <section class="flex gap-2">
-        <ButtonComponent primary md @click="emits('openCategoryDrawer')"
-          ><TagIcon class="w-5" />
-          <p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
-        >
-        <ButtonComponent primary md @click="emits('openGroupInfoDrawer')">
-          <InformationCircleIcon class="w-5" />
-          <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
-        >
-      </section>
-
       <!-- Category Filter & Add Event -->
       <div class="flex items-center gap-3 w-full sm:w-auto">
         <div class="flex items-center gap-2 flex-1 sm:flex-initial relative">
@@ -146,7 +146,7 @@ const handleTimeSlotClick = (hour: number) => {
         </div>
         <ButtonComponent primary md @click="handleAddEvent">
           <span class="w-5"><PlusCircleIcon /></span>
-          <span class="hidden ml-1 lg:inline">Add Event</span>
+          <span class="hidden ml-1 text-nowrap lg:inline">Add Event</span>
         </ButtonComponent>
       </div>
     </div>

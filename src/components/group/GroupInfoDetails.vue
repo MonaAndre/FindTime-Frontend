@@ -9,6 +9,9 @@ import {
   PencilIcon,
   PencilSquareIcon,
   ShieldCheckIcon,
+  ShieldExclamationIcon,
+  TagIcon,
+  UserGroupIcon,
   UserPlusIcon,
 } from '@heroicons/vue/24/outline'
 import GroupMemberManager from './GroupMemberManager.vue'
@@ -56,6 +59,12 @@ const handleGroupUpdate = async () => {
   </div>
 
   <Drawer position="right" v-model:visible="openCategoryDrawer" block-scroll header="Categories">
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <TagIcon class="w-6 h-6 mt-0.5 text-blue-500" />
+        <p>Categories</p>
+      </div>
+    </template>
     <ManageCategory />
   </Drawer>
 
@@ -162,7 +171,12 @@ const handleGroupUpdate = async () => {
     />
   </Dialog>
 
-  <Dialog header="Handle members" class="w-full md:w-96" v-model:visible="showAddMember">
+  <Dialog class="w-full md:w-96" v-model:visible="showAddMember">
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <UserGroupIcon class="w-6 h-6 mt-0.5 text-blue-500" />Handle members
+      </div>
+    </template>
     <GroupMemberManager
       :group-id="groupStore.currentGroup?.groupId || 0"
       :members="groupStore.currentGroup?.members || []"
@@ -172,6 +186,11 @@ const handleGroupUpdate = async () => {
   </Dialog>
 
   <Dialog header="Change admin" class="w-full md:w-96" v-model:visible="showChangeAdmin">
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <ShieldExclamationIcon class="w-6 h-6 mt-0.5 text-blue-500" />Change admin
+      </div>
+    </template>
     <ChangeGroupAdmin
       v-if="groupStore.currentGroup?.isAdmin && groupStore.currentGroup.memberCount > 1"
       :members="groupStore.currentGroup.members"
@@ -181,7 +200,7 @@ const handleGroupUpdate = async () => {
     />
   </Dialog>
   <Dialog header="Leave group?" class="w-full md:w-96" v-model:visible="showLeaveGroup">
-    <p class="text-sm text-gray-600 mt-1">
+    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
       You will be removed from this group and lose access to all shared events.
     </p>
     <div class="flex justify-end gap-3 mt-5">
@@ -191,7 +210,9 @@ const handleGroupUpdate = async () => {
   </Dialog>
 
   <Dialog header="Delete group?" class="w-full md:w-96" v-model:visible="showDeleteGroup">
-    <p class="text-sm text-gray-600 mt-1">You will delete this group and lose all data.</p>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+      You will delete this group and lose all data.
+    </p>
     <div class="flex justify-end gap-3 mt-5">
       <ButtonComponent tertiary margin-y sm @click="showDeleteGroup = false"
         >Cancel</ButtonComponent

@@ -8,20 +8,19 @@ const emit = defineEmits<{
   (e: 'cancel'): void
 }>()
 
-const cleanForm=()=>{
-  memberEmail.value="";
+const cleanForm = () => {
+  memberEmail.value = ''
 }
 </script>
 
 <template>
-  <h3>Add member</h3>
-  <form @submit.prevent="emit('add', memberEmail ?? ''), cleanForm()" >
+  <form @submit.prevent="(emit('add', memberEmail ?? ''), cleanForm())">
     <TextInput placeholder="Member email" type="email" :name="`member-email`" v-model="memberEmail">
       Member email
     </TextInput>
-    <div class="flex flex-1 items-center gap-3 justify-end">
-      <ButtonComponent margin-y secondary md @click="emit('cancel')">Back</ButtonComponent>
-         <ButtonComponent margin-y type="submit" primary lg>Add new member</ButtonComponent>
+    <div class="flex flex-1 items-center gap-3 justify-end mt-2">
+      <ButtonComponent margin-y tertiary md @click="emit('cancel')">Back</ButtonComponent>
+      <ButtonComponent margin-y md type="submit" primary >Add new member</ButtonComponent>
     </div>
   </form>
 </template>

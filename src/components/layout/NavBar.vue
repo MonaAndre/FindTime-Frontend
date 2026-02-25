@@ -37,7 +37,7 @@ const logout = async () => {
   >
     <div class="hidden md:flex md:flex-col gap-1">
       <LogoIcon class=""></LogoIcon>
-      <p class="font-bold hidden md:block lg:text-xl text-blue-400">FindTime</p>
+      <p class="font-medium hidden md:block lg:text-xl text-blue-600">FindTime</p>
     </div>
     <div class="flex md:flex-col grow justify-around md:items-start md:justify-start gap-10">
       <RouterLink class="inline-flex" to="/">
