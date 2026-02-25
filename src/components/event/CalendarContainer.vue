@@ -82,8 +82,6 @@ const handleTimeSlotClick = (hour: number) => {
   selectedDate.value = date
   showAddEventDialog.value = true
 }
-
-
 </script>
 
 <template>
@@ -134,8 +132,8 @@ const handleTimeSlotClick = (hour: number) => {
 
       <!-- Category Filter & Add Event -->
       <div class="flex items-center gap-3 w-full sm:w-auto">
-        <div class="flex items-center gap-2 flex-1 sm:flex-initial">
-          <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+        <div class="flex items-center gap-2 flex-1 sm:flex-initial relative">
+          <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400 absolute left-2 z-30" />
           <Select
             v-model="selectedCategoryFilter"
             :options="categoryFilterOptions"
@@ -143,7 +141,7 @@ const handleTimeSlotClick = (hour: number) => {
             option-value="categoryId"
             placeholder="Filter by category"
             size="small"
-            class="w-full sm:w-48 dark:bg-zinc-700!"
+            class="w-full pl-5 sm:w-48 dark:bg-zinc-700!"
           />
         </div>
         <ButtonComponent primary md @click="handleAddEvent">
