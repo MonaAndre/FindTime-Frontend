@@ -70,7 +70,7 @@ const logout = async () => {
 
     <button
       type="button"
-      class="cursor-pointer inline-flex text-red-600 dark:text-red-700 bottom-3"
+      class="cursor-pointer inline-flex text-neutral-600 dark:text-neutral-400 bottom-3 hover:text-red-400 dark:hover:text-red-500"
       v-if="auth.isAuthenticated"
       @click="logout"
     >

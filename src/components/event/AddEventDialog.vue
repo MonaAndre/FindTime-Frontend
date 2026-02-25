@@ -10,6 +10,8 @@ import { eventApi } from '@/endpoints/eventEndpoints'
 import { RecurrencePattern, type CreateEventDtoRequest } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import { addYears } from 'date-fns'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
+import AppDatePicker from '../layout/AppDatePicker.vue'
 
 const props = defineProps<{
   visible: boolean
@@ -148,14 +150,14 @@ const closeDialog = () => {
           <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
             Start date & time
           </label>
-          <VueDatePicker v-model="createEventForm.startTime" />
+          <AppDatePicker v-model="createEventForm.startTime" />
         </div>
 
         <div>
           <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
             End date & time
           </label>
-          <VueDatePicker v-model="createEventForm.endTime" />
+          <AppDatePicker v-model="createEventForm.endTime" />
         </div>
       </div>
 

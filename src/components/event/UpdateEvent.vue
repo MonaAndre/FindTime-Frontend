@@ -13,6 +13,7 @@ import { useToast } from 'primevue/usetoast'
 import Select from 'primevue/select'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import { PencilIcon } from '@heroicons/vue/24/outline'
+import AppDatePicker from '../layout/AppDatePicker.vue'
 
 const visible = ref(false)
 const toast = useToast()
@@ -94,48 +95,57 @@ const handleUpdateEvent = async (req: UpdateEventDtoRequest) => {
 }
 </script>
 <template>
-  <ButtonComponent primary sm @click="visible = true"><PencilIcon class="w-4 h-4 mr-2" />Update event</ButtonComponent>
+  <ButtonComponent primary sm @click="visible = true"
+    ><PencilIcon class="w-4 h-4 mr-2" />Update event</ButtonComponent
+  >
 
-  <Dialog v-model:visible="visible" modal header="Update Event" class="w-full md:w-96">
-    <span class="text-surface-500 dark:text-surface-400 block mb-2"
-      >Update event {{ updateEventForm.eventId }}:</span
-    >
-    <form class="" @submit.prevent="handleUpdateEvent(updateEventForm)">
-      <div class="flex items-center gap-4 mb-2">
-        <TextInput type="text" name="event-name" v-model="updateEventForm.eventName"
-          >New Name</TextInput
+  <Dialog v-model:visible="visible" modal header="Update Event" class="w-full md:w-1/2">
+    <form class="w-full" @submit.prevent="handleUpdateEvent(updateEventForm)">
+      <TextInput type="text" name="event-name" v-model="updateEventForm.eventName"
+        >Event Name</TextInput
+      >
+
+      <TextInput type="text" name="event-description" v-model="updateEventForm.eventDescription"
+        >description
+      </TextInput>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div>
+          <label
+            class="block my-2 text-xs uppercase tracking-wide text-zinc-900 dark:text-zinc-100"
+          >
+            Start time
+          </label>
+          <AppDatePicker v-model="updateEventForm.startTime" />
+        </div>
+
+        <div>
+          <label
+            class="block my-2 text-xs uppercase tracking-wide font-medium text-zinc-900 dark:text-zinc-100"
+          >
+            End date
+          </label>
+          <AppDatePicker v-model="updateEventForm.endTime" />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 mt-6">
+        <label class="text-xs uppercase tracking-wide text-zinc-900 dark:text-zinc-100"
+          >Apply update to</label
         >
-      </div>
-      <div class="flex items-center gap-4 mb-2">
-        <TextInput type="text" name="event-description" v-model="updateEventForm.eventDescription"
-          >New description
-        </TextInput>
-      </div>
-      <div class="flex items-center gap-4 mb-2">
-        <TextInput name="start-time" v-model="updateEventForm.startTime" type="datetime-local">
-          Start date
-        </TextInput>
-      </div>
-      <div class="flex items-center gap-4 mb-2">
-        <TextInput name="end-time" v-model="updateEventForm.endTime" type="datetime-local">
-          End date</TextInput
-        >
-      </div>
-      <div class="flex items-center gap-4 mb-2">
-        <label>Update :</label>
         <Select
           v-model="updateEventForm.updateOption"
           :options="recurrenceOptions"
           option-label="label"
           option-value="value"
           placeholder="Select update option"
-          class="w-3/5"
+          class="w-full dark:bg-zinc-700!"
         />
       </div>
 
       <div class="flex justify-end mt-5 gap-2">
         <ButtonComponent @click="visible = false" tertiary lg>Cancel</ButtonComponent>
-        <ButtonComponent type="submit" @click="visible = false" tertiary lg>Save</ButtonComponent>
+        <ButtonComponent type="submit" @click="visible = false" primary lg>Save</ButtonComponent>
       </div>
     </form>
   </Dialog>

@@ -5,7 +5,7 @@ import UpdateEvent from './UpdateEvent.vue'
 import DeleteEvent from './DeleteEvent.vue'
 import EventCategorySection from './EventCategorySection.vue'
 import TextTag from '../reusables/TextTag.vue'
-import { ArrowPathIcon, UserIcon } from '@heroicons/vue/24/outline'
+import { ArrowPathIcon, MapPinIcon, UserIcon } from '@heroicons/vue/24/outline'
 import TimeLine from '../reusables/TimeLine.vue'
 
 const props = defineProps<{
@@ -36,6 +36,10 @@ const mapRecurrencePattern = () => {
     <p class="flex gap-2 text-xs align-baseline">
       <span class="text-zinc-500 flex gap-1"><UserIcon class="w-4 h-4"></UserIcon> Created by </span
       ><span>{{ event.nickname ?? event.creatorUserName }}</span>
+    </p>
+       <p v-if="event.location" class="flex gap-2 text-xs align-baseline">
+      <span class="text-zinc-500 flex gap-1"><MapPinIcon class="w-4 h-4"></MapPinIcon> Location: </span
+      ><span>{{ event.location }}</span>
     </p>
     <p class="text-zinc-500 mt-5 mb-1 uppercase tracking-wide text-xs">Time & Schedule</p>
     <TimeLine :start-date="event.startTime" :end-date="event.endTime" />
