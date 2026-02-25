@@ -6,7 +6,7 @@ import Select from 'primevue/select'
 import { DeleteRecurringOption, type DeleteEventDtoRequest } from '@/types/events'
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { useToast } from 'primevue/usetoast'
-import { TrashIcon } from '@heroicons/vue/24/outline'
+import { ExclamationTriangleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 const showDeleteModal = ref(false)
 const props = defineProps<{
   eventId: number
@@ -53,21 +53,32 @@ const deleteEvent = async (req: DeleteEventDtoRequest) => {
   <ButtonComponent @click="showDeleteModal = true" danger sm
     ><TrashIcon class="w-4 h-4 mr-2" /> Delete event</ButtonComponent
   >
-  <Dialog v-model:visible="showDeleteModal" modal header="Update Event" class="w-full md:w-96">
-    <span class="text-surface-500 dark:text-surface-400 block mb-2"
-      >Delete event {{ props.eventId }}:</span
+  <Dialog v-model:visible="showDeleteModal" :draggable="false" modal class="w-full md:w-96">
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <ExclamationTriangleIcon class="w-6 h-6 mt-1 text-red-500" />Delete event
+      </div>
+    </template>
+    <span class="text-surface-800 dark:text-surface-400 text-sm block mb-5"
+      >This action is permanent and can not be undone. Are you sure you want to remove this event
+      from your calendar?</span
     >
-
+    <label class="label-custom">Occurrence scope</label>
     <Select
       v-model="deleteEventDetails.deleteOption"
       :options="recurrenceOptions"
       option-label="label"
       option-value="value"
       placeholder="Select update option"
-      class="w-3/5"
+      class="w-full mt-3 dark:bg-zinc-700!"
     />
-    <ButtonComponent margin-y md danger @click="deleteEvent(deleteEventDetails)"
-      >Delete</ButtonComponent
-    >
+    <div class="flex justify-end gap-3 mt-4">
+      <ButtonComponent @click="showDeleteModal = false" margin-y md tertiary
+        >Cancel</ButtonComponent
+      >
+      <ButtonComponent margin-y md danger @click="deleteEvent(deleteEventDetails)"
+        >Delete event</ButtonComponent
+      >
+    </div>
   </Dialog>
 </template>

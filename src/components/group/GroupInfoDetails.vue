@@ -3,7 +3,14 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import UpdateGroup from './UpdateGroup.vue'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
-import { BellAlertIcon, PencilIcon, ShieldCheckIcon, UserPlusIcon } from '@heroicons/vue/24/outline'
+import {
+  BellAlertIcon,
+  InformationCircleIcon,
+  PencilIcon,
+  PencilSquareIcon,
+  ShieldCheckIcon,
+  UserPlusIcon,
+} from '@heroicons/vue/24/outline'
 import GroupMemberManager from './GroupMemberManager.vue'
 import GroupMemberList from './GroupMemberList.vue'
 import EventsList from '../event/EventsList.vue'
@@ -24,8 +31,8 @@ const openGroupInfoDrawer = ref(false)
 const showUpdateGroup = ref(false)
 const showAddMember = ref(false)
 const showChangeAdmin = ref(false)
-const showLeaveGroup = ref(false);
-const showDeleteGroup = ref(false);
+const showLeaveGroup = ref(false)
+const showDeleteGroup = ref(false)
 
 onMounted(async () => {
   await groupStore.initialize(groupId)
@@ -38,8 +45,10 @@ const handleGroupUpdate = async () => {
 
 <template>
   <section v-if="groupStore.currentGroup && !groupStore.isLoading">
-    <EventsList @open-category-drawer="openCategoryDrawer = true"
-      @open-group-info-drawer="openGroupInfoDrawer = true" />
+    <EventsList
+      @open-category-drawer="openCategoryDrawer = true"
+      @open-group-info-drawer="openGroupInfoDrawer = true"
+    />
   </section>
 
   <div v-if="groupStore.isLoading" class="text-center py-10">
@@ -50,30 +59,60 @@ const handleGroupUpdate = async () => {
     <ManageCategory />
   </Drawer>
 
-  <Drawer position="right" v-model:visible="openGroupInfoDrawer" class="!w-full md:!w-1/2" block-scroll
-    header="Group Info">
+  <Drawer
+    position="right"
+    v-model:visible="openGroupInfoDrawer"
+    class="!w-full md:!w-1/2 lg:!w-2/5"
+    block-scroll
+  >
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <InformationCircleIcon class="w-6 h-6 text-blue-500" />Group Info
+      </div>
+    </template>
 
-    <div class="flex mt-5 relative gap-3 justify-center items-center ">
-      <h3 class="text-lg md:text-2xl font-bold text-center mb-2">{{ groupStore.currentGroup?.groupName }}</h3>
+    <div class="flex mt-5 relative gap-3 justify-center items-center">
+      <h3 class="text-lg md:text-2xl font-bold text-center mb-2">
+        {{ groupStore.currentGroup?.groupName }}
+      </h3>
 
-      <ButtonComponent class="md:absolute right-0" @click="showUpdateGroup = true" secondary rounded-full margin-y>
+      <ButtonComponent
+        class="md:absolute right-0"
+        @click="showUpdateGroup = true"
+        secondary
+        rounded-full
+        margin-y
+      >
         <PencilIcon class="w-4 md:w-5" />
       </ButtonComponent>
-
     </div>
     <p class="flex gap-1 justify-center">
       <ShieldCheckIcon class="w-5 text-blue-700" /> {{ groupStore.currentGroup?.adminName }}
     </p>
-    <p class="text-zinc-500 text-center dark:text-zinc-400 mt-2" v-if="groupStore.currentGroup?.description">{{
-      groupStore.currentGroup?.description }}</p>
+    <p
+      class="text-zinc-500 text-center dark:text-zinc-400 mt-2"
+      v-if="groupStore.currentGroup?.description"
+    >
+      {{ groupStore.currentGroup?.description }}
+    </p>
     <div class="flex my-3 justify-center gap-5">
-
-      <ButtonComponent rounded-full v-if="groupStore.currentGroup?.isAdmin" @click="showAddMember = true" primary
-        margin-y>
+      <ButtonComponent
+        rounded-full
+        v-if="groupStore.currentGroup?.isAdmin"
+        @click="showAddMember = true"
+        primary
+        margin-y
+      >
         <UserPlusIcon class="h-5 w-5" />
       </ButtonComponent>
 
-      <ButtonComponent v-if="groupStore.currentGroup?.isAdmin" @click="showChangeAdmin = true" primary rounded-full margin-y>
+      <ButtonComponent
+        v-if="groupStore.currentGroup?.isAdmin"
+        @click="showChangeAdmin = true"
+        primary
+        rounded-full
+        margin-y
+      >
         <ShieldCheckIcon class="w-5" />
       </ButtonComponent>
 
@@ -82,59 +121,82 @@ const handleGroupUpdate = async () => {
       </ButtonComponent>
     </div>
 
-    <GroupMemberList @update="handleGroupUpdate" :group-id="groupId"
-      :members="groupStore.currentGroup?.members || []" />
+    <GroupMemberList
+      @update="handleGroupUpdate"
+      :group-id="groupId"
+      :members="groupStore.currentGroup?.members || []"
+    />
 
     <div class="absolute bottom-0 right-5">
       <div class="flex gap-5">
-        <ButtonComponent danger sm margin-y @click="showLeaveGroup = true">Leave Group</ButtonComponent>
-        <ButtonComponent v-if="groupStore.currentGroup?.isAdmin" danger sm margin-y @click="showDeleteGroup = true">Delete Group</ButtonComponent>
-
+        <ButtonComponent danger sm margin-y @click="showLeaveGroup = true"
+          >Leave Group</ButtonComponent
+        >
+        <ButtonComponent
+          v-if="groupStore.currentGroup?.isAdmin"
+          danger
+          sm
+          margin-y
+          @click="showDeleteGroup = true"
+          >Delete Group</ButtonComponent
+        >
       </div>
-
     </div>
-
   </Drawer>
 
-  <Dialog header="Edit Info" class=" w-full md:w-96" v-model:visible="showUpdateGroup">
-    <UpdateGroup :members="groupStore.currentGroup?.members || []"
-      :group-name="groupStore.currentGroup?.groupName || ''" :description="groupStore.currentGroup?.description || ''"
-      :group-id-to-update="groupStore.currentGroup?.groupId || 0" :is-admin="groupStore.currentGroup?.isAdmin || false"
-      :group-color="groupStore.currentGroup?.userGroupColor || 'zinc'" @update="handleGroupUpdate"
-      @cancel="showUpdateGroup = false" />
+  <Dialog :draggable="false" class="w-full md:w-96" v-model:visible="showUpdateGroup">
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <PencilSquareIcon class="w-6 h-6 text-blue-500" />Edit info
+      </div>
+    </template>
+    <UpdateGroup
+      :members="groupStore.currentGroup?.members || []"
+      :group-name="groupStore.currentGroup?.groupName || ''"
+      :description="groupStore.currentGroup?.description || ''"
+      :group-id-to-update="groupStore.currentGroup?.groupId || 0"
+      :is-admin="groupStore.currentGroup?.isAdmin || false"
+      :group-color="groupStore.currentGroup?.userGroupColor || 'zinc'"
+      @update="handleGroupUpdate"
+      @cancel="showUpdateGroup = false"
+    />
   </Dialog>
 
-  <Dialog header="Handle members" class=" w-full md:w-96" v-model:visible="showAddMember">
-
-    <GroupMemberManager :group-id="groupStore.currentGroup?.groupId || 0"
-      :members="groupStore.currentGroup?.members || []" @cancel="showAddMember = false" @updated="handleGroupUpdate" />
+  <Dialog header="Handle members" class="w-full md:w-96" v-model:visible="showAddMember">
+    <GroupMemberManager
+      :group-id="groupStore.currentGroup?.groupId || 0"
+      :members="groupStore.currentGroup?.members || []"
+      @cancel="showAddMember = false"
+      @updated="handleGroupUpdate"
+    />
   </Dialog>
 
-  <Dialog header="Change admin" class=" w-full md:w-96" v-model:visible="showChangeAdmin">
-    <ChangeGroupAdmin v-if="groupStore.currentGroup?.isAdmin && groupStore.currentGroup.memberCount > 1"
-      :members="groupStore.currentGroup.members" :group-id="groupStore.currentGroup.groupId"
-      @updated="handleGroupUpdate" @close-modal="showChangeAdmin = false" />
-
+  <Dialog header="Change admin" class="w-full md:w-96" v-model:visible="showChangeAdmin">
+    <ChangeGroupAdmin
+      v-if="groupStore.currentGroup?.isAdmin && groupStore.currentGroup.memberCount > 1"
+      :members="groupStore.currentGroup.members"
+      :group-id="groupStore.currentGroup.groupId"
+      @updated="handleGroupUpdate"
+      @close-modal="showChangeAdmin = false"
+    />
   </Dialog>
-  <Dialog header="Leave group?" class=" w-full md:w-96" v-model:visible="showLeaveGroup">
-    <p class="text-sm text-gray-600 mt-1">You will be removed from this group and lose access to all shared events.</p>
+  <Dialog header="Leave group?" class="w-full md:w-96" v-model:visible="showLeaveGroup">
+    <p class="text-sm text-gray-600 mt-1">
+      You will be removed from this group and lose access to all shared events.
+    </p>
     <div class="flex justify-end gap-3 mt-5">
-
       <ButtonComponent tertiary margin-y sm @click="showLeaveGroup = false">Cancel</ButtonComponent>
       <LeaveGroup />
     </div>
-
   </Dialog>
 
-  <Dialog header="Delete group?" class=" w-full md:w-96" v-model:visible="showDeleteGroup">
+  <Dialog header="Delete group?" class="w-full md:w-96" v-model:visible="showDeleteGroup">
     <p class="text-sm text-gray-600 mt-1">You will delete this group and lose all data.</p>
     <div class="flex justify-end gap-3 mt-5">
-
-      <ButtonComponent tertiary margin-y sm @click="showDeleteGroup = false">Cancel</ButtonComponent>
-      <DeleteGroup :group-id="groupStore.currentGroup?.groupId"
-        />
+      <ButtonComponent tertiary margin-y sm @click="showDeleteGroup = false"
+        >Cancel</ButtonComponent
+      >
+      <DeleteGroup :group-id="groupStore.currentGroup?.groupId" />
     </div>
-
   </Dialog>
-
 </template>

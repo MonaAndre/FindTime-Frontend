@@ -56,8 +56,8 @@ const updateGroup = async (request: UpdateGroupInfoDtoRequest) => {
         name</TextInput>
       <TextInput :placeholder="'Group description'" :type="'text'" :name="'group-description'"
         v-model="updateForm.description">Group description</TextInput>
-      <div class="flex flex-1 items-center gap-3 justify-end">
-        <ButtonComponent margin-y secondary lg @click="emit('cancel')">Back</ButtonComponent>
+      <div class="flex flex-1 items-center gap-3 mt-3 justify-end">
+        <ButtonComponent margin-y tertiary lg @click="emit('cancel')">Back</ButtonComponent>
 
         <ButtonComponent margin-y type="submit" primary lg>Update</ButtonComponent>
       </div>

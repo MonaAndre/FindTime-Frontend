@@ -48,7 +48,7 @@ watch(
 </script>
 <template>
   <div class="">
-    <p class="font-semibold mb-2">Choose color</p>
+    <p class="label-custom mb-3">Choose color</p>
 
     <ul>
       <fieldset
