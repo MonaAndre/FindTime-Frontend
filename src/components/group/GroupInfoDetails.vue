@@ -116,7 +116,7 @@ const handleGroupUpdate = async () => {
       </ButtonComponent>
 
       <ButtonComponent
-        v-if="groupStore.currentGroup?.isAdmin"
+        v-if="groupStore.currentGroup?.isAdmin && groupStore.currentGroup.memberCount > 1"
         @click="showChangeAdmin = true"
         primary
         rounded-full
