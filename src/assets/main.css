@@ -24,6 +24,9 @@
 .transition-custom{
   @apply transition delay-150 duration-300
 }
+.label-custom{
+  @apply tracking-wide text-xs uppercase text-zinc-600 dark:text-neutral-200
+}
 .form {
   @apply mx-auto w-full md:w-1/2 border border-zinc-400 p-3 rounded-lg;
 }
