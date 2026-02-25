@@ -2,18 +2,18 @@
 import type { Group } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import { useRouter } from 'vue-router'
-import {  getBorderColors, getTextColors } from '@/helpers/colors'
+import { getBorderColors, getTextColors } from '@/helpers/colors'
 import { CalendarDaysIcon, UserGroupIcon } from '@heroicons/vue/24/outline'
 import type { NextEventDtoResponse } from '@/types/events'
 import { eventApi } from '@/endpoints/eventEndpoints'
-import {  onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const router = useRouter()
 const props = defineProps<Group>()
 const goToGroupPage = () => {
   router.push({ name: 'group', params: { id: props.groupId } })
 }
-const nextEvent = ref<NextEventDtoResponse | null>(null);
+const nextEvent = ref<NextEventDtoResponse | null>(null)
 
 const getNextEvent = async (groupId: number) => {
   try {
@@ -59,9 +59,15 @@ onMounted(() => {
       class="bg-neutral-100 dark:bg-zinc-900 py-3 px-3 border-l-5 space-y-3"
       :class="getBorderColors(nextEvent?.categoryColor!)"
     >
-      <p class="text-xs font-bold" :class="getTextColors(nextEvent?.categoryColor!)">UPCOMING EVENT</p>
-      <p class="font-bold text-zinc-600 dark:text-zinc-200">{{ nextEvent?.eventName ?? 'No upcoming events'  }}</p>
-      <p v-if="nextEvent?.startTime" class="text-zinc-500 dark:text-zinc-200 text-xs">{{formatDate(nextEvent.startTime!)}}</p>
+      <p class="text-xs font-bold" :class="getTextColors(nextEvent?.categoryColor!)">
+        UPCOMING EVENT
+      </p>
+      <p class="font-bold text-sm text-zinc-600 dark:text-zinc-200 truncate">
+        {{ nextEvent?.eventName ?? 'No upcoming events' }}
+      </p>
+      <p v-if="nextEvent?.startTime" class="text-zinc-500 dark:text-zinc-200 text-xs">
+        {{ formatDate(nextEvent.startTime!) }}
+      </p>
       <p v-else class="text-zinc-500 dark:text-zinc-200 text-xs">-</p>
     </section>
     <ButtonComponent md primary @click="goToGroupPage()">

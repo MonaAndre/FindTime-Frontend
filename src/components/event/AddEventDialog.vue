@@ -10,8 +10,8 @@ import { eventApi } from '@/endpoints/eventEndpoints'
 import { RecurrencePattern, type CreateEventDtoRequest } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import { addYears } from 'date-fns'
-import { VueDatePicker } from '@vuepic/vue-datepicker'
 import AppDatePicker from '../layout/AppDatePicker.vue'
+import { CalendarIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps<{
   visible: boolean
@@ -119,12 +119,17 @@ const closeDialog = () => {
 
 <template>
   <Dialog
+    :draggable="false"
     :visible="visible"
     @update:visible="emits('update:visible', $event)"
     modal
-    header="Add event"
-    class=" w-full md:w-1/2"
+    class="w-full md:w-1/2"
   >
+    <template #header>
+      <div class="flex gap-4 items-center text-xl">
+        <CalendarIcon class="w-6 h-6 text-blue-500" />Add event
+      </div>
+    </template>
     <form @submit.prevent="handleCreateEvent(createEventForm)" class="space-y-4">
       <TextInput
         placeholder="Event name"
@@ -147,14 +152,14 @@ const closeDialog = () => {
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
+          <label class="block my-2 label-custom font-medium text-zinc-900 dark:text-zinc-100">
             Start date & time
           </label>
           <AppDatePicker v-model="createEventForm.startTime" />
         </div>
 
         <div>
-          <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
+          <label class="block my-2 label-custom font-medium text-zinc-900 dark:text-zinc-100">
             End date & time
           </label>
           <AppDatePicker v-model="createEventForm.endTime" />
@@ -171,8 +176,10 @@ const closeDialog = () => {
       </TextInput>
 
       <div class="space-y-2">
-        <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100"> Category </label>
-        <Select 
+        <label class="block text-sm label-custom font-medium text-zinc-900 dark:text-zinc-100">
+          Category
+        </label>
+        <Select
           v-model="createEventForm.categoryId"
           :options="groupCategories"
           option-label="categoryName"
@@ -183,7 +190,7 @@ const closeDialog = () => {
       </div>
 
       <div class="flex gap-3 items-center">
-        <label class="text-sm font-medium text-zinc-900 dark:text-zinc-100" for="is-recurring">
+        <label class="label-custom font-medium text-zinc-900 dark:text-zinc-100" for="is-recurring">
           Recurring event?
         </label>
         <ToggleSwitch name="is-recurring" v-model="createEventForm.isRecurring" />
@@ -194,7 +201,7 @@ const closeDialog = () => {
         class="space-y-4 pl-4 border-l-2 border-blue-500 dark:border-blue-400"
       >
         <div class="space-y-2">
-          <label class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <label class="block label-custom font-medium text-zinc-900 dark:text-zinc-100">
             Recurrence pattern
           </label>
           <Select
@@ -203,22 +210,22 @@ const closeDialog = () => {
             option-label="label"
             option-value="value"
             placeholder="Select recurrence"
-            class="w-full"
+            class="w-full dark:bg-zinc-700!"
           />
         </div>
 
         <div>
-          <label class="block my-2 text-sm/6 font-medium text-zinc-900 dark:text-zinc-100">
+          <label class="block my-2 label-custom font-medium text-zinc-900 dark:text-zinc-100">
             Repeat until
           </label>
-          <VueDatePicker v-model="createEventForm.recurrenceEndTime" :max-date="maxDate" />
+          <AppDatePicker v-model="createEventForm.recurrenceEndTime" :max-date="maxDate" />
         </div>
       </div>
 
       <div
         class="flex items-center justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800"
       >
-        <ButtonComponent secondary lg @click="closeDialog" type="button"> Cancel </ButtonComponent>
+        <ButtonComponent tertiary lg @click="closeDialog" type="button"> Cancel </ButtonComponent>
         <ButtonComponent primary lg type="submit"> Add </ButtonComponent>
       </div>
     </form>
