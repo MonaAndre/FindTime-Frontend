@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import HomePageLayout from '@/components/home-page/HomePageLayout.vue';
+
 
 </script>
 
 <template>
-<h1>Home Page</h1>
+<HomePageLayout></HomePageLayout>
 </template>
