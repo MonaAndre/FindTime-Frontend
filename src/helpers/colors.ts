@@ -60,6 +60,21 @@ export const getCategoryLabel = (color?: string) => {
   return colorMap[color || 'zinc'] || 'bg-zinc-200 dark:bg-zinc-700'
 }
 
+export const getDotColor = (color?: string) => {
+  const colorMap: Record<string, string> = {
+    zinc: 'bg-zinc-400',
+    red: 'bg-red-500',
+    blue: 'bg-blue-500',
+    green: 'bg-green-500',
+    orange: 'bg-orange-500',
+    teal: 'bg-teal-500',
+    sky: 'bg-sky-500',
+    purple: 'bg-purple-500',
+    lime: 'bg-lime-500',
+  }
+  return colorMap[color || 'zinc'] || 'bg-zinc-400'
+}
+
 export const getEventCategory = (color?: string) => {
   const colorMap: Record<string, string> = {
     zinc: 'bg-zinc-100 text-zinc-700 border-l-zinc-500 dark:bg-zinc-800 dark:text-zinc-200',

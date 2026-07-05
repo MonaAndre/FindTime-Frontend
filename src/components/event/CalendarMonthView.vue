@@ -150,10 +150,10 @@ const formatEventTime = (dateString: string) => {
 
 <template>
   <div
-    class="w-full  bg-white dark:bg-zinc-900  shadow-sm border border-zinc-200 dark:border-zinc-800 "
+    class="w-full h-full flex flex-col bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800"
   >
     <!-- Calendar Header -->
-    <div class="pt-4  px-4 pb-5 border-b border-zinc-200 dark:border-zinc-800">
+    <div class="shrink-0 pt-4 px-4 pb-5 border-b border-zinc-200 dark:border-zinc-800">
       <!-- Navigation -->
       <div class="flex items-center">
         <button
@@ -181,9 +181,9 @@ const formatEventTime = (dateString: string) => {
     </div>
 
     <!-- Calendar Grid -->
-    <div class="p-4">
+    <div class="flex-1 min-h-0 flex flex-col p-4">
       <!-- Weekday Headers -->
-      <div class="grid grid-cols-7 gap-px mb-2">
+      <div class="shrink-0 grid grid-cols-7 gap-px mb-2">
         <div
           v-for="day in weekDays"
           :key="day"
@@ -194,13 +194,15 @@ const formatEventTime = (dateString: string) => {
       </div>
 
       <!-- Calendar Days -->
-      <div class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800 rounded-lg overflow-hidden">
+      <div
+        class="flex-1 min-h-0 grid grid-cols-7 grid-rows-6 gap-px bg-zinc-200 dark:bg-zinc-800 rounded-lg overflow-hidden"
+      >
         <div
           v-for="(day, index) in calendarDays"
           :key="index"
           @click="emits('dateClick', day.date)"
           :class="[
-            'h-12 md:h-24 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
+            'min-h-0 bg-white dark:bg-zinc-900 p-2 cursor-pointer transition-colors relative flex flex-col',
             {
               'bg-zinc-50 dark:bg-zinc-800/50': !day.isCurrentMonth,
               'hover:bg-zinc-50 dark:hover:bg-zinc-800': day.isCurrentMonth,
@@ -232,12 +234,12 @@ const formatEventTime = (dateString: string) => {
               :key="event.eventId"
               @click.stop="emits('eventClick', event)"
               :class="[
-                'text-xs px-2 py-1 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
+                'px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
                 getEventCategory(event.categoryColor!),
               ]"
             >
-              <div class="font-medium truncate">{{ event.eventName }}</div>
-              <div class="text-[10px] opacity-75">
+              <div class="text-[10px] sm:text-xs font-medium truncate">{{ event.eventName }}</div>
+              <div class="hidden sm:block text-[10px] opacity-75">
                 {{ formatEventTime(event.startTime) }}
               </div>
             </div>
@@ -245,7 +247,5 @@ const formatEventTime = (dateString: string) => {
         </div>
       </div>
     </div>
-
-   
   </div>
 </template>

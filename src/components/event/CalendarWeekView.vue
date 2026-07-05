@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
@@ -115,30 +115,15 @@ const formatEventTime = (dateString: string) => {
     hour12: false,
   })
 }
-const header = ref<HTMLElement | null>(null)
-const headerHeight = ref(0);
-
-defineExpose({
-  header,
-  headerHeight
-})
-
-onMounted(async () => {
-  await nextTick()
-  if (header.value) {
-    headerHeight.value = header.value.offsetHeight
-  }
-})
-
 const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 </script>
 
 <template>
   <div
-    class="w-full bg-white dark:bg-zinc-900 h-full shadow-sm border border-zinc-200 dark:border-zinc-800"
+    class="w-full h-full flex flex-col bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800"
   >
     <!-- Header -->
-    <div ref="header" class="p-4 border-b border-zinc-200 dark:border-zinc-800">
+    <div class="shrink-0 p-4 border-b border-zinc-200 dark:border-zinc-800">
       <!-- Navigation -->
       <div class="flex items-center justify-between">
         <button
@@ -165,16 +150,13 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     </div>
 
     <!-- Week Days -->
-    <div
-      :style="{ height: `calc(100vh - ${headerHeight}px - 65px)` }"
-      class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800"
-    >
+    <div class="flex-1 min-h-0 grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-800">
       <div
         v-for="(day, index) in weekDays"
         :key="index"
         @click="emits('dateClick', day.date)"
         :class="[
-          ' bg-white dark:bg-zinc-900 p-3 cursor-pointer hover:bg-zinc-50  dark:hover:bg-zinc-800 transition-colors flex flex-col',
+          'min-h-0 bg-white dark:bg-zinc-900 p-3 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors flex flex-col',
           {
             'ring-2 ring-blue-500 ring-inset': day.isToday,
           },
@@ -207,12 +189,12 @@ const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             :key="event.eventId"
             @click.stop="emits('eventClick', event)"
             :class="[
-              'text-xs px-2 py-1.5 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
+              'px-1.5 py-0.5 sm:px-2 sm:py-1.5 rounded border-l-2 cursor-pointer hover:shadow-sm transition-shadow flex-shrink-0',
               getEventCategory(event.categoryColor!),
             ]"
           >
-            <div class="font-medium truncate">{{ event.eventName }}</div>
-            <div class="text-[10px] opacity-75 mt-0.5">
+            <div class="text-[10px] sm:text-xs font-medium truncate">{{ event.eventName }}</div>
+            <div class="hidden sm:block text-[10px] opacity-75 mt-0.5">
               {{ formatEventTime(event.startTime) }}
             </div>
           </div>

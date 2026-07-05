@@ -13,7 +13,7 @@ import NavBar from './NavBar.vue';
 
         </header>
         <main class="mb-10 md:mb-0 md:col-span-12  bg-neutral-100 dark:bg-zinc-800">
-            <div class="mx-auto min-h-screen md:max-h-screen overflow-auto">
+            <div class="mx-auto h-[calc(100vh-2.5rem)] md:h-screen overflow-auto">
                 <RouterView />
             </div>
         </main>

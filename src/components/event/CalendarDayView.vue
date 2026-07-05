@@ -83,10 +83,10 @@ const formatDate = (date: Date) => {
 
 <template>
   <div
-    class="w-full bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800"
+    class="w-full h-full flex flex-col bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-800"
   >
     <!-- Header -->
-    <div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
+    <div class="shrink-0 p-4 border-b border-zinc-200 dark:border-zinc-800">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100"></h2>
       </div>
@@ -116,7 +116,7 @@ const formatDate = (date: Date) => {
     </div>
 
     <!-- Time Slots -->
-    <div class="overflow-y-auto">
+    <div class="flex-1 min-h-0 overflow-y-auto">
       <div
         v-for="hour in hours"
         :key="hour"
@@ -139,15 +139,15 @@ const formatDate = (date: Date) => {
                 :key="event.eventId"
                 @click.stop="emits('eventClick', event)"
                 :class="[
-                  'text-xs px-3 py-2 rounded border-l-2 cursor-pointer hover:shadow-md transition-shadow',
+                  'px-2 py-1 sm:px-3 sm:py-2 rounded border-l-2 cursor-pointer hover:shadow-md transition-shadow',
                   getEventCategory(event.categoryColor!),
                 ]"
               >
-                <div class="font-semibold mb-1">{{ event.eventName }}</div>
-                <div class="text-[11px] opacity-75">
+                <div class="text-[11px] sm:text-xs font-semibold truncate sm:mb-1">{{ event.eventName }}</div>
+                <div class="hidden sm:block text-[11px] opacity-75">
                   {{ formatEventTime(event.startTime) }} - {{ formatEventTime(event.endTime) }}
                 </div>
-                <div v-if="event.location" class="text-[11px] opacity-75 mt-1">
+                <div v-if="event.location" class="hidden sm:block text-[11px] opacity-75 mt-1">
                   📍 {{ event.location }}
                 </div>
               </div>
@@ -159,7 +159,7 @@ const formatDate = (date: Date) => {
 
     <!-- Summary -->
     <div
-      class="px-4 py-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50"
+      class="shrink-0 px-4 py-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50"
     >
       <div class="text-sm text-zinc-600 dark:text-zinc-400">
         {{ dayEvents.length }} {{ dayEvents.length === 1 ? 'event' : 'events' }} today

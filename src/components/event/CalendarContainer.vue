@@ -18,10 +18,12 @@ import {
   TagIcon,
 } from '@heroicons/vue/24/outline'
 import Select from 'primevue/select'
+import { getDotColor } from '@/helpers/colors'
 
 const props = defineProps<{
   events: GetAllGroupEventsResponse[]
   groupId: number
+  groupName: string
   groupCategories: GroupCategoryGroupDto[]
   groupColor: string
 }>()
@@ -34,6 +36,12 @@ const emits = defineEmits<{
 }>()
 
 type ViewMode = 'month' | 'week' | 'day'
+
+const viewModes: { value: ViewMode; label: string; icon: typeof CalendarIcon }[] = [
+  { value: 'month', label: 'Month', icon: CalendarIcon },
+  { value: 'week', label: 'Week', icon: Squares2X2Icon },
+  { value: 'day', label: 'Day', icon: QueueListIcon },
+]
 
 const viewMode = ref<ViewMode>('month')
 const showAddEventDialog = ref(false)
@@ -55,6 +63,10 @@ const categoryFilterOptions = computed(() => {
     ...props.groupCategories,
   ]
 })
+
+const selectedCategoryOption = computed(() =>
+  categoryFilterOptions.value.find((option) => option.categoryId === selectedCategoryFilter.value),
+)
 
 const handleEventClick = (event: GetAllGroupEventsResponse) => {
   selectedEvent.value = event
@@ -90,100 +102,112 @@ const handleTimeSlotClick = (hour: number) => {
 </script>
 
 <template>
-  <div class="space-y-4 pt-2">
-    <!-- Toolbar -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-3">
-      <!-- View Mode Selector -->
-      <div class="flex flex-row w-full justify-between">
-        <div class="flex items-center gap-1 rounded-lg p-1">
-          <ButtonComponent
-            :primary="viewMode === 'month'"
-            :tertiary="viewMode !== 'month'"
-            sm
-            @click="viewMode = 'month'"
-          >
-            <CalendarIcon class="h-4 w-4" />
-            <span class="hidden sm:inline">Month</span>
-          </ButtonComponent>
-          <ButtonComponent
-            :primary="viewMode === 'week'"
-            :tertiary="viewMode !== 'week'"
-            sm
-            @click="viewMode = 'week'"
-          >
-            <Squares2X2Icon class="h-4 w-4" />
-            <span class="hidden sm:inline">Week</span>
-          </ButtonComponent>
-          <ButtonComponent
-            :primary="viewMode === 'day'"
-            :tertiary="viewMode !== 'day'"
-            sm
-            @click="viewMode = 'day'"
-          >
-            <QueueListIcon class="h-4 w-4" />
-            <span class="hidden sm:inline">Day</span>
-          </ButtonComponent>
-        </div>
-        <section class="flex gap-2">
-          <ButtonComponent primary md @click="emits('openCategoryDrawer')"
-            ><TagIcon class="w-5" />
-            <p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
-          >
-          <ButtonComponent primary md @click="emits('openGroupInfoDrawer')">
-            <InformationCircleIcon class="w-5" />
-            <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
-          >
-        </section>
-      </div>
-      <!-- Category Filter & Add Event -->
-      <div class="flex items-center gap-3 w-full sm:w-auto">
-        <div class="flex items-center gap-2 flex-1 sm:flex-initial relative">
-          <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400 absolute left-2 z-30" />
-          <Select
-            v-model="selectedCategoryFilter"
-            :options="categoryFilterOptions"
-            option-label="categoryName"
-            option-value="categoryId"
-            placeholder="Filter by category"
-            size="small"
-            class="w-full pl-5 sm:w-48 dark:bg-zinc-700!"
-          />
-        </div>
+  <div class="h-full flex flex-col min-h-0">
+    <!-- Top bar -->
+    <section
+      class="shrink-0 flex justify-between items-center px-3 py-3 border-b dark:border-zinc-600 border-zinc-300 bg-white dark:bg-zinc-900"
+    >
+      <p class="font-bold text-lg truncate min-w-0">{{ groupName }}</p>
+      <div class="shrink-0 flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-3 sm:gap-5">
+        <ButtonComponent primary md @click="emits('openCategoryDrawer')"
+          ><TagIcon class="w-5" />
+          <p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
+        >
+        <ButtonComponent primary md @click="emits('openGroupInfoDrawer')">
+          <InformationCircleIcon class="w-5" />
+          <p class="hidden ml-1 lg:block">Group Info</p></ButtonComponent
+        >
         <ButtonComponent primary md @click="handleAddEvent">
           <span class="w-5"><PlusCircleIcon /></span>
           <span class="hidden ml-1 text-nowrap lg:inline">Add Event</span>
         </ButtonComponent>
       </div>
+    </section>
+
+    <!-- Toolbar -->
+    <div class="shrink-0 flex items-center justify-between gap-3 bg-neutral-100 dark:bg-stone-900 px-3 py-3">
+      <!-- View Mode Selector -->
+      <div class="shrink-0 inline-flex items-center gap-1 rounded-full bg-zinc-200 dark:bg-zinc-800 p-1">
+        <button
+          v-for="mode in viewModes"
+          :key="mode.value"
+          type="button"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer transition-colors"
+          :class="
+            viewMode === mode.value
+              ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+              : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+          "
+          @click="viewMode = mode.value"
+        >
+          <component :is="mode.icon" class="h-4 w-4" />
+          <span class="hidden sm:inline">{{ mode.label }}</span>
+        </button>
+      </div>
+      <!-- Category Filter -->
+      <div class="flex items-center gap-2 flex-1 min-w-0 sm:flex-initial relative">
+        <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400 absolute left-2 z-30 pointer-events-none" />
+        <Select
+          v-model="selectedCategoryFilter"
+          :options="categoryFilterOptions"
+          option-label="categoryName"
+          option-value="categoryId"
+          placeholder="Filter by category"
+          size="small"
+          class="w-full pl-5 sm:w-52 dark:bg-zinc-700!"
+        >
+          <template #value>
+            <div class="flex items-center gap-2 min-w-0">
+              <span
+                class="w-2.5 h-2.5 rounded-full shrink-0"
+                :class="getDotColor(selectedCategoryOption?.categoryColor)"
+              ></span>
+              <span class="truncate">{{ selectedCategoryOption?.categoryName }}</span>
+            </div>
+          </template>
+          <template #option="slotProps">
+            <div class="flex items-center gap-2">
+              <span
+                class="w-2.5 h-2.5 rounded-full shrink-0"
+                :class="getDotColor(slotProps.option.categoryColor)"
+              ></span>
+              <span>{{ slotProps.option.categoryName }}</span>
+            </div>
+          </template>
+        </Select>
+      </div>
     </div>
 
     <!-- Calendar Views -->
-    <CalendarMonthView
-      v-if="viewMode === 'month'"
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @date-click="handleDateClick"
-      @range-change="handleRangeChange"
-    />
+    <div class="flex-1 min-h-0 overflow-hidden">
+      <CalendarMonthView
+        v-if="viewMode === 'month'"
+        :events="filteredEvents"
+        :group-id="groupId"
+        @event-click="handleEventClick"
+        @date-click="handleDateClick"
+        @range-change="handleRangeChange"
+      />
 
-    <CalendarWeekView
-      ref="calendarRef"
-      v-else-if="viewMode === 'week'"
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @date-click="handleDateClick"
-      @range-change="handleRangeChange"
-    />
+      <CalendarWeekView
+        ref="calendarRef"
+        v-else-if="viewMode === 'week'"
+        :events="filteredEvents"
+        :group-id="groupId"
+        @event-click="handleEventClick"
+        @date-click="handleDateClick"
+        @range-change="handleRangeChange"
+      />
 
-    <CalendarDayView
-      v-else
-      :events="filteredEvents"
-      :group-id="groupId"
-      @event-click="handleEventClick"
-      @time-slot-click="handleTimeSlotClick"
-      @range-change="handleRangeChange"
-    />
+      <CalendarDayView
+        v-else
+        :events="filteredEvents"
+        :group-id="groupId"
+        @event-click="handleEventClick"
+        @time-slot-click="handleTimeSlotClick"
+        @range-change="handleRangeChange"
+      />
+    </div>
 
     <!-- Add Event Dialog -->
     <AddEventDialog

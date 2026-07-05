@@ -47,7 +47,7 @@ const handleGroupUpdate = async () => {
 </script>
 
 <template>
-  <section v-if="groupStore.currentGroup && !groupStore.isLoading">
+  <section v-if="groupStore.currentGroup && !groupStore.isLoading" class="h-full flex flex-col min-h-0">
     <EventsList
       @open-category-drawer="openCategoryDrawer = true"
       @open-group-info-drawer="openGroupInfoDrawer = true"

@@ -22,11 +22,12 @@ const handleRangeChange = async (start: Date, end: Date) => {
 </script>
 
 <template>
-  <div  :class="getBgColors(groupStore.currentGroup?.userGroupColor || 'zinc')">
+  <div class="h-full flex flex-col min-h-0" :class="getBgColors(groupStore.currentGroup?.userGroupColor || 'zinc')">
     <CalendarContainer
       v-if="!groupStore.isLoading"
       :events="groupStore.eventsWithCurrentCategories"
       :group-id="groupStore.groupId || 0"
+      :group-name="groupStore.currentGroup?.groupName || ''"
       :group-categories="groupStore.categories"
       :group-color="groupStore.currentGroup?.userGroupColor || 'zinc'"
       @update="handleEventUpdate"
