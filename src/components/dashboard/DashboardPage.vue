@@ -8,17 +8,23 @@ import WeekSummaryEventsCard from './WeekSummaryEventsCard.vue'
 import { userGroupStore } from '@/stores/userGroupStore.ts'
 import { storeToRefs } from 'pinia'
 import type { GetAllEventsNextWeekDtoResponse } from '@/types/events.ts'
+import GroupsOverview from './GroupsOverview.vue'
 
 const showAddEventDialog = ref(false)
 
 const eventStore = userGroupStore()
 const { eventsNextWeek } = storeToRefs(eventStore)
+const { groups } = storeToRefs(eventStore)
+
 const nextEvent = computed<GetAllEventsNextWeekDtoResponse | undefined>(
   () => eventsNextWeek.value[0],
 )
 
 onMounted(async () => {
   await eventStore.fetchNextWeekEvents()
+  if (groups.value.length === 0) {
+    await eventStore.fetchGroups()
+  }
 })
 </script>
 
@@ -43,6 +49,11 @@ onMounted(async () => {
       />
     </div>
   </section>
-  <UpNextCard :next-event="nextEvent" />
-  <WeekSummaryEventsCard :events="eventsNextWeek" />
+  <section class="grid grid-cols-12 p-4">
+    <div class="col-span-8 flex flex-col gap-5">
+      <UpNextCard :next-event="nextEvent" />
+      <WeekSummaryEventsCard :events="eventsNextWeek" />
+      <GroupsOverview :groups="groups" />
+    </div>
+  </section>
 </template>
