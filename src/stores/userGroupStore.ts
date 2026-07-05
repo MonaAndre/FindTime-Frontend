@@ -104,7 +104,6 @@ export const userGroupStore = defineStore('group', () => {
 
   const initialize = async (id: number) => {
     await fetchGroup(id)
-    await fetchEvents()
   }
   return {
     currentGroup,
