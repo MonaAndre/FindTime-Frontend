@@ -1,8 +1,6 @@
-import { activityApi } from '@/endpoints/activityEndpoints'
 import { categoryApi } from '@/endpoints/categoryEndpoints'
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { groupApi } from '@/endpoints/groupEndpoints'
-import type { ActivityDtoResponse } from '@/types/activity'
 import type { GetAllEventsNextWeekDtoResponse, GetAllGroupEventsResponse } from '@/types/events'
 import type { Group, GroupCategoryGroupDto, GroupInfoDtoResponse } from '@/types/group'
 import { defineStore } from 'pinia'
@@ -14,7 +12,6 @@ export const userGroupStore = defineStore('group', () => {
   const groups = ref<Group[]>([])
   const eventsNextWeek = ref<GetAllEventsNextWeekDtoResponse[]>([])
   const events = ref<GetAllGroupEventsResponse[]>([])
-  const activities = ref<ActivityDtoResponse[]>([])
   const isLoading = ref(false)
 
   const groupId = computed(() => currentGroup.value?.groupId)
@@ -92,13 +89,6 @@ export const userGroupStore = defineStore('group', () => {
     }
   }
 
-  const fetchUserActivity = async () => {
-    const res = await activityApi.getUserActivity()
-    if (res.success) {
-      activities.value = res.data ?? []
-    }
-  }
-
   const fetchCategories = async () => {
     if (!groupId.value) return
 
@@ -124,14 +114,12 @@ export const userGroupStore = defineStore('group', () => {
     eventsWithCurrentCategories,
     groups,
     eventsNextWeek,
-    activities,
     fetchGroup,
     fetchEvents,
     fetchCategories,
     initialize,
     fetchGroups,
     fetchNextWeekEvents,
-    fetchUserActivity,
     setRange,
   }
 })

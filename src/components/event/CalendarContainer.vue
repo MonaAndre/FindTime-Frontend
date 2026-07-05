@@ -21,6 +21,8 @@ import {
 } from '@heroicons/vue/24/outline'
 import Select from 'primevue/select'
 import { getDotColor } from '@/helpers/colors'
+import NotificationBell from '../layout/NotificationBell.vue'
+import { useToast } from 'primevue/usetoast'
 
 const props = defineProps<{
   events: GetAllGroupEventsResponse[]
@@ -47,6 +49,7 @@ const viewModes: { value: ViewMode; label: string; icon: typeof CalendarIcon }[]
 
 const route = useRoute()
 const router = useRouter()
+const toast = useToast()
 
 const viewMode = ref<ViewMode>('month')
 const showAddEventDialog = ref(false)
@@ -120,15 +123,24 @@ watch(
       cancelled = true
     })
 
-    const res = await eventApi.getEvent(props.groupId, Number(eventIdParam))
-    if (cancelled) return
+    try {
+      const res = await eventApi.getEvent(props.groupId, Number(eventIdParam))
+      if (cancelled) return
 
-    if (res.success && res.data) {
-      selectedEvent.value = res.data
-      showEventDetail.value = true
-    }
-    if (route.query.eventId === eventIdParam) {
-      router.replace({ query: {} })
+      if (res.success && res.data) {
+        selectedEvent.value = res.data
+        showEventDetail.value = true
+      } else {
+        toast.add({ severity: 'error', summary: 'Event not found', life: 3000 })
+      }
+    } catch {
+      if (!cancelled) {
+        toast.add({ severity: 'error', summary: 'Event not found', life: 3000 })
+      }
+    } finally {
+      if (!cancelled && route.query.eventId === eventIdParam) {
+        router.replace({ query: {} })
+      }
     }
   },
   { immediate: true },
@@ -142,7 +154,12 @@ watch(
       class="shrink-0 flex justify-between items-center px-3 py-3 border-b dark:border-zinc-600 border-zinc-300 bg-white dark:bg-zinc-900"
     >
       <p class="font-bold text-lg truncate min-w-0">{{ groupName }}</p>
-      <div class="shrink-0 flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-3 sm:gap-5">
+      <div
+        class="shrink-0 flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-3 sm:gap-6"
+      >
+        <div class="flex justify-center pr-2">
+          <NotificationBell />
+        </div>
         <ButtonComponent primary md @click="emits('openCategoryDrawer')"
           ><TagIcon class="w-5" />
           <p class="hidden ml-1 lg:block">Categories</p></ButtonComponent
@@ -159,9 +176,13 @@ watch(
     </section>
 
     <!-- Toolbar -->
-    <div class="shrink-0 flex items-center justify-between gap-3 bg-neutral-100 dark:bg-stone-900 px-3 py-3">
+    <div
+      class="shrink-0 flex items-center justify-between gap-3 bg-neutral-100 dark:bg-stone-900 px-3 py-3"
+    >
       <!-- View Mode Selector -->
-      <div class="shrink-0 inline-flex items-center gap-1 rounded-full bg-zinc-200 dark:bg-zinc-800 p-1">
+      <div
+        class="shrink-0 inline-flex items-center gap-1 rounded-full bg-zinc-200 dark:bg-zinc-800 p-1"
+      >
         <button
           v-for="mode in viewModes"
           :key="mode.value"
@@ -180,7 +201,9 @@ watch(
       </div>
       <!-- Category Filter -->
       <div class="flex items-center gap-2 flex-1 min-w-0 sm:flex-initial relative">
-        <FunnelIcon class="h-4 w-4 text-zinc-500 dark:text-zinc-400 absolute left-2 z-30 pointer-events-none" />
+        <FunnelIcon
+          class="h-4 w-4 text-zinc-500 dark:text-zinc-400 absolute left-2 z-30 pointer-events-none"
+        />
         <Select
           v-model="selectedCategoryFilter"
           :options="categoryFilterOptions"

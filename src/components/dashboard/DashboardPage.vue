@@ -20,7 +20,6 @@ const isDashboardLoading = ref(true)
 const eventStore = userGroupStore()
 const { eventsNextWeek } = storeToRefs(eventStore)
 const { groups } = storeToRefs(eventStore)
-const { activities } = storeToRefs(eventStore)
 
 const nextEvent = computed<GetAllEventsNextWeekDtoResponse | undefined>(
   () => eventsNextWeek.value[0],
@@ -31,7 +30,6 @@ onMounted(async () => {
     await Promise.all([
       eventStore.fetchNextWeekEvents(),
       groups.value.length === 0 ? eventStore.fetchGroups() : Promise.resolve(),
-      eventStore.fetchUserActivity(),
     ])
   } finally {
     isDashboardLoading.value = false
@@ -41,35 +39,37 @@ onMounted(async () => {
 
 <template>
   <!-- top bar -->
-  <section
-    class="flex justify-between items-center px-3 border-b dark:border-zinc-600 border-zinc-300 bg-white dark:bg-zinc-900"
-  >
-    <p class="font-bold text-lg">Dashboard</p>
-    <div class="flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-5">
-      <div class="flex justify-center mr-5">
-        <NotificationBell />
-      </div>
-      <ButtonComponent end margin-y @click="showAddEventDialog = true" lg primary>
-        <PlusIcon class="h-5 w-5 mr-1" />Create event
-      </ButtonComponent>
+  <div>
+    <section
+      class="flex justify-between items-center px-3 border-b dark:border-zinc-600 border-zinc-300 bg-white dark:bg-zinc-900"
+    >
+      <p class="font-bold text-lg">Dashboard</p>
+      <div class="flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-5">
+        <div class="flex justify-center pr-2">
+          <NotificationBell />
+        </div>
+        <ButtonComponent end margin-y @click="showAddEventDialog = true" lg primary>
+          <PlusIcon class="h-5 w-5 mr-1" />Create event
+        </ButtonComponent>
 
-      <AddEventDialog
-        v-model:visible="showAddEventDialog"
-        :without-group="true"
-        @update="eventStore.fetchNextWeekEvents()"
-      />
-    </div>
-  </section>
-  <section class="grid grid-cols-12 p-4 gap-5">
-    <div class="col-span-8 flex flex-col gap-5">
-      <UpNextCard :next-event="nextEvent" :loading="isDashboardLoading" />
-      <WeekSummaryEventsCard :events="eventsNextWeek" :loading="isDashboardLoading" />
-      <GroupsOverview :groups="groups" :loading="isDashboardLoading" />
-    </div>
-    <div class="col-span-4 flex flex-col gap-5">
-      <FindATimeCard />
-      <NeedsResponseCard :loading="isDashboardLoading" />
-      <RecentActivityCard :activities="activities" :loading="isDashboardLoading" />
-    </div>
-  </section>
+        <AddEventDialog
+          v-model:visible="showAddEventDialog"
+          :without-group="true"
+          @update="eventStore.fetchNextWeekEvents()"
+        />
+      </div>
+    </section>
+    <section class="grid grid-cols-12 p-4 gap-5">
+      <div class="col-span-8 flex flex-col gap-5">
+        <UpNextCard :next-event="nextEvent" :loading="isDashboardLoading" />
+        <WeekSummaryEventsCard :events="eventsNextWeek" :loading="isDashboardLoading" />
+        <GroupsOverview :groups="groups" :loading="isDashboardLoading" />
+      </div>
+      <div class="col-span-4 flex flex-col gap-5">
+        <FindATimeCard />
+        <NeedsResponseCard :loading="isDashboardLoading" />
+        <RecentActivityCard />
+      </div>
+    </section>
+  </div>
 </template>

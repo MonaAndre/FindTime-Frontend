@@ -34,12 +34,16 @@ onMounted(() => {
     class="flex justify-between items-center px-3 border-b dark:border-zinc-600 border-zinc-300 bg-white dark:bg-zinc-900"
   >
     <p class="font-bold text-lg">My Calendars</p>
-    <div class="flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-5">
-      <div class="flex justify-center mr-5">
+    <div class="flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-6">
+      <div class="flex justify-center pr-2">
         <NotificationBell />
       </div>
 
-      <AddGroup :toggle-form="toggleCreate" @create="handleCreate()" @close="toggleCreate = false" />
+      <AddGroup
+        :toggle-form="toggleCreate"
+        @create="handleCreate()"
+        @close="toggleCreate = false"
+      />
     </div>
   </section>
 
