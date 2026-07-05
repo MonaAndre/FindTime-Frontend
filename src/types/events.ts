@@ -93,10 +93,10 @@ export interface DeleteEventDtoResponse {
 export interface GetAllGroupEventsResponse {
   eventId: number
   eventName?: string | null
-  eventDescription?: string
+  eventDescription?: string | null
   startTime: string
   endTime: string
-  categoryId?: number | undefined
+  categoryId?: number | null
   categoryColor?: string | null
   categoryName?: string | null
   location?: string | null
@@ -107,11 +107,11 @@ export interface GetAllGroupEventsResponse {
   nickname?: string | null
 
   isRecurring: boolean
-  recurrencePattern?: RecurrencePattern
-  recurrenceEndTime?: string
+  recurrencePattern?: RecurrencePattern | null
+  recurrenceEndTime?: string | null
 
   createdAt: string
-  updatedAt?: string
+  updatedAt?: string | null
   myRsvpStatus?: RsvpStatus | null
 }
 
@@ -153,6 +153,30 @@ export interface FindFreeSlotDtoResponse {
   startTime: string
   endTime: string
   durationMinutes: number
+}
+
+export interface GetEventDtoResponse {
+  eventId: number
+  eventName: string
+  eventDescription?: string | null
+  groupId: number
+  startTime: string
+  endTime: string
+  categoryId?: number | null
+  categoryColor?: string | null
+  categoryName?: string | null
+  location?: string | null
+  creatorUserId: string
+  creatorUserName: string
+  creatorUserEmail: string
+  nickname?: string | null
+  isRecurring: boolean
+  recurrencePattern?: RecurrencePattern | null
+  recurrenceEndTime?: string | null
+  createdAt: string
+  updatedAt?: string | null
+  myRsvpStatus?: RsvpStatus | null
+  participants: EventParticipantDtoResponse[]
 }
 
 export interface GetAllEventsNextWeekDtoResponse {

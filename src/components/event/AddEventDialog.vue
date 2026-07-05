@@ -78,11 +78,6 @@ const resetForm = () => {
   recurrenceEndDate.value = null
 }
 
-const toLocalISOString = (date: Date): string => {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-}
-
 const initializeFormWithDate = (startDate: Date, endDate?: Date | null) => {
   const start = new Date(startDate)
   const end = endDate ? new Date(endDate) : null
@@ -92,12 +87,12 @@ const initializeFormWithDate = (startDate: Date, endDate?: Date | null) => {
     start.setHours(9, 0, 0, 0)
     const defaultEnd = new Date(startDate)
     defaultEnd.setHours(10, 0, 0, 0)
-    createEventForm.value.startTime = toLocalISOString(start)
-    createEventForm.value.endTime = toLocalISOString(defaultEnd)
+    createEventForm.value.startTime = start.toISOString()
+    createEventForm.value.endTime = defaultEnd.toISOString()
   } else {
     // explicit start + end (e.g. from find-a-time) — use times as-is
-    createEventForm.value.startTime = toLocalISOString(start)
-    createEventForm.value.endTime = toLocalISOString(end)
+    createEventForm.value.startTime = start.toISOString()
+    createEventForm.value.endTime = end.toISOString()
   }
 }
 

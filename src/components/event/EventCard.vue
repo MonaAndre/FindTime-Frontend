@@ -20,7 +20,7 @@ const emits = defineEmits<{
 }>()
 
 const mapRecurrencePattern = () => {
-  if (props.event.recurrencePattern !== undefined) {
+  if (props.event.recurrencePattern != null) {
     return RecurrencePattern[props.event.recurrencePattern]
   }
   return ''

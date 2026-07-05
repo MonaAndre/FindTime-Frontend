@@ -4,7 +4,8 @@ import { groupApi } from '@/endpoints/groupEndpoints'
 import type { Group } from '@/types/group'
 import { onMounted, ref } from 'vue'
 import AddGroup from './AddGroup.vue'
-import { BellIcon, PlusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon } from '@heroicons/vue/24/outline'
+import NotificationBell from '@/components/layout/NotificationBell.vue'
 
 const groupsArray = ref<Group[] | null>([])
 
@@ -34,8 +35,8 @@ onMounted(() => {
   >
     <p class="font-bold text-lg">My Calendars</p>
     <div class="flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-5">
-      <div class="flex justify-center">
-        <BellIcon class="w-5 h-5 mr-5" />
+      <div class="flex justify-center mr-5">
+        <NotificationBell />
       </div>
 
       <AddGroup :toggle-form="toggleCreate" @create="handleCreate()" @close="toggleCreate = false" />

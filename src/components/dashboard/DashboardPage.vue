@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import AddEventDialog from '../event/AddEventDialog.vue'
-import { BellIcon, PlusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon } from '@heroicons/vue/24/outline'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import UpNextCard from './upNextCard.vue'
 import WeekSummaryEventsCard from './WeekSummaryEventsCard.vue'
@@ -11,6 +11,8 @@ import type { GetAllEventsNextWeekDtoResponse } from '@/types/events.ts'
 import GroupsOverview from './GroupsOverview.vue'
 import FindATimeCard from './FindATimeCard.vue'
 import NeedsResponseCard from './NeedsResponseCard.vue'
+import RecentActivityCard from './RecentActivityCard.vue'
+import NotificationBell from '../layout/NotificationBell.vue'
 
 const showAddEventDialog = ref(false)
 const isDashboardLoading = ref(true)
@@ -18,6 +20,7 @@ const isDashboardLoading = ref(true)
 const eventStore = userGroupStore()
 const { eventsNextWeek } = storeToRefs(eventStore)
 const { groups } = storeToRefs(eventStore)
+const { activities } = storeToRefs(eventStore)
 
 const nextEvent = computed<GetAllEventsNextWeekDtoResponse | undefined>(
   () => eventsNextWeek.value[0],
@@ -28,6 +31,7 @@ onMounted(async () => {
     await Promise.all([
       eventStore.fetchNextWeekEvents(),
       groups.value.length === 0 ? eventStore.fetchGroups() : Promise.resolve(),
+      eventStore.fetchUserActivity(),
     ])
   } finally {
     isDashboardLoading.value = false
@@ -42,8 +46,8 @@ onMounted(async () => {
   >
     <p class="font-bold text-lg">Dashboard</p>
     <div class="flex items-center divide-x divide-zinc-300 dark:divide-zinc-600 gap-5">
-      <div class="flex justify-center">
-        <BellIcon class="w-5 h-5 mr-5" />
+      <div class="flex justify-center mr-5">
+        <NotificationBell />
       </div>
       <ButtonComponent end margin-y @click="showAddEventDialog = true" lg primary>
         <PlusIcon class="h-5 w-5 mr-1" />Create event
@@ -65,6 +69,7 @@ onMounted(async () => {
     <div class="col-span-4 flex flex-col gap-5">
       <FindATimeCard />
       <NeedsResponseCard :loading="isDashboardLoading" />
+      <RecentActivityCard :activities="activities" :loading="isDashboardLoading" />
     </div>
   </section>
 </template>

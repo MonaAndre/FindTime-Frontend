@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import CalendarMonthView from './CalendarMonthView.vue'
 import CalendarWeekView from './CalendarWeekView.vue'
 import CalendarDayView from './CalendarDayView.vue'
 import AddEventDialog from './AddEventDialog.vue'
 import EventDetailModal from './EventDetailModal.vue'
+import { eventApi } from '@/endpoints/eventEndpoints'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import type { GroupCategoryGroupDto } from '@/types/group'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
@@ -42,6 +44,9 @@ const viewModes: { value: ViewMode; label: string; icon: typeof CalendarIcon }[]
   { value: 'week', label: 'Week', icon: Squares2X2Icon },
   { value: 'day', label: 'Day', icon: QueueListIcon },
 ]
+
+const route = useRoute()
+const router = useRouter()
 
 const viewMode = ref<ViewMode>('month')
 const showAddEventDialog = ref(false)
@@ -99,6 +104,35 @@ const handleTimeSlotClick = (hour: number) => {
   selectedDate.value = date
   showAddEventDialog.value = true
 }
+
+// Watch rather than onMounted: clicking a second notification while already on
+// this group's route only changes the query (no remount), so onMounted would
+// miss it. A second click can also fire before the first click's fetch
+// resolves — onCleanup marks the in-flight fetch stale so an out-of-order
+// response can't overwrite the drawer with the wrong event.
+watch(
+  () => route.query.eventId,
+  async (eventIdParam, _oldValue, onCleanup) => {
+    if (!eventIdParam) return
+
+    let cancelled = false
+    onCleanup(() => {
+      cancelled = true
+    })
+
+    const res = await eventApi.getEvent(props.groupId, Number(eventIdParam))
+    if (cancelled) return
+
+    if (res.success && res.data) {
+      selectedEvent.value = res.data
+      showEventDetail.value = true
+    }
+    if (route.query.eventId === eventIdParam) {
+      router.replace({ query: {} })
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
