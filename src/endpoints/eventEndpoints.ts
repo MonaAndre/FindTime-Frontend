@@ -34,9 +34,19 @@ export const eventApi = {
     )
     return response.data
   },
-  async getGroupEvents(groupId: number): Promise<ServiceResponse<GetAllGroupEventsResponse[]>> {
-    const response = await api.post<ServiceResponse<GetAllGroupEventsResponse[]>>(
+  async getGroupEvents(
+    groupId: number,
+    rangeStart: Date,
+    rangeEnd: Date,
+  ): Promise<ServiceResponse<GetAllGroupEventsResponse[]>> {
+    const response = await api.get<ServiceResponse<GetAllGroupEventsResponse[]>>(
       `api/Event/get-group-events/${groupId}`,
+      {
+        params: {
+          rangeStart: rangeStart.toISOString(),
+          rangeEnd: rangeEnd.toISOString(),
+        },
+      },
     )
     return response.data
   },

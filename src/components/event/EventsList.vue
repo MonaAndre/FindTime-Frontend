@@ -13,6 +13,11 @@ const emits = defineEmits<{
 const handleEventUpdate = async () => {
   await groupStore.fetchEvents()
 }
+
+const handleRangeChange = async (start: Date, end: Date) => {
+  groupStore.setRange(start, end)
+  await groupStore.fetchEvents()
+}
 </script>
 
 <template>
@@ -24,6 +29,7 @@ const handleEventUpdate = async () => {
       :group-categories="groupStore.categories"
       :group-color="groupStore.currentGroup?.userGroupColor || 'zinc'"
       @update="handleEventUpdate"
+      @range-change="handleRangeChange"
       @open-category-drawer="emits('openCategoryDrawer')"
       @open-group-info-drawer="emits('openGroupInfoDrawer')"
     />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
@@ -13,9 +13,22 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'eventClick', event: GetAllGroupEventsResponse): void
   (e: 'dateClick', date: Date): void
+  (e: 'rangeChange', start: Date, end: Date): void
 }>()
 
 const currentDate = ref(new Date())
+
+watch(currentDate, (date) => {
+  const start = new Date(date)
+  const day = start.getDay()
+  const diff = start.getDate() - day + (day === 0 ? -6 : 1)
+  start.setDate(diff)
+  start.setHours(0, 0, 0, 0)
+  const end = new Date(start)
+  end.setDate(end.getDate() + 6)
+  end.setHours(23, 59, 59, 999)
+  emits('rangeChange', start, end)
+}, { immediate: true })
 
 const weekDays = computed(() => {
   const days: Array<{

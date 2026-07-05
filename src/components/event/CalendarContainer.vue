@@ -30,6 +30,7 @@ const emits = defineEmits<{
   (e: 'update'): void
   (e: 'openCategoryDrawer'): void
   (e: 'openGroupInfoDrawer'): void
+  (e: 'rangeChange', start: Date, end: Date): void
 }>()
 
 type ViewMode = 'month' | 'week' | 'day'
@@ -74,6 +75,10 @@ const handleEventUpdate = async () => {
   emits('update')
   showEventDetail.value = false
   showAddEventDialog.value = false
+}
+
+const handleRangeChange = (start: Date, end: Date) => {
+  emits('rangeChange', start, end)
 }
 
 const handleTimeSlotClick = (hour: number) => {
@@ -158,6 +163,7 @@ const handleTimeSlotClick = (hour: number) => {
       :group-id="groupId"
       @event-click="handleEventClick"
       @date-click="handleDateClick"
+      @range-change="handleRangeChange"
     />
 
     <CalendarWeekView
@@ -167,6 +173,7 @@ const handleTimeSlotClick = (hour: number) => {
       :group-id="groupId"
       @event-click="handleEventClick"
       @date-click="handleDateClick"
+      @range-change="handleRangeChange"
     />
 
     <CalendarDayView
@@ -175,6 +182,7 @@ const handleTimeSlotClick = (hour: number) => {
       :group-id="groupId"
       @event-click="handleEventClick"
       @time-slot-click="handleTimeSlotClick"
+      @range-change="handleRangeChange"
     />
 
     <!-- Add Event Dialog -->

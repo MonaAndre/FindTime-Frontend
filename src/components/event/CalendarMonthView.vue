@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
@@ -13,9 +13,24 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'eventClick', event: GetAllGroupEventsResponse): void
   (e: 'dateClick', date: Date): void
+  (e: 'rangeChange', start: Date, end: Date): void
 }>()
 
 const currentDate = ref(new Date())
+
+watch(currentDate, (date) => {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const firstDay = new Date(year, month, 1)
+  let startDay = firstDay.getDay()
+  startDay = startDay === 0 ? 6 : startDay - 1
+  const start = new Date(year, month, 1 - startDay)
+  start.setHours(0, 0, 0, 0)
+  const end = new Date(start)
+  end.setDate(end.getDate() + 41)
+  end.setHours(23, 59, 59, 999)
+  emits('rangeChange', start, end)
+}, { immediate: true })
 
 const currentMonth = computed(() => currentDate.value.getMonth())
 const currentYear = computed(() => currentDate.value.getFullYear())

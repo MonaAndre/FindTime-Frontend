@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import type { GetAllGroupEventsResponse } from '@/types/events'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
@@ -13,9 +13,18 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'eventClick', event: GetAllGroupEventsResponse): void
   (e: 'timeSlotClick', hour: number): void
+  (e: 'rangeChange', start: Date, end: Date): void
 }>()
 
 const currentDate = ref(new Date())
+
+watch(currentDate, (date) => {
+  const start = new Date(date)
+  start.setHours(0, 0, 0, 0)
+  const end = new Date(date)
+  end.setHours(23, 59, 59, 999)
+  emits('rangeChange', start, end)
+}, { immediate: true })
 
 const hours = Array.from({ length: 24 }, (_, i) => i)
 

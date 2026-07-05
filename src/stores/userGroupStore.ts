@@ -15,6 +15,8 @@ export const userGroupStore = defineStore('group', () => {
   const isLoading = ref(false)
 
   const groupId = computed(() => currentGroup.value?.groupId)
+  const startTime = ref<Date | undefined>(undefined)
+  const endTime = ref<Date | undefined>(undefined)
 
   const categoryMap = computed(() => {
     const map = new Map<number, GroupCategoryGroupDto>()
@@ -65,12 +67,18 @@ export const userGroupStore = defineStore('group', () => {
     }
   }
 
+  const setRange = (start: Date, end: Date) => {
+    startTime.value = start
+    endTime.value = end
+  }
+
   const fetchEvents = async () => {
     if (!groupId.value) return
-
-    const res = await eventApi.getGroupEvents(groupId.value)
-    if (res.success) {
-      events.value = res.data || []
+    if (startTime.value && endTime.value) {
+      const res = await eventApi.getGroupEvents(groupId.value, startTime.value, endTime.value)
+      if (res.success) {
+        events.value = res.data || []
+      }
     }
   }
 
@@ -112,6 +120,7 @@ export const userGroupStore = defineStore('group', () => {
     fetchCategories,
     initialize,
     fetchGroups,
-    fetchNextWeekEvents
+    fetchNextWeekEvents,
+    setRange,
   }
 })
