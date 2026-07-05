@@ -1,8 +1,9 @@
-import GroupPage from '@/pages/group-page.vue';
-import GroupsPage from '@/pages/groups-page.vue';
+import DashboardPage from '@/pages/dashboard-page.vue'
+import GroupPage from '@/pages/group-page.vue'
+import GroupsPage from '@/pages/groups-page.vue'
 import HomePage from '@/pages/home-page.vue'
-import SettingsPage from '@/pages/settings-page.vue';
-import { useAuthStore } from '@/stores/authStore';
+import SettingsPage from '@/pages/settings-page.vue'
+import { useAuthStore } from '@/stores/authStore'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -12,19 +13,19 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomePage,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
       path: '/register',
       name: 'register',
       component: () => import('@/pages/auth/register-page.vue'),
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('@/pages/auth/login-page.vue'),
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
       path: '/groups',
@@ -37,35 +38,37 @@ const router = createRouter({
       path: '/group/details/:id',
       name: 'group',
       component: GroupPage,
-       meta: { requiresAuth: true }
-    }
-
-    ,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardPage,
+      meta: { requiresAuth: true },
+    },
     {
       path: '/settings',
       name: 'settings',
       component: SettingsPage,
-      meta: { requiresAuth: true }
-    }
+      meta: { requiresAuth: true },
+    },
   ],
-});
+})
 
 router.beforeEach(async (to, from, next) => {
-
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
   if (!authStore.isInitialized) {
-    await authStore.checkAuth();
+    await authStore.checkAuth()
   }
-  const requiresAuth = to.meta.requiresAuth;
+  const requiresAuth = to.meta.requiresAuth
   const isAuthenticated = authStore.isAuthenticated
 
-
   if (requiresAuth && !isAuthenticated) {
-    next({ path: "/", })
-  } else if (!requiresAuth && isAuthenticated && (to.name === "login" || to.name === "register")) {
-    next({ name: "groups" });
+    next({ path: '/' })
+  } else if (!requiresAuth && isAuthenticated && (to.name === 'login' || to.name === 'register')) {
+    next({ name: 'groups' })
   } else {
-    next();
+    next()
   }
 })
 

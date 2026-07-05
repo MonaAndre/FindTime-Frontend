@@ -5,6 +5,7 @@ import type {
   CreateEventDtoResponse,
   DeleteEventDtoRequest,
   DeleteEventDtoResponse,
+  GetAllEventsNextWeekDtoResponse,
   GetAllGroupEventsResponse,
   NextEventDtoResponse,
   UpdateEventDtoRequest,
@@ -42,6 +43,12 @@ export const eventApi = {
   async getNextEvent(groupId: number): Promise<ServiceResponse<NextEventDtoResponse>> {
     const response = await api.post<ServiceResponse<NextEventDtoResponse>>(
       `api/Event/get-next-event/${groupId}`,
+    )
+    return response.data
+  },
+  async getEventsForNextWeek(): Promise<ServiceResponse<GetAllEventsNextWeekDtoResponse[]>> {
+    const response = await api.get<ServiceResponse<GetAllEventsNextWeekDtoResponse[]>>(
+      `/api/Event/get-all-events-next-week`,
     )
     return response.data
   },

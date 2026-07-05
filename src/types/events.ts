@@ -8,7 +8,7 @@ export enum RecurrencePattern {
 export interface CreateEventDtoRequest {
   eventName: string
   eventDescription?: string | null
-  groupId: number
+  groupId: number | undefined
   startTime: string
   endTime: string
   categoryId?: number | undefined
@@ -65,7 +65,7 @@ export interface GetAllGroupEventsResponse {
   endTime: string
   categoryId?: number | undefined
   categoryColor?: string | null
-  categoryName?: string|null
+  categoryName?: string | null
   location?: string | null
 
   creatorUserId: string
@@ -107,10 +107,28 @@ export interface UpdateEventDtoResponse {
   message: string
 }
 
-export interface NextEventDtoResponse{
-  eventName: string;
-  startTime: string;
-  endTime: string;
-  categoryId: number;
-  categoryColor: string;
+export interface NextEventDtoResponse {
+  eventName: string
+  startTime: string
+  endTime: string
+  categoryId: number
+  categoryColor: string
+}
+
+export interface GetAllEventsNextWeekDtoResponse {
+  eventId: number
+  eventName?: string | null
+  eventDescription?: string
+  startTime: string
+  endTime: string
+  categoryId?: number | undefined
+  categoryColor?: string | null
+  categoryName?: string | null
+  location?: string | null
+
+  creatorUserId: string
+  creatorUserName: string
+  creatorUserEmail: string
+  nickname?: string | null
+  updatedAt?: string
 }

@@ -1,14 +1,16 @@
 import { categoryApi } from '@/endpoints/categoryEndpoints'
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { groupApi } from '@/endpoints/groupEndpoints'
-import type { GetAllGroupEventsResponse } from '@/types/events'
-import type { GroupCategoryGroupDto, GroupInfoDtoResponse } from '@/types/group'
+import type { GetAllEventsNextWeekDtoResponse, GetAllGroupEventsResponse } from '@/types/events'
+import type { Group, GroupCategoryGroupDto, GroupInfoDtoResponse } from '@/types/group'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const userGroupStore = defineStore('group', () => {
   const currentGroup = ref<GroupInfoDtoResponse | null>(null)
   const categories = ref<GroupCategoryGroupDto[]>([])
+  const groups = ref<Group[]>([])
+  const eventsNextWeek = ref<GetAllEventsNextWeekDtoResponse[]>([])
   const events = ref<GetAllGroupEventsResponse[]>([])
   const isLoading = ref(false)
 
@@ -52,12 +54,30 @@ export const userGroupStore = defineStore('group', () => {
     }
   }
 
+  const fetchGroups = async () => {
+    try {
+      const res = await groupApi.getGroups()
+      if (res.success && res.data) {
+        groups.value = res.data
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const fetchEvents = async () => {
     if (!groupId.value) return
 
     const res = await eventApi.getGroupEvents(groupId.value)
     if (res.success) {
       events.value = res.data || []
+    }
+  }
+
+  const fetchNextWeekEvents = async () => {
+    const res = await eventApi.getEventsForNextWeek()
+    if (res.success) {
+      eventsNextWeek.value = res.data ?? []
     }
   }
 
@@ -83,13 +103,15 @@ export const userGroupStore = defineStore('group', () => {
     categories,
     events,
     isLoading,
-
     groupId,
     eventsWithCurrentCategories,
-
+    groups,
+    eventsNextWeek,
     fetchGroup,
     fetchEvents,
     fetchCategories,
     initialize,
+    fetchGroups,
+    fetchNextWeekEvents
   }
 })

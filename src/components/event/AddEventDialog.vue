@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import Dialog from 'primevue/dialog'
 import TextInput from '../reusables/TextInput.vue'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
@@ -12,12 +13,14 @@ import type { GroupCategoryGroupDto } from '@/types/group'
 import { addYears } from 'date-fns'
 import AppDatePicker from '../layout/AppDatePicker.vue'
 import { CalendarIcon } from '@heroicons/vue/24/outline'
+import { userGroupStore } from '@/stores/userGroupStore.ts'
 
 const props = defineProps<{
   visible: boolean
-  groupId: number
-  groupCategories: GroupCategoryGroupDto[]
+  groupId?: number | null
+  groupCategories?: GroupCategoryGroupDto[]
   initialDate?: Date | null
+  withoutGroup?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -34,10 +37,14 @@ const recurrenceOptions = [
   { label: 'Yearly', value: RecurrencePattern.Yearly },
 ]
 
+const chosenGroup = ref<number>()
+const groupStore = userGroupStore()
+const { groups } = storeToRefs(groupStore)
+
 const createEventForm = ref<CreateEventDtoRequest>({
   eventName: '',
   eventDescription: null,
-  groupId: props.groupId,
+  groupId: props.groupId ? props.groupId : chosenGroup.value,
   startTime: '',
   endTime: '',
   categoryId: undefined,
@@ -56,7 +63,7 @@ const resetForm = () => {
   createEventForm.value = {
     eventName: '',
     eventDescription: null,
-    groupId: props.groupId,
+    groupId: props.groupId ? props.groupId : chosenGroup.value,
     startTime: '',
     endTime: '',
     categoryId: undefined,
@@ -115,6 +122,11 @@ const handleCreateEvent = async (req: CreateEventDtoRequest) => {
 const closeDialog = () => {
   emits('update:visible', false)
 }
+onMounted(async () => {
+  if (groups.value.length === 0) {
+    await groupStore.fetchGroups()
+  }
+})
 </script>
 
 <template>
@@ -174,6 +186,20 @@ const closeDialog = () => {
       >
         Location
       </TextInput>
+
+      <div class="space-y-2" v-if="props.withoutGroup">
+        <label class="block text-sm label-custom font-medium text-zinc-900 dark:text-zinc-100">
+          Group
+        </label>
+        <Select
+          v-model="createEventForm.groupId"
+          :options="groups.filter((g) => g.groupName)"
+          option-label="groupName"
+          option-value="groupId"
+          placeholder="Select group"
+          class="w-full dark:bg-zinc-700!"
+        />
+      </div>
 
       <div class="space-y-2">
         <label class="block text-sm label-custom font-medium text-zinc-900 dark:text-zinc-100">

@@ -5,6 +5,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   Cog8ToothIcon,
   HomeIcon,
+  RectangleGroupIcon,
   UserGroupIcon,
   UserPlusIcon,
 } from '@heroicons/vue/24/outline'
@@ -46,6 +47,16 @@ const logout = async () => {
         <HomeIcon class="w-5 h-5 md:mr-2 self-center" />
         <p class="hidden md:block">Home</p>
       </RouterLink>
+
+      <RouterLink
+        class="flex items-center md:justify-start justify-center md:w-full p-3"
+        v-if="auth.isAuthenticated"
+        to="/dashboard"
+      >
+        <RectangleGroupIcon class="h-5 w-5 md:mr-2 self-center" />
+        <p class="hidden md:block">Dashboard</p>
+      </RouterLink>
+
       <RouterLink
         :class="{ 'router-link-active': isGroupsActive }"
         class="flex items-center md:justify-start justify-center md:w-full p-3"
@@ -105,7 +116,7 @@ const logout = async () => {
 }
 
 .dark .router-link-active {
-  color: #005fff; 
+  color: #005fff;
   background-color: #0b1c3b;
 
   font-weight: bold;
