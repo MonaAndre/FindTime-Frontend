@@ -6,7 +6,7 @@ import { RsvpStatus, type GetAllEventsNextWeekDtoResponse } from '@/types/events
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { useToast } from 'primevue/usetoast'
 
-const props = defineProps<{
+defineProps<{
   loading?: boolean
 }>()
 

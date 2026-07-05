@@ -21,7 +21,7 @@ const handleDeleteGroup = async (groupId: number) => {
     } catch (error) {
         toast.add({
             severity: 'error',
-            summary: 'Failed to deleted group',
+            summary: 'Failed to delete group',
             life: 5000
         })
         console.error(error);

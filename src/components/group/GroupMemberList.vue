@@ -8,6 +8,7 @@ import { groupApi } from '@/endpoints/groupEndpoints'
 import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from '@/stores/authStore'
 import { userGroupStore } from '@/stores/userGroupStore'
+import { getBgColors } from '@/helpers/colors'
 import Dialog from 'primevue/dialog'
 
 const props = defineProps<{
@@ -23,26 +24,44 @@ const auth = useAuthStore()
 const toast = useToast()
 const showAddNickName = ref(false)
 const selectedMember = ref<GroupMemberGroupDto>()
-const isEditing = ref(false)
-const editingUserId = ref<string | null>(null)
+const nicknameSubmitted = ref(false)
 const request = ref<AddNicknameDtoRequest>({
-  targetUserId: editingUserId.value!,
+  targetUserId: '',
   nickname: '',
   groupId: props.groupId,
 })
 
-const handleAddNickname = async (request: AddNicknameDtoRequest) => {
+const nicknameError = computed(() => {
+  const nickname = request.value.nickname.trim()
+  if (!nickname) return 'Nickname is required'
+  if (nickname.length > 30) return 'Nickname must be 30 characters or less'
+  return ''
+})
+
+const openNicknameDialog = (member: GroupMemberGroupDto) => {
+  selectedMember.value = member
+  request.value.targetUserId = member.userId
+  request.value.nickname = member.nickname ?? ''
+  nicknameSubmitted.value = false
+  showAddNickName.value = true
+}
+
+const handleAddNickname = async () => {
+  nicknameSubmitted.value = true
+  if (nicknameError.value) return
   try {
-    const result = await groupApi.addNickname(request)
+    const result = await groupApi.addNickname({
+      ...request.value,
+      nickname: request.value.nickname.trim(),
+    })
     if (result.success) {
       toast.add({
         severity: 'success',
-        summary: `You added nickname successfully`,
+        summary: `Nickname saved for ${selectedMember.value?.firstName}`,
         life: 3000,
       })
-      isEditing.value = false
-      editingUserId.value = null
-      request.nickname = ''
+      request.value.nickname = ''
+      nicknameSubmitted.value = false
       emit('update')
       showAddNickName.value = false
     }
@@ -55,31 +74,42 @@ const handleAddNickname = async (request: AddNicknameDtoRequest) => {
     console.error(error)
   }
 }
-const bgColor = computed(() => {
-  const color = groupStore.currentGroup?.userGroupColor
-  return color ? `bg-${color}-200` : 'bg-gray-500'
-})
+
+const avatarBg = computed(() => getBgColors(groupStore.currentGroup?.userGroupColor ?? 'zinc'))
 </script>
 <template>
   <div>
-    <div class="flex items-center justify-between mb-4">
-      <p class="font-semibold text-xl mb-2">Group Members</p>
-      <p class="rounded-full px-2 py-.5 border-2 text-sm border-blue-600 text-blue-600">
-        {{ groupStore.currentGroup?.memberCount }} Total
+    <div class="mb-2 flex items-center justify-between">
+      <p class="text-lg font-semibold">Members</p>
+      <p
+        class="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300"
+      >
+        {{ groupStore.currentGroup?.memberCount }} total
       </p>
     </div>
 
-    <ul class="space-y-3 divide-y divide-gray-200 dark:divide-zinc-800 px-2 ">
-      <li class="pl-4 flex gap-2 items-center px-2 py-6">
-        <div :class="bgColor" class="rounded-full border w-10 h-10">
-          <img v-if="auth.user?.profilePictureLink" :src="auth.user?.profilePictureLink" />
-          <UserCircleIcon v-else class="w-full" />
+    <ul class="divide-y divide-zinc-200 dark:divide-zinc-800">
+      <li class="flex items-center gap-3 py-3">
+        <div
+          :class="avatarBg"
+          class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full"
+        >
+          <img
+            v-if="auth.user?.profilePictureLink"
+            :src="auth.user?.profilePictureLink"
+            class="h-full w-full object-cover"
+          />
+          <UserCircleIcon v-else class="h-8 w-8 text-zinc-500 dark:text-zinc-300" />
         </div>
-        {{ auth.user?.firstName }} {{ auth.user?.lastName }}
-        <p class="text-sm text-zinc-400">(Me)</p>
+        <div class="min-w-0 flex-1">
+          <p class="truncate font-medium">
+            {{ auth.user?.firstName }} {{ auth.user?.lastName }}
+            <span class="text-sm font-normal text-zinc-400">(Me)</span>
+          </p>
+        </div>
         <p
-          class="border-2 py-.5 px-2 text-blue-600 text-sm border-blue-600 ml-auto rounded-full"
           v-if="groupStore.currentGroup?.isAdmin"
+          class="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300"
         >
           Admin
         </p>
@@ -87,49 +117,66 @@ const bgColor = computed(() => {
       <li
         v-for="member in members.filter((me) => me.userId !== auth.user?.id)"
         :key="member.userId"
-        class="pl-4 flex gap-2 items-center"
+        class="flex items-center gap-3 py-3"
       >
-        <div :class="bgColor" class="rounded-full border w-10 h-10">
-          <img v-if="member.profilePictureLink" :src="member.profilePictureLink" />
-          <UserCircleIcon v-else class="w-full" />
-        </div>
-        <p>{{ member.firstName }} {{ member.lastName }}</p>
-        <p class="text-sm text-zinc-400" v-if="member.nickname">({{ member.nickname }})</p>
-        <ButtonComponent
-          @click="
-            ((editingUserId = member.userId),
-            (showAddNickName = true),
-            (request.targetUserId = editingUserId),
-            (selectedMember = member))
-          "
-          rounded-full
-          margin-y
-          sm
-          class="my-auto"
+        <div
+          :class="avatarBg"
+          class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full"
         >
-          <PencilIcon class="h-4" />
-        </ButtonComponent>
+          <img
+            v-if="member.profilePictureLink"
+            :src="member.profilePictureLink"
+            class="h-full w-full object-cover"
+          />
+          <UserCircleIcon v-else class="h-8 w-8 text-zinc-500 dark:text-zinc-300" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="truncate font-medium">
+            {{ member.firstName }} {{ member.lastName }}
+            <span v-if="member.nickname" class="text-sm font-normal text-zinc-400"
+              >({{ member.nickname }})</span
+            >
+          </p>
+        </div>
+        <button
+          type="button"
+          :title="`Edit nickname for ${member.firstName}`"
+          class="cursor-pointer rounded-full p-1.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-blue-600 dark:hover:bg-zinc-800"
+          @click="openNicknameDialog(member)"
+        >
+          <PencilIcon class="h-4 w-4" />
+        </button>
         <p
-          class="border-2 py-.5 px-2 text-blue-600 text-sm border-blue-600 ml-auto rounded-full"
           v-if="member.isAdmin"
+          class="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300"
         >
           Admin
         </p>
       </li>
     </ul>
   </div>
-  <Dialog class="w-full md:w-96" v-model:visible="showAddNickName">
+  <Dialog :draggable="false" class="w-full md:w-96" v-model:visible="showAddNickName">
     <template #header>
       <div class="flex gap-4 items-center text-xl">
-        <PencilSquareIcon class="w-6 h-6 text-blue-500" />Add nickname for
+        <PencilSquareIcon class="w-6 h-6 text-blue-500" />Nickname for
         {{ selectedMember?.firstName }}
       </div>
     </template>
-    <TextInput v-model="request.nickname" placeholder="Cute name" name="nickName" type="text">Nickname</TextInput>
+    <form novalidate @submit.prevent="handleAddNickname">
+      <TextInput
+        v-model="request.nickname"
+        placeholder="Cute name"
+        name="nickName"
+        type="text"
+        :is-valid="!(nicknameSubmitted && nicknameError)"
+        :error-message="nicknameSubmitted ? nicknameError : ''"
+        >Nickname</TextInput
+      >
 
-    <div class="flex gap-3 mt-5 justify-end">
-      <ButtonComponent md @click="showAddNickName = false" tertiary> Cancel </ButtonComponent>
-      <ButtonComponent @click="handleAddNickname(request)" md primary> Save </ButtonComponent>
-    </div>
+      <div class="flex gap-3 mt-5 justify-end">
+        <ButtonComponent md @click="showAddNickName = false" tertiary> Cancel </ButtonComponent>
+        <ButtonComponent type="submit" md primary> Save </ButtonComponent>
+      </div>
+    </form>
   </Dialog>
 </template>

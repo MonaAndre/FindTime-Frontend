@@ -1,26 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import TextInput from '../reusables/TextInput.vue'
-const memberEmail = ref<string>()
+import { isValidEmail } from '@/helpers/validation'
+
+const memberEmail = ref('')
+const submitted = ref(false)
 const emit = defineEmits<{
   (e: 'add', email: string): void
   (e: 'cancel'): void
 }>()
 
-const cleanForm = () => {
+const emailError = computed(() => {
+  const email = memberEmail.value.trim()
+  if (!email) return 'Email is required'
+  if (!isValidEmail(email)) return 'Enter a valid email address'
+  return ''
+})
+
+const handleSubmit = () => {
+  submitted.value = true
+  if (emailError.value) return
+  emit('add', memberEmail.value.trim())
   memberEmail.value = ''
+  submitted.value = false
 }
 </script>
 
 <template>
-  <form @submit.prevent="(emit('add', memberEmail ?? ''), cleanForm())">
-    <TextInput placeholder="Member email" type="email" :name="`member-email`" v-model="memberEmail">
+  <form novalidate @submit.prevent="handleSubmit">
+    <TextInput
+      placeholder="member@example.com"
+      type="email"
+      name="member-email"
+      v-model="memberEmail"
+      :is-valid="!(submitted && emailError)"
+      :error-message="submitted ? emailError : ''"
+    >
       Member email
     </TextInput>
     <div class="flex flex-1 items-center gap-3 justify-end mt-2">
       <ButtonComponent margin-y tertiary md @click="emit('cancel')">Back</ButtonComponent>
-      <ButtonComponent margin-y md type="submit" primary >Add new member</ButtonComponent>
+      <ButtonComponent margin-y md type="submit" primary>Add new member</ButtonComponent>
     </div>
   </form>
 </template>

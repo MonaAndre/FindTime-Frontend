@@ -10,22 +10,22 @@ const groupStore = userGroupStore();
 
 
 const handleLeaveGroup = async (groupId: number) => {
-    if (groupStore.currentGroup!.isAdmin && groupStore.currentGroup!.memberCount>0) {
+    if (groupStore.currentGroup!.isAdmin && groupStore.currentGroup!.memberCount > 1) {
         toast.add({
             severity: "warn",
             summary: "Cannot leave group",
             detail: "You must transfer admin rights before leaving the group",
             life: 5000
         });
-        router.push('/groups')
+        return;
     }
     try {
         const result = await groupApi.leaveGroup(groupId);
-       
+
         if (result.success) {
             toast.add({
                 severity: "success",
-                summary: `You leaved the group ${groupStore.currentGroup?.groupName}`,
+                summary: `You left the group ${groupStore.currentGroup?.groupName}`,
                 life:5000
             })
             router.push('/groups');
