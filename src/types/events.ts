@@ -131,4 +131,5 @@ export interface GetAllEventsNextWeekDtoResponse {
   creatorUserEmail: string
   nickname?: string | null
   updatedAt?: string
+  groupName?: string
 }

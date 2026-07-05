@@ -1,15 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import AddEventDialog from '../event/AddEventDialog.vue'
 import { BellIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import UpNextCard from './upNextCard.vue'
+import WeekSummaryEventsCard from './WeekSummaryEventsCard.vue'
+import { userGroupStore } from '@/stores/userGroupStore.ts'
+import { storeToRefs } from 'pinia'
+import type { GetAllEventsNextWeekDtoResponse } from '@/types/events.ts'
 
 const showAddEventDialog = ref(false)
+
+const eventStore = userGroupStore()
+const { eventsNextWeek } = storeToRefs(eventStore)
+const nextEvent = computed<GetAllEventsNextWeekDtoResponse | undefined>(
+  () => eventsNextWeek.value[0],
+)
+
+onMounted(async () => {
+  await eventStore.fetchNextWeekEvents()
+})
 </script>
 
 <template>
-    <!-- top bar -->
+  <!-- top bar -->
   <section
     class="flex justify-between items-center px-3 border-b dark:border-zinc-600 border-zinc-300 bg-white dark:bg-zinc-900"
   >
@@ -25,10 +39,10 @@ const showAddEventDialog = ref(false)
       <AddEventDialog
         v-model:visible="showAddEventDialog"
         :without-group="true"
-        @update="console.log('saved')"
+        @update="eventStore.fetchNextWeekEvents()"
       />
     </div>
   </section>
-  <UpNextCard/>
-
+  <UpNextCard :next-event="nextEvent" />
+  <WeekSummaryEventsCard :events="eventsNextWeek" />
 </template>
