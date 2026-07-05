@@ -107,6 +107,16 @@ watch(
   },
 )
 
+watch(
+  () => createEventForm.value.startTime,
+  (newStart) => {
+    if (!newStart || createEventForm.value.endTime) return
+    const end = new Date(newStart)
+    end.setHours(end.getHours() + 1)
+    createEventForm.value.endTime = end.toISOString()
+  },
+)
+
 const handleCreateEvent = async (req: CreateEventDtoRequest) => {
   try {
     const result = await eventApi.createEvent(req)

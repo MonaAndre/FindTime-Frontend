@@ -226,7 +226,7 @@ const handleGroupUpdate = async () => {
   <Dialog :draggable="false" class="w-full md:w-96" v-model:visible="showAddMember">
     <template #header>
       <div class="flex gap-4 items-center text-xl">
-        <UserGroupIcon class="w-6 h-6 mt-0.5 text-blue-500" />Handle members
+        <UserGroupIcon class="w-6 h-6 mt-0.5 text-blue-500" />Manage members
       </div>
     </template>
     <GroupMemberManager

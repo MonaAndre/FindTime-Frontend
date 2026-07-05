@@ -21,6 +21,6 @@ const handleChangeCategoryValue = () => {
 </script>
 <template>
     <Select v-model="chosenCatId" :options="props.groupCategories" option-label="categoryName" option-value="categoryId"
-        placeholder="Add category" class="w-3/5 mt-2 mb-5" @change="handleChangeCategoryValue" />
+        placeholder="Add category" class="w-full dark:bg-zinc-700!" @change="handleChangeCategoryValue" />
        
 </template>

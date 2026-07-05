@@ -20,5 +20,6 @@ const isDark = computed(() => theme.value === "dark")
     :model-value="modelValue"
     @update:model-value="v => emit('update:modelValue', v instanceof Date ? v.toISOString() : v)"
     :dark="isDark"
+    teleport="body"
   />
 </template>

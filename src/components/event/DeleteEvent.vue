@@ -50,9 +50,13 @@ const deleteEvent = async (req: DeleteEventDtoRequest) => {
 </script>
 
 <template>
-  <ButtonComponent @click="showDeleteModal = true" danger sm
-    ><TrashIcon class="w-4 h-4 mr-2" /> Delete event</ButtonComponent
+  <button
+    type="button"
+    class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+    @click="showDeleteModal = true"
   >
+    <TrashIcon class="h-4 w-4" />Delete event
+  </button>
   <Dialog v-model:visible="showDeleteModal" :draggable="false" modal class="w-full md:w-96">
     <template #header>
       <div class="flex gap-4 items-center text-xl">

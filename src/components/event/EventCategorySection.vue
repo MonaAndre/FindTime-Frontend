@@ -53,20 +53,18 @@ const handleAddCatToEvent = async (categoryId: number) => {
 
 <template>
   <div v-if="event.categoryId && event.categoryColor && !showSelectCategory">
-    <p class="text-zinc-500 mt-5 mb-1 uppercase tracking-wide text-xs">category</p>
-    <div class="my-5 flex items-top gap-1">
-      <TextTag
-        class="cursor-pointer"
-        @click="showSelectCategory = true"
-        :icon="PencilSquareIcon"
-        :color="event.categoryColor"
-      >
-        {{ event.categoryName }}</TextTag
-      >
-    </div>
+    <p class="label-custom mb-2">Category</p>
+    <TextTag
+      class="cursor-pointer"
+      @click="showSelectCategory = true"
+      :icon="PencilSquareIcon"
+      :color="event.categoryColor"
+    >
+      {{ event.categoryName }}</TextTag
+    >
   </div>
   <div v-else-if="showSelectCategory || !event.categoryId">
-    <p class="text-zinc-500 mt-5 mb-1 uppercase tracking-wide text-xs">Category</p>
+    <p class="label-custom mb-2">Category</p>
     <AddCategoryToEvent
       @set-category-to-event="handleAddCatToEvent"
       :group-categories="groupCategories"

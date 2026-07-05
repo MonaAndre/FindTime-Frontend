@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import ButtonComponent from '../reusables/ButtonComponent.vue'
 import TextInput from '../reusables/TextInput.vue'
 import { isValidEmail } from '@/helpers/validation'
+import { UserPlusIcon } from '@heroicons/vue/24/outline'
 
 const memberEmail = ref('')
 const submitted = ref(false)
@@ -39,9 +40,11 @@ const handleSubmit = () => {
     >
       Member email
     </TextInput>
-    <div class="flex flex-1 items-center gap-3 justify-end mt-2">
-      <ButtonComponent margin-y tertiary md @click="emit('cancel')">Back</ButtonComponent>
-      <ButtonComponent margin-y md type="submit" primary>Add new member</ButtonComponent>
+    <div class="flex flex-1 items-center gap-3 justify-end mt-4">
+      <ButtonComponent margin-y tertiary md @click="emit('cancel')">Cancel</ButtonComponent>
+      <ButtonComponent margin-y md type="submit" primary>
+        <UserPlusIcon class="mr-1.5 h-4 w-4" />Add member
+      </ButtonComponent>
     </div>
   </form>
 </template>

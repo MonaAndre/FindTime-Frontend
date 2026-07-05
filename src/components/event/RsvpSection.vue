@@ -74,7 +74,7 @@ onMounted(fetchParticipants)
 
 <template>
   <div class="flex flex-col gap-4">
-    <p class="text-zinc-500 uppercase tracking-wide text-xs">Your RSVP</p>
+    <p class="label-custom">Your RSVP</p>
 
     <!-- Status indicator -->
     <div class="flex items-center gap-2">
@@ -133,7 +133,7 @@ onMounted(fetchParticipants)
     </div>
 
     <!-- Participants -->
-    <p class="text-zinc-500 uppercase tracking-wide text-xs mt-2">Participants</p>
+    <p class="label-custom mt-2">Participants</p>
     <div v-if="loadingParticipants" class="space-y-2">
       <div v-for="i in 3" :key="i" class="h-8 bg-zinc-200 dark:bg-zinc-700 rounded animate-pulse" />
     </div>
