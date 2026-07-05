@@ -13,6 +13,7 @@ import FindATimeCard from './FindATimeCard.vue'
 import NeedsResponseCard from './NeedsResponseCard.vue'
 
 const showAddEventDialog = ref(false)
+const isDashboardLoading = ref(true)
 
 const eventStore = userGroupStore()
 const { eventsNextWeek } = storeToRefs(eventStore)
@@ -23,9 +24,13 @@ const nextEvent = computed<GetAllEventsNextWeekDtoResponse | undefined>(
 )
 
 onMounted(async () => {
-  await eventStore.fetchNextWeekEvents()
-  if (groups.value.length === 0) {
-    await eventStore.fetchGroups()
+  try {
+    await Promise.all([
+      eventStore.fetchNextWeekEvents(),
+      groups.value.length === 0 ? eventStore.fetchGroups() : Promise.resolve(),
+    ])
+  } finally {
+    isDashboardLoading.value = false
   }
 })
 </script>
@@ -53,13 +58,13 @@ onMounted(async () => {
   </section>
   <section class="grid grid-cols-12 p-4 gap-5">
     <div class="col-span-8 flex flex-col gap-5">
-      <UpNextCard :next-event="nextEvent" />
-      <WeekSummaryEventsCard :events="eventsNextWeek" />
-      <GroupsOverview :groups="groups" />
+      <UpNextCard :next-event="nextEvent" :loading="isDashboardLoading" />
+      <WeekSummaryEventsCard :events="eventsNextWeek" :loading="isDashboardLoading" />
+      <GroupsOverview :groups="groups" :loading="isDashboardLoading" />
     </div>
     <div class="col-span-4 flex flex-col gap-5">
       <FindATimeCard />
-      <NeedsResponseCard />
+      <NeedsResponseCard :loading="isDashboardLoading" />
     </div>
   </section>
 </template>

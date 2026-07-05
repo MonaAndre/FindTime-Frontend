@@ -6,6 +6,10 @@ import { RsvpStatus, type GetAllEventsNextWeekDtoResponse } from '@/types/events
 import { eventApi } from '@/endpoints/eventEndpoints'
 import { useToast } from 'primevue/usetoast'
 
+const props = defineProps<{
+  loading?: boolean
+}>()
+
 const store = userGroupStore()
 const { eventsNextWeek } = storeToRefs(store)
 const toast = useToast()
@@ -48,7 +52,20 @@ const formatEventTime = (event: GetAllEventsNextWeekDtoResponse): string => {
 </script>
 
 <template>
-  <div v-if="pendingEvents.length" class="rounded-xl bg-zinc-900 p-4 flex flex-col gap-3">
+  <div v-if="loading" class="rounded-xl bg-zinc-900 p-4 flex flex-col gap-3 animate-pulse">
+    <div class="h-5 w-40 bg-zinc-700 rounded" />
+    <div v-for="i in 2" :key="i" class="flex flex-col gap-2 pt-3 border-t border-zinc-800">
+      <div class="h-4 w-36 bg-zinc-700 rounded" />
+      <div class="h-3 w-48 bg-zinc-800 rounded" />
+      <div class="flex gap-2 mt-1">
+        <div class="flex-1 h-8 bg-zinc-700 rounded-lg" />
+        <div class="flex-1 h-8 bg-zinc-800 rounded-lg" />
+        <div class="flex-1 h-8 bg-zinc-800 rounded-lg" />
+      </div>
+    </div>
+  </div>
+
+  <div v-else-if="pendingEvents.length" class="rounded-xl bg-zinc-900 p-4 flex flex-col gap-3">
     <h2 class="font-bold text-white text-lg">Needs your response</h2>
 
     <div

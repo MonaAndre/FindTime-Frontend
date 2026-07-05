@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CalendarContainer from './CalendarContainer.vue'
+import CalendarSkeleton from './CalendarSkeleton.vue'
 import { getBgColors } from '@/helpers/colors'
 import { userGroupStore } from '@/stores/userGroupStore'
 
@@ -33,8 +34,6 @@ const handleRangeChange = async (start: Date, end: Date) => {
       @open-category-drawer="emits('openCategoryDrawer')"
       @open-group-info-drawer="emits('openGroupInfoDrawer')"
     />
-    <div v-else class="text-center py-10">
-      <p class="text-zinc-500">Loading calendar.....</p>
-    </div>
+    <CalendarSkeleton v-else />
   </div>
 </template>

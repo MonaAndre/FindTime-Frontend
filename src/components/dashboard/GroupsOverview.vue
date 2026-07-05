@@ -8,6 +8,7 @@ import { CalendarDaysIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps<{
   groups: Group[]
+  loading?: boolean
 }>()
 
 const store = userGroupStore()
@@ -76,7 +77,24 @@ const formatEventTime = (dateString: string): string => {
     </button>
   </section>
 
-  <section class="grid grid-cols-2 gap-4">
+  <!-- Skeleton -->
+  <section v-if="loading" class="grid grid-cols-2 gap-4 animate-pulse">
+    <div v-for="i in 2" :key="i" class="p-4 bg-zinc-900 rounded-xl flex flex-col gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-zinc-700 shrink-0" />
+        <div class="flex flex-col gap-1.5 flex-1">
+          <div class="h-4 w-24 bg-zinc-700 rounded" />
+          <div class="h-3 w-16 bg-zinc-800 rounded" />
+        </div>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <div class="h-3 w-12 bg-zinc-800 rounded" />
+        <div class="h-4 w-full bg-zinc-700 rounded" />
+      </div>
+    </div>
+  </section>
+
+  <section v-else class="grid grid-cols-2 gap-4">
     <div
       v-for="group in twoFirstGroups"
       :key="group.groupId"
@@ -107,4 +125,5 @@ const formatEventTime = (dateString: string): string => {
       </div>
     </div>
   </section>
+
 </template>
