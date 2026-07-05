@@ -75,6 +75,17 @@ export const getDotColor = (color?: string) => {
   return colorMap[color || 'zinc'] || 'bg-zinc-400'
 }
 
+const avatarColorKeys = ['red', 'blue', 'green', 'orange', 'teal', 'sky', 'purple', 'lime']
+
+export const getAvatarColor = (seed: string) => {
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) | 0
+  }
+  const key = avatarColorKeys[Math.abs(hash) % avatarColorKeys.length]
+  return getDotColor(key)
+}
+
 export const getEventCategory = (color?: string) => {
   const colorMap: Record<string, string> = {
     zinc: 'bg-zinc-100 text-zinc-700 border-l-zinc-500 dark:bg-zinc-800 dark:text-zinc-200',

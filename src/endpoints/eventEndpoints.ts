@@ -9,6 +9,7 @@ import type {
   FindFreeSlotDtoResponse,
   GetAllEventsNextWeekDtoResponse,
   GetAllGroupEventsResponse,
+  GetEventDtoResponse,
   NextEventDtoResponse,
   RespondToEventDtoRequest,
   RespondToEventDtoResponse,
@@ -80,6 +81,12 @@ export const eventApi = {
   ): Promise<ServiceResponse<EventParticipantDtoResponse[]>> {
     const response = await api.get<ServiceResponse<EventParticipantDtoResponse[]>>(
       `api/Event/get-event-participants/${eventId}`,
+    )
+    return response.data
+  },
+  async getEvent(groupId: number, eventId: number): Promise<ServiceResponse<GetEventDtoResponse>> {
+    const response = await api.get<ServiceResponse<GetEventDtoResponse>>(
+      `api/Event/get-event/${groupId}/${eventId}`,
     )
     return response.data
   },
