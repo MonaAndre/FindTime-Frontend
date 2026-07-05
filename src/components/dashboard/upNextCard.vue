@@ -50,7 +50,7 @@ onUnmounted(() => {
 
 <template>
   <section
-    class="flex flex-col w-full gap-2 border p-4 border-blue-800 rounded-md bg-[linear-gradient(135deg,#0f0c08eb_0%,#142042_55%,#15171d_100%)]"
+    class="flex flex-col w-full gap-2 border p-4 border-blue-800 rounded-xl bg-[linear-gradient(135deg,#0f0c08eb_0%,#142042_55%,#15171d_100%)]"
   >
     <div class="flex items-center gap-2">
       <span class="inline-block w-2 h-2 rounded-full bg-blue-300 animate-pulse"></span>

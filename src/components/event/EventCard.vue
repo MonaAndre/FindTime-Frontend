@@ -7,6 +7,7 @@ import EventCategorySection from './EventCategorySection.vue'
 import TextTag from '../reusables/TextTag.vue'
 import { ArrowPathIcon, MapPinIcon, UserIcon } from '@heroicons/vue/24/outline'
 import TimeLine from '../reusables/TimeLine.vue'
+import RsvpSection from './RsvpSection.vue'
 
 const props = defineProps<{
   event: GetAllGroupEventsResponse
@@ -54,6 +55,8 @@ const mapRecurrencePattern = () => {
       <p v-if="event.eventDescription" class="text-sm">{{ event.eventDescription }}</p>
       <p v-else class="text-sm">No description</p>
     </span>
+
+    <RsvpSection :event="event" @update="emits('update')" />
 
     <EventCategorySection
       :event="event"

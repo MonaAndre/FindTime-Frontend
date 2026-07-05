@@ -1,3 +1,36 @@
+export enum RsvpStatus {
+  Pending = 0,
+  Accepted = 1,
+  Declined = 2,
+  Maybe = 3,
+}
+
+/* =========================
+   RSVP
+   ========================= */
+
+export interface RespondToEventDtoRequest {
+  eventId: number
+  status: RsvpStatus
+}
+
+export interface RespondToEventDtoResponse {
+  eventId: number
+  status: RsvpStatus
+  respondedAt?: string | null
+}
+
+export interface EventParticipantDtoResponse {
+  userId: string
+  email: string
+  firstName: string
+  lastName: string
+  nickname?: string | null
+  status: RsvpStatus
+  invitedAt: string
+  respondedAt?: string | null
+}
+
 export enum RecurrencePattern {
   Daily = 0,
   Weekly = 1,
@@ -79,6 +112,7 @@ export interface GetAllGroupEventsResponse {
 
   createdAt: string
   updatedAt?: string
+  myRsvpStatus?: RsvpStatus | null
 }
 
 /* =========================
@@ -115,6 +149,12 @@ export interface NextEventDtoResponse {
   categoryColor: string
 }
 
+export interface FindFreeSlotDtoResponse {
+  startTime: string
+  endTime: string
+  durationMinutes: number
+}
+
 export interface GetAllEventsNextWeekDtoResponse {
   eventId: number
   eventName?: string | null
@@ -132,4 +172,5 @@ export interface GetAllEventsNextWeekDtoResponse {
   nickname?: string | null
   updatedAt?: string
   groupName?: string
+  myRsvpStatus?: RsvpStatus | null
 }

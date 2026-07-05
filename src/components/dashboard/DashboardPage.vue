@@ -9,6 +9,8 @@ import { userGroupStore } from '@/stores/userGroupStore.ts'
 import { storeToRefs } from 'pinia'
 import type { GetAllEventsNextWeekDtoResponse } from '@/types/events.ts'
 import GroupsOverview from './GroupsOverview.vue'
+import FindATimeCard from './FindATimeCard.vue'
+import NeedsResponseCard from './NeedsResponseCard.vue'
 
 const showAddEventDialog = ref(false)
 
@@ -49,11 +51,15 @@ onMounted(async () => {
       />
     </div>
   </section>
-  <section class="grid grid-cols-12 p-4">
+  <section class="grid grid-cols-12 p-4 gap-5">
     <div class="col-span-8 flex flex-col gap-5">
       <UpNextCard :next-event="nextEvent" />
       <WeekSummaryEventsCard :events="eventsNextWeek" />
       <GroupsOverview :groups="groups" />
+    </div>
+    <div class="col-span-4 flex flex-col gap-5">
+      <FindATimeCard />
+      <NeedsResponseCard />
     </div>
   </section>
 </template>

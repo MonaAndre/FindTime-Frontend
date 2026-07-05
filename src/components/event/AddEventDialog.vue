@@ -20,6 +20,7 @@ const props = defineProps<{
   groupId?: number | null
   groupCategories?: GroupCategoryGroupDto[]
   initialDate?: Date | null
+  initialEndDate?: Date | null
   withoutGroup?: boolean
 }>()
 
@@ -82,20 +83,29 @@ const toLocalISOString = (date: Date): string => {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
 }
 
-const initializeFormWithDate = (date: Date) => {
-  const start = new Date(date)
-  start.setHours(9, 0, 0, 0)
-  const end = new Date(date)
-  end.setHours(10, 0, 0, 0)
-  createEventForm.value.startTime = toLocalISOString(start)
-  createEventForm.value.endTime = toLocalISOString(end)
+const initializeFormWithDate = (startDate: Date, endDate?: Date | null) => {
+  const start = new Date(startDate)
+  const end = endDate ? new Date(endDate) : null
+
+  if (!end) {
+    // plain calendar day click — default to 9:00–10:00
+    start.setHours(9, 0, 0, 0)
+    const defaultEnd = new Date(startDate)
+    defaultEnd.setHours(10, 0, 0, 0)
+    createEventForm.value.startTime = toLocalISOString(start)
+    createEventForm.value.endTime = toLocalISOString(defaultEnd)
+  } else {
+    // explicit start + end (e.g. from find-a-time) — use times as-is
+    createEventForm.value.startTime = toLocalISOString(start)
+    createEventForm.value.endTime = toLocalISOString(end)
+  }
 }
 
 watch(
   () => props.visible,
   (isVisible) => {
     if (isVisible && props.initialDate) {
-      initializeFormWithDate(props.initialDate)
+      initializeFormWithDate(props.initialDate, props.initialEndDate)
     } else if (!isVisible) {
       setTimeout(() => resetForm(), 300)
     }
