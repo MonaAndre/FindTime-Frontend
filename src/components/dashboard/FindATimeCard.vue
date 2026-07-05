@@ -91,8 +91,8 @@ const isSuggestedDay = (date: Date): boolean => {
 
 const getDayColor = (date: Date): string => {
   if (isSuggestedDay(date)) return 'bg-teal-500 ring-2 ring-teal-300'
-  if (hasEventsOnDay(date)) return 'bg-amber-700'
-  return 'bg-zinc-700'
+  if (hasEventsOnDay(date)) return 'bg-amber-600 dark:bg-amber-700'
+  return 'bg-zinc-200 dark:bg-zinc-700'
 }
 
 const getTimeOfDay = (dateString: string): string => {
@@ -130,18 +130,18 @@ const slotEndDate = computed(() =>
 </script>
 
 <template>
-  <div class="rounded-xl bg-zinc-900 p-4 flex flex-col gap-4">
+  <div class="rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-transparent p-4 flex flex-col gap-4">
     <!-- Header -->
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <MagnifyingGlassIcon class="w-5 h-5 text-teal-400 shrink-0" />
-        <h2 class="font-bold text-white text-lg">Find a time</h2>
+        <MagnifyingGlassIcon class="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0" />
+        <h2 class="font-bold text-zinc-900 dark:text-white text-lg">Find a time</h2>
       </div>
-      <p class="text-sm text-zinc-400 flex items-center flex-wrap gap-x-1">
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 flex items-center flex-wrap gap-x-1">
         Next slot everyone in
         <span class="relative" ref="dropdownRef">
           <button
-            class="inline-flex items-center gap-0.5 font-semibold text-white hover:text-teal-300 transition-colors"
+            class="inline-flex items-center gap-0.5 font-semibold text-zinc-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 transition-colors"
             @click="showGroupDropdown = !showGroupDropdown"
           >
             {{ selectedGroup?.groupName ?? '…' }}
@@ -152,13 +152,13 @@ const slotEndDate = computed(() =>
           </button>
           <ul
             v-if="showGroupDropdown"
-            class="absolute left-0 top-full mt-1 z-20 min-w-40 rounded-lg bg-zinc-800 border border-zinc-700 shadow-lg py-1 overflow-hidden"
+            class="absolute left-0 top-full mt-1 z-20 min-w-40 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-lg py-1 overflow-hidden"
           >
             <li
               v-for="group in groups"
               :key="group.groupId"
-              class="px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-700 cursor-pointer flex items-center justify-between gap-3"
-              :class="group.groupId === selectedGroupId ? 'text-teal-400 font-semibold' : ''"
+              class="px-3 py-2 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer flex items-center justify-between gap-3"
+              :class="group.groupId === selectedGroupId ? 'text-teal-600 dark:text-teal-400 font-semibold' : ''"
               @click="selectGroup(group.groupId)"
             >
               {{ group.groupName }}
@@ -170,20 +170,20 @@ const slotEndDate = computed(() =>
     </div>
 
     <!-- Slot card -->
-    <div class="rounded-lg bg-teal-950 border border-teal-800 p-4 min-h-16">
+    <div class="rounded-lg bg-teal-50 dark:bg-teal-950 border border-teal-200 dark:border-teal-800 p-4 min-h-16">
       <template v-if="loading">
-        <div class="h-5 w-40 bg-teal-900 rounded animate-pulse mb-2" />
-        <div class="h-4 w-28 bg-teal-900 rounded animate-pulse" />
+        <div class="h-5 w-40 bg-teal-200 dark:bg-teal-900 rounded animate-pulse mb-2" />
+        <div class="h-4 w-28 bg-teal-200 dark:bg-teal-900 rounded animate-pulse" />
       </template>
       <template v-else-if="freeSlot">
-        <p class="font-bold text-white text-lg leading-snug">
+        <p class="font-bold text-zinc-900 dark:text-white text-lg leading-snug">
           {{ formatSlotDate(freeSlot.start) }} · {{ getTimeOfDay(freeSlot.start) }}
         </p>
-        <p class="text-sm text-teal-300">
+        <p class="text-sm text-teal-700 dark:text-teal-300">
           {{ formatTime(freeSlot.start) }} – {{ formatTime(freeSlot.end) }} · all members free
         </p>
       </template>
-      <p v-else class="text-sm text-zinc-500 italic">No free slot found in the next week</p>
+      <p v-else class="text-sm text-zinc-500 dark:text-zinc-400 italic">No free slot found in the next week</p>
     </div>
 
     <!-- Week strip -->

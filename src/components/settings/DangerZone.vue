@@ -7,6 +7,7 @@ import { userApi } from '@/endpoints/userEndpoints';
 import { useToast } from 'primevue/usetoast';
 import router from '@/router';
 import { useAuthStore } from '@/stores/authStore';
+import { ExclamationTriangleIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 const confirm = useConfirm();
 const isVisible = ref(false);
@@ -46,7 +47,7 @@ const confirm1 = () => {
         acceptClass:'p-button-danger',
         rejectClass:'p-button-text',
         accept: handleDeleteUser,
-     
+
         onShow: () => {
             isVisible.value = true;
         },
@@ -55,17 +56,31 @@ const confirm1 = () => {
         }
     });
 
-   
+
 };
 </script>
 <template>
-    <h3 class="text-red-700 text-3xl text-center mt-10 mb-5 ">Danger Zone</h3>
-  <div class="border form border-red-700 rounded-2xl p-4 ">
-        <p>Attention!</p>
-        <p>After deleting account you will not be able to restore it</p>
-        <ButtonComponent @click="confirm1()" danger lg>
-            Delete Account
-        </ButtonComponent>
+    <div class="bg-red-50/60 dark:bg-red-950/20 rounded-2xl border border-red-200 dark:border-red-900/60 p-5 md:p-6">
+        <div class="flex items-center gap-2 pb-5 mb-5 border-b border-red-100 dark:border-red-900/40">
+            <div
+                class="w-9 h-9 shrink-0 rounded-full bg-red-100 dark:bg-red-950 text-red-600 flex items-center justify-center">
+                <ExclamationTriangleIcon class="w-5 h-5" />
+            </div>
+            <div>
+                <h2 class="font-bold text-lg leading-tight text-red-700 dark:text-red-500">Danger zone</h2>
+                <p class="text-sm text-red-700/70 dark:text-red-400/70">Irreversible and destructive actions</p>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <p class="text-sm text-zinc-700 dark:text-zinc-300 max-w-sm">
+                Deleting your account will permanently remove your data. This action cannot be undone.
+            </p>
+            <ButtonComponent @click="confirm1()" danger lg>
+                <TrashIcon class="w-4 h-4 mr-1.5" />
+                Delete account
+            </ButtonComponent>
+        </div>
         <ConfirmDialog />
     </div>
 </template>

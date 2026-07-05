@@ -51,25 +51,25 @@ onUnmounted(() => {
 
 <template>
   <section
-    class="flex flex-col w-full gap-2 border p-4 border-blue-800 rounded-xl bg-[linear-gradient(135deg,#0f0c08eb_0%,#142042_55%,#15171d_100%)]"
+    class="flex flex-col w-full gap-2 border p-4 border-blue-200 dark:border-blue-800 rounded-xl bg-[linear-gradient(135deg,#e9f0ff_0%,#dbe4ff_55%,#eef1f6_100%)] dark:bg-[linear-gradient(135deg,#0f0c08eb_0%,#142042_55%,#15171d_100%)]"
   >
     <div class="flex items-center gap-2">
-      <span class="inline-block w-2 h-2 rounded-full bg-blue-300 animate-pulse"></span>
-      <p class="text-blue-300 text-xs font-bold">UP NEXT</p>
+      <span class="inline-block w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-300 animate-pulse"></span>
+      <p class="text-blue-600 dark:text-blue-300 text-xs font-bold">UP NEXT</p>
     </div>
 
     <!-- Skeleton -->
     <template v-if="loading">
       <div class="animate-pulse flex flex-col gap-2">
-        <div class="h-4 w-24 bg-blue-900/50 rounded" />
-        <div class="h-8 w-48 bg-blue-900/50 rounded mt-1" />
-        <div class="h-4 w-36 bg-blue-900/50 rounded" />
+        <div class="h-4 w-24 bg-blue-200 dark:bg-blue-900/50 rounded" />
+        <div class="h-8 w-48 bg-blue-200 dark:bg-blue-900/50 rounded mt-1" />
+        <div class="h-4 w-36 bg-blue-200 dark:bg-blue-900/50 rounded" />
       </div>
     </template>
 
     <!-- No event -->
     <template v-else-if="!nextEvent">
-      <p class="text-gray-400 text-sm italic mt-2">No upcoming events this week</p>
+      <p class="text-zinc-500 dark:text-gray-400 text-sm italic mt-2">No upcoming events this week</p>
     </template>
 
     <!-- Event content -->
@@ -77,9 +77,9 @@ onUnmounted(() => {
       <div class="flex items-center gap-2">
         <span
           class="inline-block w-2 h-2 rounded-xs"
-          :class="nextEvent.categoryColor ? `bg-${color}-200` : 'bg-zinc-200'"
+          :class="nextEvent.categoryColor ? `bg-${color}-200` : 'bg-zinc-300 dark:bg-zinc-200'"
         ></span>
-        <p class="text-gray-300 text-sm">{{ nextEvent.groupName }}</p>
+        <p class="text-zinc-600 dark:text-gray-300 text-sm">{{ nextEvent.groupName }}</p>
       </div>
       <div class="grid grid-cols-2">
         <div class="flex flex-col gap-1">
@@ -93,7 +93,7 @@ onUnmounted(() => {
         </div>
         <div class="flex-col">
           <div class="text-end">
-            <p class="text-xs text-gray-300">starts in</p>
+            <p class="text-xs text-zinc-600 dark:text-gray-300">starts in</p>
             <p class="text-3xl font-bold">{{ countdown.hours }}h {{ countdown.minutes }}m</p>
             <ButtonComponent margin-y primary sm class="p-2!" @click="showEventDetail = true">
               View event

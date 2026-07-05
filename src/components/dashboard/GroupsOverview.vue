@@ -68,9 +68,9 @@ const formatEventTime = (dateString: string): string => {
 
 <template>
   <section class="flex items-center justify-between px-2 ">
-    <h2 class="font-bold text-white text-lg">Your calendars</h2>
+    <h2 class="font-bold text-zinc-900 dark:text-white text-lg">Your calendars</h2>
     <button
-      class="text-blue-500 font-semibold hover:text-blue-400 cursor-pointer text-sm"
+      class="text-blue-600 dark:text-blue-500 font-semibold hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer text-sm"
       @click="router.push('/groups')"
     >
       View all
@@ -79,17 +79,17 @@ const formatEventTime = (dateString: string): string => {
 
   <!-- Skeleton -->
   <section v-if="loading" class="grid grid-cols-2 gap-4 animate-pulse">
-    <div v-for="i in 2" :key="i" class="p-4 bg-zinc-900 rounded-xl flex flex-col gap-4">
+    <div v-for="i in 2" :key="i" class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-transparent rounded-xl flex flex-col gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-zinc-700 shrink-0" />
+        <div class="w-10 h-10 rounded-lg bg-zinc-200 dark:bg-zinc-700 shrink-0" />
         <div class="flex flex-col gap-1.5 flex-1">
-          <div class="h-4 w-24 bg-zinc-700 rounded" />
-          <div class="h-3 w-16 bg-zinc-800 rounded" />
+          <div class="h-4 w-24 bg-zinc-200 dark:bg-zinc-700 rounded" />
+          <div class="h-3 w-16 bg-zinc-100 dark:bg-zinc-800 rounded" />
         </div>
       </div>
       <div class="flex flex-col gap-1.5">
-        <div class="h-3 w-12 bg-zinc-800 rounded" />
-        <div class="h-4 w-full bg-zinc-700 rounded" />
+        <div class="h-3 w-12 bg-zinc-100 dark:bg-zinc-800 rounded" />
+        <div class="h-4 w-full bg-zinc-200 dark:bg-zinc-700 rounded" />
       </div>
     </div>
   </section>
@@ -98,7 +98,7 @@ const formatEventTime = (dateString: string): string => {
     <div
       v-for="group in twoFirstGroups"
       :key="group.groupId"
-      class="p-4 bg-zinc-900 rounded-xl flex flex-col gap-4 cursor-pointer hover:bg-zinc-700 transition-colors"
+      class="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-transparent rounded-xl flex flex-col gap-4 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
       @click="router.push(`/group/details/${group.groupId}`)"
     >
       <div class="flex items-center gap-3">
@@ -109,15 +109,15 @@ const formatEventTime = (dateString: string): string => {
           <CalendarDaysIcon class="w-5 h-5 text-white" />
         </div>
         <div class="min-w-0">
-          <p class="font-semibold text-white truncate">{{ group.groupName }}</p>
-          <p class="text-xs text-zinc-400 truncate">{{ getMemberLabel(group) }}</p>
+          <p class="font-semibold text-zinc-900 dark:text-white truncate">{{ group.groupName }}</p>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 truncate">{{ getMemberLabel(group) }}</p>
         </div>
       </div>
 
       <div>
         <p class="text-xs text-zinc-500 mb-0.5">Next up</p>
         <template v-if="getNextEvent(group)">
-          <p class="text-sm font-semibold text-white truncate">
+          <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">
             {{ getNextEvent(group)!.eventName }} · {{ formatEventTime(getNextEvent(group)!.startTime) }}
           </p>
         </template>

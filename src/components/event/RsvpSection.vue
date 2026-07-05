@@ -34,6 +34,13 @@ const fetchParticipants = async () => {
   }
 }
 
+const statusMessages: Record<RsvpStatus, string> = {
+  [RsvpStatus.Accepted]: "You're going!",
+  [RsvpStatus.Declined]: 'Not going — response saved',
+  [RsvpStatus.Maybe]: 'Marked as maybe',
+  [RsvpStatus.Pending]: 'Response cleared',
+}
+
 const respond = async (status: RsvpStatus) => {
   if (responding.value) return
   responding.value = true
@@ -41,6 +48,7 @@ const respond = async (status: RsvpStatus) => {
     const res = await eventApi.respondToEvent({ eventId: props.event.eventId, status })
     if (res.success && res.data) {
       currentStatus.value = res.data.status
+      toast.add({ severity: 'success', summary: statusMessages[status], life: 2500 })
       await fetchParticipants()
       emits('update')
     }
